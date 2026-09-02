@@ -1,0 +1,21 @@
+{
+  "name": "kratagyaagarwal",
+  "owner": {
+    "name": "Kratagya Devvratt Agarwal"
+  },
+  "description": "Flutter engineering skills: plan, build test-first, prove, and ship.",
+  "plugins": [
+    {
+      "name": "flutter-engineering-kit",
+      "source": "./",
+      "description": "Engineer Flutter apps: plan the change, build it test-first, prove it, ship it.",
+      "category": "development",
+      "keywords": [
+        "flutter",
+        "dart",
+        "testing",
+        "engineering"
+      ]
+    }
+  ]
+}
