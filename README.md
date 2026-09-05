@@ -6,9 +6,10 @@ code, design the change, build it test-first, prove it works, and ship it.
 Every skill is small, readable, and adapts to the stack the project already uses. Nothing here owns
 your process; you compose the parts you want.
 
-Built from what worked across a run of real apps, and from two public skill sets
-([pstack](https://github.com/cursor/plugins/tree/main/pstack) and
-[mattpocock/skills](https://github.com/mattpocock/skills)).
+Built from what worked across a run of real apps, and from three public skill sets
+([pstack](https://github.com/cursor/plugins/tree/main/pstack),
+[mattpocock/skills](https://github.com/mattpocock/skills) and
+[emilkowalski/skills](https://github.com/emilkowalski/skills)).
 
 ## Install
 
@@ -107,7 +108,7 @@ Type `/ask-kit` whenever you are unsure which skill fits.
 
 ## Why this kit exists
 
-Five failures, each one the reason for a group of skills.
+Six failures, each one the reason for a group of skills.
 
 ### #1. We built the wrong thing
 
@@ -171,6 +172,18 @@ anyone's job.
 [`flutter-accessibility`](./skills/flutter-accessibility/SKILL.md) and
 [`flutter-localization`](./skills/flutter-localization/SKILL.md).
 
+### #6. It was correct and it looked amateur
+
+**The problem.** Everything above can hold and the result still reads as unfinished. The loading
+state is a spinner over content the user was reading, the empty state says "No data", the error shows
+what the exception returned, and something animates on a tab switch a user makes forty times a day.
+None of it is a bug, so no test catches it and no review flags it. It comes back as a feedback round.
+
+**The fix** is to make the design decisions explicit rather than leaving them to whatever the first
+draft produced. [`flutter-design`](./skills/flutter-design/SKILL.md) holds the gates — how often a
+thing is seen, what an animation is *for*, what belongs in a state nobody drew — and makes the answer
+name what it chose not to do.
+
 ---
 
 ## Two tracks
@@ -184,13 +197,17 @@ The default. Each step's output is the next step's input.
 | 1 | Configure the repo, once | `setup-flutter-project` |
 | 2 | Understand what is there | `flutter-explain` |
 | 3 | Settle the requirement | `grill` |
-| 4 | Design the change | `flutter-plan-change` |
-| 5 | Build it, test-first, to a reviewed commit | `flutter-implement` |
-| 6 | Prove it, and name the rung | `flutter-verify` |
-| 7 | Ship it | `setup-ci`, `release-readiness` |
+| 4 | Settle how it should look and move | `flutter-design` |
+| 5 | Design the shape of the change | `flutter-plan-change` |
+| 6 | Build it, test-first, to a reviewed commit | `flutter-implement` |
+| 7 | Prove it, and name the rung | `flutter-verify` |
+| 8 | Ship it | `setup-ci`, `release-readiness` |
 
-Step 5 drives steps of its own: `flutter-tdd` per slice, then the analyzer, the suite,
+Step 6 drives steps of its own: `flutter-tdd` per slice, then the analyzer, the suite,
 `flutter-code-review` and `flutter-verify`, stopping at a commit.
+
+Step 4 is settled once per app rather than once per change: it writes `docs/agents/design.md`, and
+every later screen reads it instead of deciding again.
 
 ### Client delivery
 
@@ -203,10 +220,11 @@ if you are building your own product.
 | 2 | Turn answers or a feedback round into numbered criteria | `grill` |
 | 3 | Fix the vocabulary you and the client share | `domain-glossary` |
 | 4 | Write it down, including what you are *not* building | `to-spec` |
-| 5 | Scaffold from a design and an endpoint | `flutter-create-feature-e2e` |
-| 6 | Check the release, prove the one safety fact | `release-readiness` |
-| 7 | Ship the store pack | `store-compliance` |
-| 8 | Fold what you learned back into the kit | `retro` |
+| 5 | Settle the app's design language, once | `flutter-design` |
+| 6 | Scaffold from a design and an endpoint | `flutter-create-feature-e2e` |
+| 7 | Check the release, prove the one safety fact | `release-readiness` |
+| 8 | Ship the store pack | `store-compliance` |
+| 9 | Fold what you learned back into the kit | `retro` |
 
 The alignment steps are the cheapest in the kit and the ones most often skipped.
 
@@ -294,6 +312,9 @@ Writing the code. `flutter-implement` is the entry point for changing existing c
 - **[flutter-create-screen](./skills/flutter-create-screen/SKILL.md)**: Generate a screen (view +
   widgets) from a Figma node URL (read via the Figma MCP server), or a pasted CSS + screenshot
   fallback, or a written spec.
+- **[flutter-design](./skills/flutter-design/SKILL.md)**: Judge and shape what a screen looks like
+  and how it moves, when no design source settles it: visual hierarchy, the states a build skips,
+  and whether something should animate at all.
 - **[flutter-navigation](./skills/flutter-navigation/SKILL.md)**: Wire routes, typed arguments and
   deep links, and test that they arrive.
 - **[flutter-modernize-screen](./skills/flutter-modernize-screen/SKILL.md)**: Migrate a legacy
@@ -446,4 +467,10 @@ The alignment skills adapt `grilling`, `to-questionnaire`, `to-spec`, `domain-mo
 `code-review`, `diagnosing-bugs`, `tdd`, `wizard`, `handoff` and `writing-for-agents` from
 **mattpocock/skills** (MIT). The verification ladder, `release-readiness`, the harness generator and
 the principles adapt `create-verification-skill`, `prove-it-works`, `blast-radius`, `hillclimb` and
-the principle set from **pstack** (MIT). Both are worth reading in full.
+the principle set from **pstack** (MIT). `flutter-design` adapts its motion judgment — the frequency
+and purpose gates, the duration budgets, the physicality and interruptibility rules, and the habit of
+naming what you chose *not* to animate — from [`emilkowalski/skills`](https://github.com/emilkowalski/skills)
+(MIT), chiefly `emil-design-eng`, `animate`, `animate-expo`, `review-animations`,
+`find-animation-opportunities` and `apple-design`. The gates port because they are claims about human
+perception; the implementations are CSS and React Native and were rewritten for Flutter. All three
+are worth reading in full.

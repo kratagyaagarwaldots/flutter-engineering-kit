@@ -111,7 +111,9 @@ Write, showing each for approval first:
   exists, add only the missing hooks.
 
 Do not write a `CONTEXT.md`. That is `domain-glossary`'s job, and it should be created lazily when
-the first term is actually resolved.
+the first term is actually resolved. The same holds for `docs/agents/design.md`: `flutter-design`
+writes it once there is a settled product to design against, so leave the Design language row
+pointing at it and unfilled here.
 
 ## 5. Hand off
 
@@ -123,7 +125,9 @@ Tell the user what was written, then name the next step based on what the projec
   acceptance criteria.
 - **Existing project** → nothing further. The skills now read `docs/agents/project.md`. Mention that
   `flutter-verify` will report the test baseline recorded in step 1, so a pre-existing failure is
-  never mistaken for new breakage.
+  never mistaken for new breakage. Where the repo already has screens, its design language exists in
+  practice but nowhere in writing; call the Skill tool with `flutter-design` to recover it into
+  `docs/agents/design.md` before the next screen adds to the drift.
 
 Where exploration found integrations whose keys a human has to fetch by hand, call the Skill tool
 with `setup-wizard`. Mention `scripts/sync-cursor.sh` in the kit if the team uses Cursor on this

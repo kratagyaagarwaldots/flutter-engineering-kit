@@ -79,6 +79,10 @@ arrives later and is listed here is a change request, not a bug.
 Show the user the **Acceptance criteria**, **Assumptions** and **Out of scope** sections and get
 those three confirmed. The rest is ours to get right; those three are the contract.
 
+With the contract confirmed the product is locked, which is the moment the app's visual language stops
+being free to invent per screen. Where `docs/agents/design.md` does not exist yet, call the Skill tool
+with `flutter-design` to settle it before any screen is built.
+
 Then tell the user which scaffolder to run. Both are user-invoked, so only they can start one:
 `/flutter-create-feature-e2e` when a model and endpoint exist, `/flutter-create-screen-e2e` when they
 do not.

@@ -52,7 +52,8 @@ rebuild on a real project.
 
 - **State coverage.** Every criterion implies a `{Feature}Status`. What does the screen show on
   `loading`, on `failure`, and on success with an empty list? A criterion that names only the happy
-  path is one third of a spec.
+  path is one third of a spec. Settle *whether* each state exists here; for what the user should see
+  in one, call the Skill tool with `flutter-design`.
 - **The fixture boundary.** Is there a real endpoint now, or is this screen-first? This decides
   `flutter-create-feature-e2e` against `flutter-create-screen-e2e`, so settle it in round one.
 - **Validation and limits.** Which fields are required, what the bounds are, and what the user sees
@@ -83,6 +84,10 @@ and put it back to them as a recommendation.
 Close with the settled understanding as a numbered acceptance-criteria list, in the shape the
 scaffolding skills consume. That list is the deliverable. Write it to `docs/specs/` when the
 project's config names that directory.
+
+Once the criteria are settled the states are known, which is the cheapest moment to decide what they
+look like everywhere rather than once per screen. Where `docs/agents/design.md` does not exist yet,
+call the Skill tool with `flutter-design` to settle the app's design language against this list.
 
 Then tell the user which scaffolder to run against it. Both are user-invoked, so only they can start
 one: `/flutter-create-feature-e2e` when the endpoint exists, `/flutter-create-screen-e2e` when the

@@ -56,6 +56,8 @@ The Value column below is filled with the kit's default. Replace each with what 
 | Source | `<Figma MCP server>` / `<pasted CSS + screenshot>` / `<written spec only>` |
 | Figma file or project | `<url>` |
 | Token strategy | `<get_variable_defs first, then get_design_context>` |
+| Theme location | `<lib/core/constants/>` — where colour, type and component defaults are centralised |
+| Design language | `<docs/agents/design.md>` — personality, type steps, colour roles, motion tokens and state patterns. Written by `flutter-design` once there is something to settle; `<not yet settled>` until then |
 
 ## Documents
 

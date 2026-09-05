@@ -22,6 +22,7 @@ The default route for changing an app that exists. Each step's output is the nex
 | New repo, kit not configured | `setup-flutter-project` | type it |
 | Do not yet understand the code | `flutter-explain` | either |
 | Requirement is thin or arrived as prose | `grill` | either |
+| Product settled, but the app has no design language | `flutter-design` | either |
 | Change touches more than a couple of files | `flutter-plan-change` | either |
 | Ready to build against a spec or sketch | `flutter-implement` | type it |
 | Building one slice, test-first | `flutter-tdd` | either |
@@ -55,6 +56,7 @@ Everything above still applies. Route here for what a paying client adds on top.
 | Request and response DTOs | `flutter-create-model` |
 | Repository over an endpoint | `flutter-create-repository` |
 | View and widgets | `flutter-create-screen` |
+| Hierarchy, the states nobody drew, whether it should animate | `flutter-design` |
 | Routes, typed arguments, deep links | `flutter-navigation` |
 | Tests: logic, widget, golden | `flutter-write-tests` |
 | Legacy screen onto current conventions | `flutter-modernize-screen` |

@@ -17,6 +17,9 @@ Before creating UI, constants, dialogs, or shared helpers, call the Skill tool w
 - **Feature PascalCase**
 - **Design source**: primary — a **Figma node URL** read via the Figma MCP server. Fallback — a pasted CSS dump / screenshot / written spec when no Figma access is available.
 
+Where there is no design source, or it leaves a decision open, call the Skill tool with
+`flutter-design` for that decision rather than settling it in the first draft.
+
 ## Design token extraction
 
 For a Figma node URL, pull design data with the Figma MCP server before building the table:
@@ -198,4 +201,5 @@ has before writing a primitive of your own. What is specific to this layer:
 The screen is done when every state the state layer can emit has a branch in the tree, including loading,
 empty and failure, and the render matches the design source. State which token in the map has no
 `App*` constant yet and what you added, and name any state the design did not specify that you had
-to invent.
+to invent. For what belongs inside a state the design never drew, call the Skill tool with
+`flutter-design`.
