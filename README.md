@@ -15,7 +15,8 @@ Built from what worked across a run of real apps, and from three public skill se
 
 Two ways in. **As a plugin** the kit is managed and read-only, and a `git pull` on the marketplace
 updates it. **As local files** it is copied into your repo, yours to edit, and nothing changes
-underneath you. Pick one: installing both offers every skill twice and fires every hook twice.
+underneath you. **As a mirror** it is generated into your repo from this kit, and re-generated on
+update. Pick one: installing two of these offers every skill twice and fires every hook twice.
 
 ### 1. Get the kit
 
@@ -83,8 +84,49 @@ Cursor has no plugin system, so the kit is mirrored into the project as files:
 scripts/sync-cursor.sh /path/to/project
 ```
 
-This writes `.cursor/{skills,agents,rules,hooks}` from `skills/`, `agents/` and `rules/`. The
+This writes `.cursor/{skills,agents,rules,hooks,template}` from `skills/`, `agents/`, `rules/`
+and `template/`. The
 mirror is generated. Never hand-edit it; change the kit and re-run the script.
+
+</details>
+
+<details>
+<summary><strong>opencode</strong></summary>
+
+opencode reads `.claude/skills` natively, but the kit's agents, user-invoked skills and hooks need
+opencode-native shapes, so the kit is mirrored into the project as files:
+
+```bash
+scripts/sync-opencode.sh /path/to/project
+```
+
+This writes `.opencode/{skills,agents,commands,rules,plugins,template}` from `skills/`, `agents/`,
+`rules/`, `opencode/plugins/` and `template/`, and merges `opencode.json` (formatter on for
+`dart format`, `instructions` loading `.opencode/rules/*.md`; your other keys untouched). Agents are
+converted to opencode frontmatter (`mode: subagent`, `tools:` becomes `permission:`, Claude model
+shorthands unpinned so they inherit your default), and every user-invoked skill becomes a `/<name>`
+command that loads that skill. The dart-format hook becomes the built-in `dart` formatter; the
+fixture and secret scans become the `flutter-kit.ts` plugin, loaded automatically from
+`.opencode/plugins/`. The mirror is generated. Never hand-edit it; change the kit and re-run the
+script.
+
+opencode has no user-invoked skills — it ignores `disable-model-invocation` — so the merge also
+writes a `permission.skill` gate set to `ask` for each of them. That keeps the heavy skills
+human-started, as they are under Claude Code, at the cost of one confirmation when you type the
+command. Set any of them to `allow` in your `opencode.json` and the sync leaves your value alone.
+
+Do not also install the `.claude/` local files in the same project: opencode scans
+`.claude/skills` too, so two mirrors offer every skill twice.
+
+No clone needed — one command fetches a pinned release and runs the same sync:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- /path/to/project
+```
+
+It installs the latest stable tag by default; `--version vX.Y.Z` pins another, `--version main`
+tracks trunk, `--uninstall` removes the mirror, and re-running updates. Pipe through `less` first
+instead of `bash` if you want to read the installer before running it.
 
 </details>
 
@@ -94,8 +136,10 @@ Once per project, before any other skill. It will:
 
 - Explore the repo and ask only the few things it cannot observe
 - Fill in the **Architecture table**, which records the stack this project actually uses
-- Write `docs/agents/project.md` and a `CLAUDE.md`
-- Copy the hooks into `.claude/hooks/` and wire them into `settings.json`
+- Write `docs/agents/project.md`, a `CLAUDE.md`, and an `AGENTS.md` twin so opencode reads the same
+  conventions
+- Copy the hooks into `.claude/hooks/` and wire them into `settings.json` (or confirm the
+  `.opencode/` mirror and `opencode.json` are already wired, when the project uses opencode)
 - Scaffold `lib/core` if the repo is greenfield
 
 Every other skill reads `docs/agents/project.md`, which is what makes one kit serve many apps.
@@ -453,7 +497,9 @@ in a skill.** If it is true of one app but not of every Flutter app, it belongs 
 `rules/` holds four always-on convention files. The plugin manifest has no key for them, so a
 plugin install does not deliver them: Claude Code gets the same conventions through the `CLAUDE.md`
 that `/setup-flutter-project` writes and through `flutter-core-architecture`, while the Cursor mirror
-copies `rules/` verbatim. `store-compliance` reads `rules/store-compliance-docs.md` from the kit
+copies `rules/` verbatim and the opencode mirror copies them to `.opencode/rules/`, loaded through
+the `instructions` key in `opencode.json`. opencode reads the `AGENTS.md` twin where Claude Code
+reads `CLAUDE.md`. `store-compliance` reads `rules/store-compliance-docs.md` from the kit
 directly.
 
 `CLAUDE.md` in this repo carries the authoring conventions. Run `scripts/validate-kit.py` before

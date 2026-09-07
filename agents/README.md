@@ -4,7 +4,9 @@ Specialists the skills delegate to. Each owns one layer or one document, so a sk
 without any single agent holding the whole feature in context.
 
 These files are the source. `scripts/sync-cursor.sh` generates the `.cursor/agents/` mirror from
-them, so edit here and re-run the script. Never edit the mirror.
+them, and `scripts/sync-opencode.sh` generates the `.opencode/agents/` mirror (converted to
+opencode frontmatter: `mode: subagent`, `tools:` becomes `permission:`, model tier unpinned), so
+edit here and re-run the script. Never edit a mirror.
 
 ## Feature layers
 

@@ -6,9 +6,13 @@ memory. Add a rule here whenever you catch yourself writing one down twice.
 """
 
 import json
+import os
 import pathlib
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 
 FAIL: list[str] = []
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -206,6 +210,198 @@ def main() -> int:
                 )
     check("10.", f"stack-neutral skills name no state library "
                  f"({len(STACK_OPINIONATED)} legacy skills exempt)")
+
+    # 11. template/AGENTS.md is the opencode twin of template/CLAUDE.md: it exists and
+    #     carries the same sections, so opencode reads what Claude Code reads.
+    try:
+        agents_md = (ROOT / "template/AGENTS.md").read_text()
+    except FileNotFoundError:
+        FAIL.append("template/AGENTS.md missing — the opencode twin of template/CLAUDE.md")
+        agents_md = ""
+    if agents_md:
+        for section in ("## Project", "## Architecture", "## Hard rules",
+                        "## Skills", "## Verification"):
+            if section not in agents_md:
+                FAIL.append(f"template/AGENTS.md omits section '{section}'")
+        if "docs/agents/project.md" not in agents_md:
+            FAIL.append("template/AGENTS.md does not point at docs/agents/project.md")
+    check("11.", "template/AGENTS.md twins template/CLAUDE.md for opencode")
+
+    # 12. The opencode mirror generator exists, is executable, and wires every surface
+    #     the mirror promises: skills, converted agents, commands, rules, plugin, config.
+    sync = ROOT / "scripts/sync-opencode.sh"
+    if not sync.exists():
+        FAIL.append("scripts/sync-opencode.sh missing")
+    elif not os.access(sync, os.X_OK):
+        FAIL.append("scripts/sync-opencode.sh is not executable")
+    else:
+        sync_text = sync.read_text()
+        for marker in (".opencode/skills", ".opencode/agents", ".opencode/commands",
+                       ".opencode/rules", ".opencode/plugins", "mode: subagent",
+                       "$ARGUMENTS", "instructions", "formatter"):
+            if marker not in sync_text:
+                FAIL.append(f"scripts/sync-opencode.sh never mentions '{marker}'")
+        if ".opencode/template" not in sync_text:
+            FAIL.append("scripts/sync-opencode.sh never copies template/ to the mirror root")
+        if "permission" not in sync_text or "skill" not in sync_text.split("permission")[1][:200]:
+            FAIL.append("scripts/sync-opencode.sh never gates user-invoked skills via permission.skill")
+    check("12.", "scripts/sync-opencode.sh generates the full .opencode/ mirror")
+
+    # 13. The opencode plugin covers the Claude hooks it replaces: the fixture heads-up
+    #     on git commit/push and the secret refusal on file writes. Tool ids are literal:
+    #     the shell tool's id is `bash` (shell/id.ts keeps ToolID = "bash"; shell.ts is
+    #     the filename) and the patch tool is `apply_patch` (apply_patch.ts), so match
+    #     those and nothing else.
+    plugin = ROOT / "opencode/plugins/flutter-kit.ts"
+    if not plugin.exists():
+        FAIL.append("opencode/plugins/flutter-kit.ts missing")
+    else:
+        plugin_text = plugin.read_text()
+        for marker in ("tool.execute.before", "FIXTURE", "flutter_secure_storage",
+                       "export default"):
+            if marker not in plugin_text:
+                FAIL.append(f"opencode plugin never mentions '{marker}'")
+        if 'tool === "bash"' not in plugin_text:
+            FAIL.append('opencode plugin does not match the shell tool id "bash"')
+        if '"apply_patch"' not in plugin_text:
+            FAIL.append('opencode plugin does not match the patch tool id "apply_patch"')
+        for wrong in ('tool === "shell"', 'tool === "patch"'):
+            if wrong in plugin_text:
+                FAIL.append(f"opencode plugin matches non-existent tool id {wrong}")
+    check("13.", "opencode plugin carries the fixture and secret hooks")
+
+    # 14. The README documents the opencode install path it now offers.
+    if "sync-opencode.sh" not in readme or ".opencode/" not in readme:
+        FAIL.append("README does not document the opencode mirror (sync-opencode.sh)")
+    check("14.", "README documents the opencode install")
+
+    # 15. The remote installer delegates instead of duplicating: it downloads a pinned
+    #     tarball and runs that tree's sync script, so it must never name a skill, agent,
+    #     or command of its own, or it becomes a second source of truth.
+    installer = ROOT / "install.sh"
+    if not installer.exists():
+        FAIL.append("install.sh missing")
+    elif not os.access(installer, os.X_OK):
+        FAIL.append("install.sh is not executable")
+    else:
+        installer_text = installer.read_text()
+        for marker in ("sync-opencode.sh", "codeload", "--uninstall", "pubspec.yaml",
+                       "DEFAULT_VERSION", "mktemp"):
+            if marker not in installer_text:
+                FAIL.append(f"install.sh never mentions '{marker}'")
+        for hardcoded in (".opencode/skills", ".opencode/commands",
+                          "disable-model-invocation"):
+            if hardcoded in installer_text:
+                FAIL.append(
+                    f"install.sh hardcodes '{hardcoded}' — delegate to sync-opencode.sh instead"
+                )
+    check("15.", "install.sh downloads and delegates, duplicating nothing")
+
+    # 16. Functional mirror test. Marker greps cannot catch wrong tool ids, missing
+    #     gates, or a command list that drifted from the skills, so run the sync
+    #     script for real against a temp fixture project and assert the result.
+    user_invoked = sorted(n for n, is_user in skills.items() if is_user)
+    with tempfile.TemporaryDirectory(prefix="kit-validate-") as tmp:
+        proj = pathlib.Path(tmp) / "proj"
+        proj.mkdir()
+        (proj / "pubspec.yaml").write_text("name: fixture_app\n")
+        fixture = proj / "lib" / "features" / "demo"
+        fixture.mkdir(parents=True)
+        (fixture / "README.md").write_text("Runs in fixture mode.\n")
+        cfg = proj / "opencode.json"
+        cfg.write_text(json.dumps({
+            "$schema": "https://opencode.ai/config.json",
+            "model": "anthropic/x",
+            "permission": {"bash": {"git status *": "allow"}, "skill": {"retro": "allow"}},
+        }))
+        r = subprocess.run(["bash", str(ROOT / "scripts/sync-opencode.sh"), str(proj)],
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            FAIL.append(f"sync-opencode.sh failed on fixture project: {r.stderr.strip()}")
+        else:
+            op = proj / ".opencode"
+            got_skills = sorted(p.parent.name for p in (op / "skills").glob("*/SKILL.md")) \
+                if (op / "skills").is_dir() else []
+            got_cmds = sorted(p.stem for p in (op / "commands").glob("*.md")) \
+                if (op / "commands").is_dir() else []
+            if got_skills != sorted(skills):
+                FAIL.append(f"mirror skills drifted: {len(got_skills)} vs {len(skills)} on disk")
+            if got_cmds != user_invoked:
+                FAIL.append(
+                    "mirror commands drifted from disable-model-invocation scan: "
+                    f"missing={sorted(set(user_invoked) - set(got_cmds))} "
+                    f"extra={sorted(set(got_cmds) - set(user_invoked))}"
+                )
+            got_agents = sorted(p.name for p in (op / "agents").glob("*.md")) \
+                if (op / "agents").is_dir() else []
+            want_agents = sorted(p.name for p in (ROOT / "agents").glob("*.md")
+                                 if p.name != "README.md")
+            if got_agents != want_agents:
+                FAIL.append(f"mirror agents drifted: {got_agents} vs {want_agents}")
+            for link in ("template/CLAUDE.md", "template/AGENTS.md",
+                         "template/docs/agents/project.md", "plugins/flutter-kit.ts"):
+                if not (op / link).is_file():
+                    FAIL.append(f"mirror omits {link}")
+            try:
+                merged = json.loads(cfg.read_text())
+            except json.JSONDecodeError as e:
+                FAIL.append(f"merged opencode.json does not parse: {e}")
+                merged = {}
+            if merged:
+                gates = merged.get("permission", {}).get("skill", {})
+                missing = [n for n in user_invoked if n not in gates]
+                if missing:
+                    FAIL.append(f"opencode.json gates missing for: {missing}")
+                if gates.get("retro") != "allow":
+                    FAIL.append('project-set permission.skill.retro="allow" was overwritten')
+                if merged.get("model") != "anthropic/x":
+                    FAIL.append("merge clobbered the project's own model key")
+            before = sorted(str(p.relative_to(proj)) for p in proj.rglob("*") if p.is_file())
+            r2 = subprocess.run(["bash", str(ROOT / "scripts/sync-opencode.sh"), str(proj)],
+                                capture_output=True, text=True)
+            after = sorted(str(p.relative_to(proj)) for p in proj.rglob("*") if p.is_file())
+            contents_same = True
+            for rel in before:
+                p = proj / rel
+                if rel == "opencode.json":
+                    try:
+                        if json.loads(p.read_text()) != merged:
+                            contents_same = False
+                    except (json.JSONDecodeError, OSError):
+                        contents_same = False
+                else:
+                    try:
+                        if p.read_bytes() != (proj / rel).read_bytes():
+                            contents_same = False
+                    except OSError:
+                        contents_same = False
+            if r2.returncode != 0 or before != after or not contents_same:
+                FAIL.append("sync-opencode.sh is not idempotent on re-run")
+            r3 = subprocess.run(["bash", str(ROOT / "scripts/sync-opencode.sh"),
+                                 "--uninstall", str(proj)], capture_output=True, text=True)
+            if r3.returncode != 0:
+                FAIL.append(f"sync-opencode.sh --uninstall failed: {r3.stderr.strip()}")
+            else:
+                leftovers = [str(p.relative_to(proj)) for p in (proj / ".opencode").rglob("*")
+                             if p.is_file()] if (proj / ".opencode").exists() else []
+                if leftovers:
+                    FAIL.append(f"uninstall left kit files behind: {leftovers}")
+                try:
+                    cleaned = json.loads(cfg.read_text())
+                except json.JSONDecodeError as e:
+                    FAIL.append(f"opencode.json does not parse after uninstall: {e}")
+                    cleaned = {}
+                if cleaned:
+                    cskill = cleaned.get("permission", {}).get("skill", {})
+                    # Uninstall strips only the kit's own "ask" gates; a value the
+                    # project set itself (like the fixture's retro="allow") stays.
+                    if any(cskill.get(n) == "ask" for n in user_invoked):
+                        FAIL.append("uninstall left permission.skill gates behind")
+                    if ".opencode/rules/*.md" in cleaned.get("instructions", []):
+                        FAIL.append("uninstall left the kit instructions entry behind")
+                    if cleaned.get("model") != "anthropic/x":
+                        FAIL.append("uninstall clobbered the project's own model key")
+    check("16.", "sync-opencode.sh passes a functional install/gate/idempotency/uninstall test")
 
     print()
     if FAIL:

@@ -68,4 +68,9 @@ Hooks are files, not wiring. Add this to the settings.json next to them to activ
 
 Do not also install the plugin. Two copies means every skill is offered twice and every hook fires
 twice. Then run /setup-flutter-project, which writes docs/agents/project.md.
+
+For opencode instead of this script, run scripts/sync-opencode.sh /path/to/project from the kit:
+it writes .opencode/ (skills, converted agents, commands, rules, plugin) and merges opencode.json.
+Do not install both mirrors in one project: opencode also reads .claude/skills, so two mirrors
+offer every skill twice.
 NOTE

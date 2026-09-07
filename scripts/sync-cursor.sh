@@ -39,6 +39,14 @@ for dir in "$KIT"/skills/*/; do
 done
 echo "synced $count skills"
 
+# Template: setup-flutter-project links to ../../template/... from inside its own
+# skill directory. Copying the tree to the mirror root keeps those links resolving
+# here exactly as they do in a plugin install.
+rm -rf "$TARGET/.cursor/template"
+mkdir -p "$TARGET/.cursor/template"
+cp -R "$KIT"/template/. "$TARGET/.cursor/template/"
+echo "synced template/"
+
 # Agents.
 cp "$KIT"/agents/*.md "$TARGET/.cursor/agents/"
 echo "synced $(ls -1 "$KIT"/agents/*.md | wc -l | tr -d ' ') agents"
@@ -93,8 +101,8 @@ echo "synced hooks"
 cat > "$TARGET/.cursor/skills/README.md" <<'INNER'
 # Generated mirror
 
-Every file under `.cursor/skills`, `.cursor/agents`, `.cursor/rules` and `.cursor/hooks` is generated
-from the flutter-engineering-kit repo by `scripts/sync-cursor.sh`.
+Every file under `.cursor/skills`, `.cursor/agents`, `.cursor/rules`, `.cursor/hooks` and
+`.cursor/template` is generated from the flutter-engineering-kit repo by `scripts/sync-cursor.sh`.
 
 Do not edit these files. Change the kit and re-run the script, or the next sync silently discards
 your edit.
