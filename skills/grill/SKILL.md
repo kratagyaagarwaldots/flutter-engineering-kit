@@ -55,7 +55,7 @@ rebuild on a real project.
   path is one third of a spec. Settle *whether* each state exists here; for what the user should see
   in one, call the Skill tool with `flutter-design`.
 - **The fixture boundary.** Is there a real endpoint now, or is this screen-first? This decides
-  `flutter-create-feature-e2e` against `flutter-create-screen-e2e`, so settle it in round one.
+  whether the feature is scaffolded in real or fixture mode, so settle it in round one.
 - **Validation and limits.** Which fields are required, what the bounds are, and what the user sees
   when a bound is hit. Check the project's field-limit constants before asking.
 - **Navigation.** Where the screen is reached from, where each terminal action goes, and what the

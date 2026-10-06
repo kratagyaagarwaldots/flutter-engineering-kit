@@ -21,9 +21,7 @@ Read what you were given, then take the first row that fits.
 | The work | Path |
 |---|---|
 | No spec, sketch or numbered acceptance criteria, or criteria naming only the happy path | Stop. Tell the user to run `/fk-plan` first, or call the Skill tool with `grill` when only a criterion or two is missing. |
-| A **new feature folder**, with a design and a real endpoint | Call the Skill tool with `flutter-create-feature-e2e`. It runs its own phases and gates; return here only for step 6. |
-| A **fixture-mode feature** whose API now exists | Call the Skill tool with `flutter-create-feature-e2e`; it detects upgrade mode from the feature's README. |
-| A **new screen** with a design but no API yet | Call the Skill tool with `flutter-create-screen-e2e`. |
+| A **new feature folder**, with or without its API yet, or a **fixture-mode feature** whose API now exists | Call the Skill tool with `flutter-scaffold-feature`. It picks real, fixture or upgrade mode from what exists, runs its own phases and gates, and returns here only for step 6. |
 | A change to **code that already exists** | Steps 1 to 6 below. |
 
 Where the user wants a cheaper model to do the build, tell them to run `/spec-for-cheap-executor`,

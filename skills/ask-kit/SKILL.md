@@ -46,8 +46,7 @@ Route to one directly when the person wants that single step and nothing around 
 | Terms mean different things to you and the client | `domain-glossary` | `/fk-plan` |
 | Write the settled discussion as a spec | `to-spec` | `/fk-plan` |
 | Design the shape of a change | `flutter-plan-change` | `/fk-plan` |
-| New feature from a design and an endpoint | `flutter-create-feature-e2e` | `/fk-build` |
-| New screen from a design, before the API | `flutter-create-screen-e2e` | `/fk-build` |
+| New feature folder, with or before its API | `flutter-scaffold-feature` | `/fk-build` |
 | One slice, test-first | `flutter-tdd` | `/fk-build` |
 | Prove it works, and name the rung | `flutter-verify` | `/fk-build` |
 | Review against conventions and spec | `flutter-code-review` | `/fk-build` |
@@ -68,7 +67,6 @@ Route to one directly when the person wants that single step and nothing around 
 | Routes, typed arguments, deep links | `flutter-navigation` |
 | Tests: logic, widget, golden | `flutter-write-tests` |
 | Legacy screen onto current conventions | `flutter-modernize-screen` |
-| Feature from criteria alone, no design or API | `flutter-create-feature` |
 
 All model-invoked, so they also fire on their own when a request clearly names one layer. Route here
 when the caller wants exactly one layer touched.

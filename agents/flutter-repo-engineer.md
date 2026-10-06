@@ -27,8 +27,8 @@ Read freely from `lib/core/network/` (`ApiClient`), `lib/core/error/` (`Failure`
 2. Call the Skill tool with `flutter-create-model` for the DTOs.
 3. Call the Skill tool with `flutter-create-repository` for the repository.
 
-In **fixture mode** (no real API yet), the parent passes the fixture phases from
-`flutter-create-screen-e2e`; follow those, and the fixture rules below.
+In **fixture mode** (no real API yet), the parent passes the fixture rules from
+`flutter-scaffold-feature`; follow those, and the rules below.
 
 Apply the conventions in the project's root `CLAUDE.md` or `AGENTS.md`.
 

@@ -26,8 +26,8 @@ that fits, rather than working from your own recollection of the steps:
 | What this project's stack actually is | `project-conventions` |
 | The shared conventions and what `lib/core` holds | `flutter-core-architecture` |
 
-Where the phase tables for `flutter-create-feature-e2e` or `flutter-create-screen-e2e` are what the
-parent asked for, follow that skill's table shapes; it owns them.
+Where the parent asked for a feature's planning tables, follow the shapes in
+`flutter-scaffold-feature`'s `references/planning-tables.md`; that skill owns them.
 
 ## Scope
 

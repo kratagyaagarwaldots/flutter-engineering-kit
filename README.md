@@ -191,7 +191,7 @@ if you are building your own product.
 | 2 | Turn answers or a feedback round into numbered criteria | `/fk-plan` → `grill` |
 | 3 | Fix the vocabulary you and the client share | `domain-glossary` |
 | 4 | Write it down, including what you are *not* building | `/fk-plan` → `to-spec` |
-| 5 | Scaffold from a design and an endpoint | `/fk-build` → `flutter-create-feature-e2e` |
+| 5 | Scaffold from a design and an endpoint | `/fk-build` → `flutter-scaffold-feature` |
 | 6 | Prove the release, ship the store pack | `/fk-release` |
 | 7 | Fold what you learned back into the kit | `/retro` |
 
@@ -268,19 +268,15 @@ Deciding the shape of a change while it is still cheap to change.
 
 ### Build
 
-Writing the code. `fk-build` is the entry point for changing existing code; the two end-to-end
-scaffolders are for a new feature folder built from a design and an endpoint.
+Writing the code. `/fk-build` is the entry point: it changes existing code itself and hands a new
+feature folder to `flutter-scaffold-feature`.
 
-- **[flutter-create-feature-e2e](./skills/flutter-create-feature-e2e/SKILL.md)**: Build or upgrade a
-  complete feature (model, repo, state layer, view, widgets, tests) from a model spec, one API
-  endpoint, acceptance criteria and a Figma node.
-- **[flutter-create-screen-e2e](./skills/flutter-create-screen-e2e/SKILL.md)**: Build a screen
-  backed by a FIXTURE repo from acceptance criteria and a Figma node, before the model and API
-  exist.
+- **[flutter-scaffold-feature](./skills/flutter-scaffold-feature/SKILL.md)**: Scaffold a complete
+  feature folder (model, repository, state layer, view, widgets, tests) from acceptance criteria, in
+  one of three modes: real (a model and endpoint exist), fixture (build the screen first, the API
+  comes later) or upgrade (move a fixture-mode feature onto its real API).
 - **[flutter-tdd](./skills/flutter-tdd/SKILL.md)**: Build a change test-first: a failing test at a
   named seam, then the smallest code that passes it.
-- **[flutter-create-feature](./skills/flutter-create-feature/SKILL.md)**: Scaffold a complete
-  feature folder (bloc + model + repo + view + widget) from requirements alone, without API spec.
 - **[flutter-create-state-layer](./skills/flutter-create-state-layer/SKILL.md)**: Generate a
   feature's state layer in whichever state management the project uses: the seam holding its
   behaviour, its actions, and the state the UI reads back.

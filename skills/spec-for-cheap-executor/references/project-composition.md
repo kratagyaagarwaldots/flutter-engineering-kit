@@ -25,12 +25,12 @@ dropped into prose reads as a label, and the executor will treat it as one.
 | `flutter-create-model` | New DTOs / JSON shapes | "Call the Skill tool with `flutter-create-model` and build the response DTO from the field map in §4." |
 | `flutter-create-repository` | Wrapping endpoints | "Call the Skill tool with `flutter-create-repository`. §3 fixes the signatures; keep them." |
 | `flutter-create-screen` | A screen from Figma / CSS / spec | "Call the Skill tool with `flutter-create-screen`, using the mockups in §5 as the spec (no Figma node for this task)." |
-| `flutter-create-feature` | Whole feature, API unknown | Rarely in a task doc — prefer naming the layer skills per build step. |
+| `flutter-scaffold-feature` | Whole feature folder | Rarely in a task doc — prefer naming the layer skills per build step. |
 | `flutter-modernize-screen` | Legacy screen → BLoC + screenutil | "Step 2: call the Skill tool with `flutter-modernize-screen` on the page named in §1; §11 overrides its defaults where they differ." |
 | `flutter-write-tests` | Any bloc test work | "Call the Skill tool with `flutter-write-tests`, then replace its generated assertions with the exact ones in §10.2." |
 | `flutter-security-review` | Storage / network / secrets / WebView touched | "Step 7: call the Skill tool with `flutter-security-review` — this task adds a token to storage." |
 
-The two end-to-end scaffolders and `store-compliance` are whole workflows, not steps inside a task
+`flutter-scaffold-feature` and `store-compliance` are whole workflows, not steps inside a task
 doc. When the task's scope is one of those, say so in §1 and name the command a human runs instead:
 `/fk-build` for a new feature or fixture-mode screen, `/fk-release` for the store pack.
 

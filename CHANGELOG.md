@@ -3,6 +3,17 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.7.0
+
+- `flutter-create-feature-e2e`, `flutter-create-screen-e2e` and `flutter-create-feature` are one
+  skill, `flutter-scaffold-feature`, in three modes: real (a model and endpoint exist), fixture
+  (screen first, API later) and upgrade (fixture to real API). `/fk-build` routes to it.
+- The scaffolder is stack-neutral: it generates in the project's state management through
+  `project-conventions`, and sizes in the project's sizing strategy rather than `.w`/`.sp`.
+
+**Migration:** none for a project. A fixture-mode feature built by the old screen scaffolder
+upgrades through `/fk-build` as before; its README's "fixture mode" heading is still what is read.
+
 ## 0.6.0
 
 Four commands now carry the work, and every other skill is reached through them.

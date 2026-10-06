@@ -197,7 +197,6 @@ def main() -> int:
         r"flutter_bloc|BlocProvider|BlocBuilder|BlocListener|BlocConsumer|blocTest|bloc_test"
     )
     STACK_OPINIONATED = {
-        "flutter-create-feature-e2e", "flutter-create-screen-e2e",
         "fk-setup",
     }
     # A detector has to name what it detects, which is the opposite of generating in its shape.

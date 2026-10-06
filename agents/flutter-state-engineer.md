@@ -1,6 +1,6 @@
 ---
 name: flutter-state-engineer
-description: Owns the state layer for a single feature: its actions, its state shape, the handlers, and the repository calls. Use proactively once a feature's action list and repository signatures are stable (e.g. after Phase 1 of flutter-create-feature-e2e) and work splits cleanly along layer lines. Scaffold or edit the feature's state-layer files.
+description: Owns the state layer for a single feature: its actions, its state shape, the handlers, and the repository calls. Use proactively once a feature's action list and repository signatures are stable (e.g. after Phase 1 of flutter-scaffold-feature) and work splits cleanly along layer lines. Scaffold or edit the feature's state-layer files.
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
 ---

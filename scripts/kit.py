@@ -449,7 +449,8 @@ def doctor() -> int:
 
 
 # Skill names earlier kit versions used, so clean-project still recognises their copies.
-RETIRED_SKILLS = {"setup-flutter-project", "flutter-implement"}
+RETIRED_SKILLS = {"setup-flutter-project", "flutter-implement", "flutter-create-feature",
+                  "flutter-create-feature-e2e", "flutter-create-screen-e2e"}
 
 
 def clean_project(target: pathlib.Path) -> None:
