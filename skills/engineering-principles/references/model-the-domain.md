@@ -85,5 +85,5 @@ value is actually possible and would be costly**: identifiers that get transpose
 carrying conditional data, values arriving from a network or a user. A local variable in a
 twelve-line function needs none of it.
 
-Beyond this, `template/CLAUDE.md` already bans `dynamic` and `var`, and `flutter-code-review`
+Beyond this, the `CLAUDE.md` that `setup-flutter-project` writes already bans `dynamic` and `var`, and `flutter-code-review`
 already flags an unchecked cast off JSON. Those are the floor, not this principle.

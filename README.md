@@ -13,122 +13,52 @@ Built from what worked across a run of real apps, and from three public skill se
 
 ## Install
 
-Two ways in. **As a plugin** the kit is managed and read-only, and a `git pull` on the marketplace
-updates it. **As local files** it is copied into your repo, yours to edit, and nothing changes
-underneath you. **As a mirror** it is generated into your repo from this kit, and re-generated on
-update. Pick one: installing two of these offers every skill twice and fires every hook twice.
+The kit installs **once for your user**, not into each project, and works with Claude Code, Codex,
+opencode, Antigravity and Cursor, alone or side by side. Projects only ever carry their own
+configuration, which `/setup-flutter-project` writes.
 
 ### 1. Get the kit
 
-<details>
-<summary><strong>Claude Code</strong></summary>
+**Let your agent do it.** In any of the five harnesses, say:
+
+> Install the Flutter Engineering Kit for me by following
+> https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/INSTALL.md
+
+It detects which harnesses you have, asks which you want, installs, and checks the result.
+
+**Or do it yourself:**
 
 ```bash
-# once per machine
-/plugin marketplace add kratagyaagarwaldots/flutter-engineering-kit
+# Codex, opencode, Antigravity, Cursor: any combination
+curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- --for codex,cursor
 
-# then
+# every harness found on this machine
+curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- --detect
+```
+
+```text
+# Claude Code installs as a managed plugin, from inside Claude Code
+/plugin marketplace add kratagyaagarwaldots/flutter-engineering-kit
 /plugin install flutter-engineering-kit@kratagyaagarwal
 ```
 
-The repo is its own marketplace, so there is nothing else to add first. `git pull` on the
-marketplace picks up new skills.
+Including `claude` in `--for` runs those two commands for you when the `claude` CLI is on your PATH.
 
-</details>
+| Harness | Skills | Commands (human-started skills) | Agents | Hooks |
+|---|---|---|---|---|
+| Claude Code | plugin | native | native | native |
+| Codex | `~/.agents/skills` | kept manual by each skill's `agents/openai.yaml` | converted to TOML | `~/.codex/hooks.json` |
+| opencode | `~/.agents/skills` | `/name` commands behind a permission prompt | converted | global plugin |
+| Antigravity | `~/.gemini/config/skills` | not supported: the agent may start any skill | native | `~/.gemini/config/hooks.json`, no prompt hook |
+| Cursor | `~/.agents/skills` | native | native | `~/.cursor/hooks.json` |
 
-<details>
-<summary><strong>Local files, yours to edit</strong></summary>
+Codex, opencode and Cursor read one shared folder, so installing for all three costs one copy. Run
+`kit doctor` (in `~/.flutter-kit/bin`) any time to see what each harness loads and whether a skill
+shows up twice. `kit uninstall` removes exactly what was installed and keeps your own settings.
+`install/harnesses.json` is the registry of these paths.
 
-```bash
-git clone https://github.com/kratagyaagarwaldots/flutter-engineering-kit.git
-cd flutter-engineering-kit
-
-./scripts/install-local.sh /path/to/your/project   # → <project>/.claude/
-./scripts/install-local.sh --user                  # → ~/.claude/, every project
-```
-
-This writes `.claude/{skills,agents,rules,hooks}` as ordinary files. Delete the skills you do not
-want and edit the ones you keep. It prints the `settings.json` block that activates the hooks, since
-files alone do not wire them.
-
-Re-running it overwrites what it installed, so a skill you have edited should be forked under a
-different name before the next pull.
-
-</details>
-
-<details>
-<summary><strong>A whole team, from the project repo</strong></summary>
-
-Commit this to the project's `.claude/settings.json` and everyone who clones it gets the kit
-without running any install command:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "kratagyaagarwal": {
-      "source": { "source": "github", "repo": "kratagyaagarwaldots/flutter-engineering-kit" }
-    }
-  },
-  "enabledPlugins": { "flutter-engineering-kit@kratagyaagarwal": true }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Cursor</strong></summary>
-
-Cursor has no plugin system, so the kit is mirrored into the project as files:
-
-```bash
-scripts/sync-cursor.sh /path/to/project
-```
-
-This writes `.cursor/{skills,agents,rules,hooks,template}` from `skills/`, `agents/`, `rules/`
-and `template/`. The
-mirror is generated. Never hand-edit it; change the kit and re-run the script.
-
-</details>
-
-<details>
-<summary><strong>opencode</strong></summary>
-
-opencode reads `.claude/skills` natively, but the kit's agents, user-invoked skills and hooks need
-opencode-native shapes, so the kit is mirrored into the project as files:
-
-```bash
-scripts/sync-opencode.sh /path/to/project
-```
-
-This writes `.opencode/{skills,agents,commands,rules,plugins,template}` from `skills/`, `agents/`,
-`rules/`, `opencode/plugins/` and `template/`, and merges `opencode.json` (formatter on for
-`dart format`, `instructions` loading `.opencode/rules/*.md`; your other keys untouched). Agents are
-converted to opencode frontmatter (`mode: subagent`, `tools:` becomes `permission:`, Claude model
-shorthands unpinned so they inherit your default), and every user-invoked skill becomes a `/<name>`
-command that loads that skill. The dart-format hook becomes the built-in `dart` formatter; the
-fixture and secret scans become the `flutter-kit.ts` plugin, loaded automatically from
-`.opencode/plugins/`. The mirror is generated. Never hand-edit it; change the kit and re-run the
-script.
-
-opencode has no user-invoked skills — it ignores `disable-model-invocation` — so the merge also
-writes a `permission.skill` gate set to `ask` for each of them. That keeps the heavy skills
-human-started, as they are under Claude Code, at the cost of one confirmation when you type the
-command. Set any of them to `allow` in your `opencode.json` and the sync leaves your value alone.
-
-Do not also install the `.claude/` local files in the same project: opencode scans
-`.claude/skills` too, so two mirrors offer every skill twice.
-
-No clone needed — one command fetches a pinned release and runs the same sync:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- /path/to/project
-```
-
-It installs the latest stable tag by default; `--version vX.Y.Z` pins another, `--version main`
-tracks trunk, `--uninstall` removes the mirror, and re-running updates. Pipe through `less` first
-instead of `bash` if you want to read the installer before running it.
-
-</details>
+Upgrading from a kit version that copied itself into a project? `kit clean-project <path>` removes
+the old `.opencode/`, `.cursor/` or `.claude/` copy and keeps the project's own files.
 
 ### 2. Run `/setup-flutter-project`
 
@@ -136,10 +66,8 @@ Once per project, before any other skill. It will:
 
 - Explore the repo and ask only the few things it cannot observe
 - Fill in the **Architecture table**, which records the stack this project actually uses
-- Write `docs/agents/project.md`, a `CLAUDE.md`, and an `AGENTS.md` twin so opencode reads the same
-  conventions
-- Copy the hooks into `.claude/hooks/` and wire them into `settings.json` (or confirm the
-  `.opencode/` mirror and `opencode.json` are already wired, when the project uses opencode)
+- Write `docs/agents/project.md`, a `CLAUDE.md`, and an `AGENTS.md` twin for every other harness
+- Add the path-scoped rules that match the project's stack
 - Scaffold `lib/core` if the repo is greenfield
 
 Every other skill reads `docs/agents/project.md`, which is what makes one kit serve many apps.
@@ -303,7 +231,7 @@ Working out what the code does, and what it should do, before changing it.
 - **[grill](./skills/grill/SKILL.md)**: Interview the user until a feature's requirements are
   settled.
 - **[domain-glossary](./skills/domain-glossary/SKILL.md)**: Build and sharpen the project's shared
-  vocabulary in CONTEXT.md, and record hard-to-reverse decisions as ADRs.
+  vocabulary in GLOSSARY.md, and record hard-to-reverse decisions as ADRs.
 - **[project-conventions](./skills/project-conventions/SKILL.md)**: Resolve which state
   management, serialization, navigation, sizing and test tooling this project actually uses,
   before generating code.
@@ -490,20 +418,17 @@ Its defaults for a greenfield repo are `flutter_bloc`, `dartz` and `dio`, which 
 
 ## Editing the kit
 
-Read `writing-for-agents` first. Then the rule that keeps this portable: **a project fact never goes
+Read `writing-for-agents` first. `scripts/kit.py` is the installer, `scripts/build-site.py` builds the
+site from the kit, and `install/harnesses.json` is the one list of supported harnesses. Then the rule that keeps this portable: **a project fact never goes
 in a skill.** If it is true of one app but not of every Flutter app, it belongs in
 `docs/agents/project.md`.
 
-`rules/` holds four always-on convention files. The plugin manifest has no key for them, so a
-plugin install does not deliver them: Claude Code gets the same conventions through the `CLAUDE.md`
-that `/setup-flutter-project` writes and through `flutter-core-architecture`, while the Cursor mirror
-copies `rules/` verbatim and the opencode mirror copies them to `.opencode/rules/`, loaded through
-the `instructions` key in `opencode.json`. opencode reads the `AGENTS.md` twin where Claude Code
-reads `CLAUDE.md`. `store-compliance` reads `rules/store-compliance-docs.md` from the kit
-directly.
+A skill carries everything it reads. `setup-flutter-project` holds the project templates and the
+path-scoped rules it copies into a project; `store-compliance` holds its document conventions. That
+is what lets the same skill folder work in every harness's install location.
 
 `CLAUDE.md` in this repo carries the authoring conventions. Run `scripts/validate-kit.py` before
-committing: it checks ten invariants, including that every skill appears in this README with a
+committing: it checks eighteen invariants, including that every skill appears in this README with a
 description matching its frontmatter, and that no skill outside `templates/` names a state
 management library.
 

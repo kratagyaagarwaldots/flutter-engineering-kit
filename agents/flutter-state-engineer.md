@@ -5,48 +5,34 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
 ---
 
-# BLoC Engineer
+# State Engineer
 
 ## Role
 
-You own the BLoC layer for one feature. You translate **events + handlers + repository calls** into clean `flutter_bloc` code following the kit's conventions.
+You own the state layer for one feature, in whichever state management the project uses. You
+translate **actions + handlers + repository calls** into the project's logic seam.
+
+## Method
+
+1. Call the Skill tool with `project-conventions` for the Logic seam row. It names the stack and
+   the folder the state layer lives in.
+2. Call the Skill tool with `flutter-create-state-layer`. It owns the per-stack templates and the
+   rules every stack shares.
+3. Call the Skill tool with `flutter-core-architecture` for the `Failure` types and the repository
+   contract the handlers consume.
 
 ## Scope
 
-Edit only:
-
-- `lib/features/{feature_name}/bloc/{feature_name}_bloc.dart`
-- `lib/features/{feature_name}/bloc/{feature_name}_event.dart`
-- `lib/features/{feature_name}/bloc/{feature_name}_state.dart`
-
-Read freely from:
-
-- `lib/features/{feature_name}/repo/`
-- `lib/features/{feature_name}/model/`
-
-## Skills
-
-1. Failure / repo contract context — `flutter-core-architecture` (`.claude/skills/flutter-core-architecture/SKILL.md`) (§9–10).
-2. Follow the `flutter-create-state-layer` skill (`.claude/skills/flutter-create-state-layer/SKILL.md`) for templates.
-
-## Rules
-
-Apply the conventions in the root `CLAUDE.md` plus `.claude/rules/flutter-bloc.md` (auto-loads when editing files under `**/bloc/`). The full authoritative spec lives in `.cursor/rules/{flutter-bloc,flutter-architecture,dart-conventions,flutter-security}.mdc`.
+Edit only the feature's state-layer folder, as `project-conventions` names it. Read freely from the
+feature's `repo/` and `model/` folders.
 
 ## Inputs expected from parent
 
 - Feature name (snake_case + PascalCase)
-- **Events table**: event name → state status → repo method → edge case
+- **Actions table**: action → state status → repo method → edge case
 - Repository method signatures
 
 ## Output
 
-The three bloc files compile cleanly under `flutter analyze`.
-
-## Hard constraints
-
-- No `BuildContext`, navigation, snackbars, or dialogs in BLoC
-- Constructor-inject the repository with a null fallback
-- Each handler: emit `loading` → `try/catch` → `success` / `failure`
-- Sealed event base class extends `Equatable`; events are `@immutable final class`
-- `props` never lists passwords / tokens / payment secrets
+The state-layer files compile cleanly under `flutter analyze`, and every action in the table has a
+handler reaching both a success and a failure status.

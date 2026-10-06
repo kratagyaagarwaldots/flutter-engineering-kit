@@ -93,7 +93,7 @@ question differently.
 
 Where it does not exist, or the decision in front of you is one it leaves open, settle it — read
 [references/design-language.md](references/design-language.md) and write the file. Create it lazily,
-when there is something real to settle, the way `domain-glossary` creates `CONTEXT.md`. The moment
+when there is something real to settle, the way `domain-glossary` creates `GLOSSARY.md`. The moment
 worth taking it is when acceptance criteria or a spec have just been settled: the product is locked
 and the visual language is the remaining unstated half.
 

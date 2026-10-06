@@ -8,8 +8,11 @@ disable-model-invocation: true
 
 Every other skill in this kit assumes two things exist: `docs/agents/project.md` (what differs
 between client apps) and a `CLAUDE.md` carrying the always-on conventions, with an `AGENTS.md` twin
-for opencode. This skill writes them,
-and scaffolds the core structure when the repo does not have it yet.
+for Codex, opencode, Antigravity and Cursor. This skill writes them, and scaffolds the core
+structure when the repo does not have it yet.
+
+The kit itself is installed once per user, not into the project. What this skill writes is the
+project's own configuration, and it is the only kit-shaped thing a project carries.
 
 Works on a brand-new `flutter create` repo and on an existing project. Explore first, propose, get
 confirmation, then write. Never overwrite a file the project already has without showing the diff.
@@ -34,14 +37,14 @@ Answer these from the repo. Only ask the user what you genuinely cannot observe.
 - **Startup gates.** Read `lib/main.dart`. Every `await` before `runApp` is a gate a verification
   driver has to survive. List them.
 - **Platforms.** Which of `android/ ios/ web/ macos/ windows/ linux/` exist.
-- **Existing docs.** `CLAUDE.md`, `AGENTS.md`, `CONTEXT.md`, `docs/`, a release checklist.
+- **Existing docs.** `CLAUDE.md`, `AGENTS.md`, `GLOSSARY.md`, `docs/`, a release checklist.
 - **Test baseline.** Run `flutter analyze` and `flutter test`. Record the counts, including any
   failing test, before the project accumulates agent-authored code on top of it.
 
 ## 2. Propose
 
 Show the user a filled-in draft of `docs/agents/project.md` using
-[project.md](../../template/docs/agents/project.md) as the shape, with everything exploration
+[project.md](template/docs/agents/project.md) as the shape, with everything exploration
 settled already filled and only the genuine unknowns marked. Then ask, one question at a time, in
 this order. Lead each with your recommended answer so it can be accepted in a word.
 
@@ -96,30 +99,24 @@ which is what stops skills assuming a shape it does not have.
 Write, showing each for approval first:
 
 - **`docs/agents/project.md`** from the confirmed draft.
-- **`CLAUDE.md`** from [CLAUDE.md](../../template/CLAUDE.md), with the identity and command tables
+- **`CLAUDE.md`** from [CLAUDE.md](template/CLAUDE.md), with the identity and command tables
   filled in. If a `CLAUDE.md` already exists, merge rather than replace: keep everything the project
   added, add the kit's sections that are missing, and show the diff.
-- **`AGENTS.md`** from [AGENTS.md](../../template/AGENTS.md), filled in the same way and kept in
-  sync with `CLAUDE.md`. opencode reads this file where Claude Code reads `CLAUDE.md`. If an
-  `AGENTS.md` already exists, merge rather than replace, as with `CLAUDE.md`.
+- **`AGENTS.md`** from [AGENTS.md](template/AGENTS.md), filled in the same way and kept in
+  sync with `CLAUDE.md`. Codex, opencode, Antigravity and Cursor read this file where Claude Code
+  reads `CLAUDE.md`. If an `AGENTS.md` already exists, merge rather than replace, as with
+  `CLAUDE.md`.
+- **`.claude/rules/`** from [template/rules/](template/rules/), choosing by the Architecture table:
+  `flutter-ui.md` and `flutter-models.md` always, and `flutter-bloc.md` only where the Logic seam
+  is `Bloc`. Each is path-scoped, so it loads only while the agent edits matching files. Copy a
+  rule only where the project has no file of that name, and say which you skipped.
 - **`docs/specs/.gitkeep`**, `docs/client/.gitkeep`, `docs/adr/.gitkeep` for whichever the answers
   above put in play.
-- **Hooks, only if the kit is not installed as a plugin.** A plugin install already loads them
-  from the kit's own `hooks/hooks.json`, so copying them again runs dart-format twice and blocks a
-  pasted secret with two identical messages. Check `enabledPlugins` in `.claude/settings.json` and
-  `~/.claude/settings.json` first: if either names `flutter-engineering-kit`, say the hooks are
-  already active and copy nothing.
-  Under opencode the equivalent check is whether `.opencode/plugins/flutter-kit.ts` exists and
-  `opencode.json` sets the `formatter` key (both written by `scripts/sync-opencode.sh` in the kit):
-  if both are present, say the opencode wiring is already active and copy nothing. If the project
-  uses opencode but has no `.opencode/` mirror, tell the user to run that script rather than
-  hand-copying files: it also generates the `commands/` and converted `agents/` opencode needs.
-  Otherwise — a Cursor mirror, or the skills copied into `.claude/skills/` — copy `hooks/*.sh` into
-  `.claude/hooks/` and wire them in `.claude/settings.json`: dart-format on `Edit|Write`,
-  secret-scan on `UserPromptSubmit`, fixture-scan on `Bash`. Where a `settings.json` already
-  exists, add only the missing hooks.
 
-Do not write a `CONTEXT.md`. That is `domain-glossary`'s job, and it should be created lazily when
+Hooks are not this skill's job: the user-level install wires them for every harness. Where the
+user reports that formatting or the secret scan is not running, tell them to run `kit doctor`.
+
+Do not write a `GLOSSARY.md`. That is `domain-glossary`'s job, and it should be created lazily when
 the first term is actually resolved. The same holds for `docs/agents/design.md`: `flutter-design`
 writes it once there is a settled product to design against, so leave the Design language row
 pointing at it and unfilled here.
@@ -139,5 +136,9 @@ Tell the user what was written, then name the next step based on what the projec
   `docs/agents/design.md` before the next screen adds to the drift.
 
 Where exploration found integrations whose keys a human has to fetch by hand, call the Skill tool
-with `setup-wizard`. Mention `scripts/sync-cursor.sh` in the kit if the team uses Cursor on this
-repo, or `scripts/sync-opencode.sh` if it uses opencode.
+with `setup-wizard`.
+
+Where the repo still carries a copy of the kit from an older version (kit skills under
+`.opencode/skills/`, `.cursor/skills/` or `.claude/skills/`), tell the user to run
+`kit clean-project <path>`, which removes the kit's files and keeps the project's own. Two copies
+offer every skill twice.

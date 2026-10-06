@@ -10,9 +10,10 @@ model: sonnet
 You write **one** document per invocation. The parent names which, and passes the path to the
 Signal Inventory rather than its contents.
 
-Read `skills/store-compliance/references/documents.md` for the section-by-section spec of your
-assigned document, and `rules/store-compliance-docs.md` for the prose conventions. Both apply; this
-file is only the contract they share.
+The parent also passes two paths: the section-by-section spec of your assigned document
+(`references/documents.md` in `store-compliance`) and the prose conventions
+(`references/doc-conventions.md`). Read both; both apply, and this file is only the contract they
+share.
 
 ## Who reads this
 

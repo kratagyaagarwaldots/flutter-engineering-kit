@@ -75,14 +75,14 @@ with the rule file cited beside each.
 
 ## Hooks — tell the executor these fire
 
-Configured in `.claude/settings.json`. The executor will see their output and may mistake it
+Installed with the kit for every harness that runs hooks (`hooks/kit-hook.py`). The executor will see their output and may mistake it
 for its own error. Warn it in the doc when relevant:
 
 | Hook | Trigger | What the executor sees |
 |------|---------|------------------------|
-| `dart-format.sh` | `PostToolUse` on `Edit`/`Write` | Files reformat themselves after every edit — **do not hand-format, and do not "fix" the reformat** |
-| `scan-secrets.sh` | `UserPromptSubmit` | **Blocks** submission on a secret match; a literal key in the doc will jam the executor |
-| `scan-fixtures.sh` | `PreToolUse` on `Bash` | A heads-up before `git commit` / `git push` when `FIXTURE` markers remain — expected in fixture mode, not an error |
+| format | after every file edit | Files reformat themselves after every edit — **do not hand-format, and do not "fix" the reformat** |
+| secrets | on prompt submit (on file write under opencode) | **Blocks** submission on a secret match; a literal key in the doc will jam the executor |
+| fixtures | before a shell command | A heads-up before `git commit` / `git push` when `FIXTURE` markers remain — expected in fixture mode, not an error |
 
 Consequence for **you**, the doc author: never put a real key, token, or credential-shaped
 string in the doc. Use `{{API_KEY}}` placeholders and a §7 note on where the real value lives.

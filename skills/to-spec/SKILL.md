@@ -17,7 +17,7 @@ instead and link it from the file.
 
 ## Before writing
 
-Read the project's glossary (`CONTEXT.md`) if it exists and use its terms exactly; a spec that
+Read the project's glossary (`GLOSSARY.md`) if it exists and use its terms exactly; a spec that
 renames a domain concept teaches the codebase a second word for the same thing. Respect anything in
 `docs/adr/` covering the area, and do not re-litigate a recorded decision inside a spec.
 

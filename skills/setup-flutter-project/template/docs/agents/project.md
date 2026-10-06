@@ -64,7 +64,7 @@ The Value column below is filled with the kit's default. Replace each with what 
 | Field | Value |
 |---|---|
 | Acceptance criteria and specs | `docs/specs/` |
-| Domain glossary | `CONTEXT.md` |
+| Domain glossary | `GLOSSARY.md` |
 | Decisions worth recording | `docs/adr/` |
 | Client questionnaires | `docs/client/` |
 | Store and compliance pack | `docs/store/` |

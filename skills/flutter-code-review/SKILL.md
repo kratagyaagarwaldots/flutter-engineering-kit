@@ -38,7 +38,7 @@ worth surfacing on client work.
 
 ## 3. Gather the convention sources
 
-Read what the project documents: `CLAUDE.md`, anything under `rules/`, `CONTEXT.md` for vocabulary.
+Read what the project documents: `CLAUDE.md`, anything under `rules/`, `GLOSSARY.md` for vocabulary.
 Those always win.
 
 On top of whatever the project documents, the conventions axis always carries the **Flutter

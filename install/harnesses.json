@@ -1,0 +1,71 @@
+{
+  "$comment": "The one registry of supported harnesses. scripts/kit.py installs from these paths and scripts/build-site.py renders the install tabs and support table from them, so the two cannot disagree. Paths are user-global; ~ is the user's home.",
+  "repo": "kratagyaagarwaldots/flutter-engineering-kit",
+  "plugin": "flutter-engineering-kit@kratagyaagarwal",
+  "shared_skills_dir": "~/.agents/skills",
+  "harnesses": [
+    {
+      "id": "claude",
+      "name": "Claude Code",
+      "detect": { "bins": ["claude"], "dirs": ["~/.claude"] },
+      "method": "plugin",
+      "install": "# inside Claude Code\n/plugin marketplace add kratagyaagarwaldots/flutter-engineering-kit\n/plugin install flutter-engineering-kit@kratagyaagarwal",
+      "note": "Installed as a managed plugin: skills, agents and hooks in one step, updated by the marketplace.",
+      "support": { "skills": true, "commands": true, "agents": true, "hooks": true }
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "detect": { "bins": ["codex"], "dirs": ["~/.codex"] },
+      "method": "files",
+      "skills_dirs": ["~/.agents/skills"],
+      "agents_dir": "~/.codex/agents",
+      "agents_format": "codex-toml",
+      "hooks_file": "~/.codex/hooks.json",
+      "install": "curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- --for codex",
+      "note": "CLI, IDE extension and desktop app share one install. Commands are kept manual-only through each skill's agents/openai.yaml.",
+      "support": { "skills": true, "commands": true, "agents": "Converted to TOML", "hooks": true }
+    },
+    {
+      "id": "opencode",
+      "name": "opencode",
+      "detect": { "bins": ["opencode"], "dirs": ["~/.config/opencode"] },
+      "method": "files",
+      "skills_dirs": ["~/.agents/skills"],
+      "agents_dir": "~/.config/opencode/agents",
+      "agents_format": "opencode-md",
+      "commands_dir": "~/.config/opencode/commands",
+      "plugins_dir": "~/.config/opencode/plugins",
+      "config_file": "~/.config/opencode/opencode.json",
+      "install": "curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- --for opencode",
+      "note": "Commands become /name commands, gated behind a permission prompt so only you start them.",
+      "support": { "skills": true, "commands": "Permission-gated", "agents": "Converted", "hooks": "Plugin" }
+    },
+    {
+      "id": "antigravity",
+      "name": "Antigravity",
+      "detect": { "bins": ["agy"], "dirs": ["~/.gemini/config", "~/.gemini/antigravity", "~/.gemini/antigravity-cli"] },
+      "method": "files",
+      "skills_dirs": ["~/.gemini/config/skills", "~/.gemini/antigravity-cli/skills"],
+      "agents_dir": "~/.gemini/config/agents",
+      "agents_format": "antigravity-md",
+      "hooks_file": "~/.gemini/config/hooks.json",
+      "install": "curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- --for antigravity",
+      "note": "Antigravity has no manual-only skills and no prompt hook, so the agent may start any skill itself and pasted secrets are not scanned.",
+      "support": { "skills": true, "commands": "Not manual-only", "agents": true, "hooks": "No prompt hook" }
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "detect": { "bins": ["cursor"], "dirs": ["~/.cursor"] },
+      "method": "files",
+      "skills_dirs": ["~/.agents/skills"],
+      "agents_dir": "~/.cursor/agents",
+      "agents_format": "cursor-md",
+      "hooks_file": "~/.cursor/hooks.json",
+      "install": "curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- --for cursor",
+      "note": "Reads the same shared skills folder as Codex and opencode, so installing several of them costs one copy.",
+      "support": { "skills": true, "commands": true, "agents": true, "hooks": true }
+    }
+  ]
+}

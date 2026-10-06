@@ -35,7 +35,7 @@ You are improving the **environment the agent works in**, not the code it wrote.
      better in the review skill than in `CLAUDE.md`.
    - **Navigation.** Did the agent spend a long time finding something? A pointer in `CLAUDE.md` or a
      row in `docs/agents/project.md` is cheaper than repeated searching.
-   - **Glossary.** Did we and the client mean different things by a word? That is a `CONTEXT.md`
+   - **Glossary.** Did we and the client mean different things by a word? That is a `GLOSSARY.md`
      entry, and possibly an ADR.
    - **No-ops.** Instructions in the steering files that do not change behaviour. Deleting these is
      as valuable as adding a good one, and safer than it feels.

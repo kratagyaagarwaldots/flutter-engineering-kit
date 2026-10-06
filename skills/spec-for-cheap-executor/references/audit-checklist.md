@@ -27,7 +27,7 @@ code?* If yes, it is not finished.
 - [ ] Every project-specific term is either defined or cited to a rule file
 - [ ] An executor with no project knowledge could apply §11 without reading anything else
       *except* the rule files §11 names
-- [ ] No credential-shaped literals (the `scan-secrets` hook will block the executor's prompt)
+- [ ] No credential-shaped literals (the kit's secrets hook will block the executor's prompt)
 
 ## C. Verifiability
 

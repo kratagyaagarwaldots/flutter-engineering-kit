@@ -1,9 +1,3 @@
----
-description: Conventions for generated store/compliance Markdown documents — no fabrication, provenance, character budgets, policy citations, readability, and PDF-friendly formatting.
-paths:
-  - "docs/store/**/*.md"
----
-
 # Store & Compliance Doc Conventions
 
 When creating or editing any file under `docs/store/`:
