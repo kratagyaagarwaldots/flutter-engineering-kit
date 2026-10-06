@@ -21,7 +21,7 @@ set -euo pipefail
 # tests), FLUTTER_KIT_HOME (default ~/.flutter-kit).
 
 REPO="kratagyaagarwaldots/flutter-engineering-kit"
-DEFAULT_VERSION="v0.5.0"
+DEFAULT_VERSION="v0.9.0"
 
 VERSION="${KIT_VERSION:-$DEFAULT_VERSION}"
 STATE="${FLUTTER_KIT_HOME:-$HOME/.flutter-kit}"
@@ -36,7 +36,7 @@ while [ $# -gt 0 ]; do
 done
 
 case "${ARGS[0]:-}" in
-  install|uninstall|doctor|list|clean-project) ;;
+  install|uninstall|doctor|list|clean-project|models|loop) ;;
   *) ARGS=(install "${ARGS[@]+"${ARGS[@]}"}") ;;
 esac
 
