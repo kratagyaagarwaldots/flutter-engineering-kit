@@ -1,4 +1,29 @@
-# Flutter Engineering Kit
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo-light.svg" alt="Flutter Engineering Kit" width="420">
+  </picture>
+</p>
+
+<p align="center"><em>Build Flutter apps with AI agents the way a good team would: settle the requirement, build it
+test-first, prove it works, and ship it, from one ticket to a whole project.</em></p>
+
+<p align="center">
+  <a href=".claude-plugin/plugin.json"><img alt="kit version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkratagyaagarwaldots%2Fflutter-engineering-kit%2Fmain%2F.claude-plugin%2Fplugin.json&query=%24.version&label=kit&color=0b5cad"></a>
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-e3b341"></a>
+  <img alt="Flutter, any state management" src="https://img.shields.io/badge/Flutter-any%20stack-02569B?logo=flutter&logoColor=white">
+  <a href="https://github.com/kratagyaagarwaldots/flutter-engineering-kit/actions/workflows/pages.yml"><img alt="checks and site" src="https://github.com/kratagyaagarwaldots/flutter-engineering-kit/actions/workflows/pages.yml/badge.svg"></a>
+  <img alt="Works with Claude Code, Codex, opencode, Antigravity and Cursor" src="https://img.shields.io/badge/works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20opencode%20%C2%B7%20Antigravity%20%C2%B7%20Cursor-0e9f8a">
+</p>
+
+**Website:** https://kratagyaagarwaldots.github.io/flutter-engineering-kit/
+
+**Docs:** [Install](#install) · [Commands](#commands) · [Project delivery](#project-delivery) ·
+[Agent loop](#the-agent-loop) · [Agents](agents/README.md) · [Changelog](CHANGELOG.md)
+
+**Let your agent install it:** point it at [INSTALL.md](INSTALL.md).
+
+---
 
 Skills and agents for **engineering** Flutter apps rather than vibe-coding them: understand the
 code, design the change, build it test-first, prove it works, and ship it. Run as a project, the
