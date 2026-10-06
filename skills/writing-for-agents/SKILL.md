@@ -37,14 +37,14 @@ Every skill is one of two things, and the choice is a trade between those budget
 
 Pick model-invocation only when the agent must reach the skill on its own, or another skill must. A
 heavy orchestrator that should never auto-fire on a vague request is user-invoked. In this kit that
-is `setup-flutter-project`, `client-questionnaire`, `to-spec`, the two end-to-end scaffolders,
-`release-readiness`, `retro`, `handoff`, `spec-for-cheap-executor`, `store-compliance`
-and the router itself.
+is the six `fk-` commands, `retro`, the tools (`handoff`, `unslop`, `spec-for-cheap-executor`) and
+the router itself, and the list is held fixed: check 19 fails when a command is added outside it.
+A new workflow becomes a step one of those commands calls, not a command of its own.
 
 Two consequences worth internalising. Shared reference that two **user-invoked** skills both need can
 live in neither — push it to a plain file both point at. And when a step's precondition is a
 user-invoked skill, phrase it as an instruction for the human ("tell the user to run
-`/setup-flutter-project`"), never as a call.
+`/fk-setup`"), never as a call.
 
 ## Composition: call the tool, do not link the file
 

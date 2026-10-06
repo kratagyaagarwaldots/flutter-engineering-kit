@@ -1,7 +1,6 @@
 ---
 name: release-readiness
-description: Before shipping to a live app, find what a change could break elsewhere and prove the one fact its safety depends on by running code. Use before a production release, a backend cutover, or any change to a live app you are nervous about.
-disable-model-invocation: true
+description: Before shipping to a live app, find what a change could break elsewhere and prove the one fact its safety depends on by running code. Use when /fk-release starts, or before a production release, a backend cutover, or any change to a live app the user is nervous about.
 ---
 
 # Release readiness
@@ -80,5 +79,4 @@ round up.
 - **Before you ship.** The cheapest check that would catch the real bug, including the script you
   wrote.
 
-Then tell the user to run `/store-compliance` for the submission pack, which is user-invoked and
-reachable only by them typing it. The mechanical steps stay with the project's release checklist.
+Inside `/fk-release` the store pack comes next; on its own, tell the user `/fk-release` covers it. The mechanical steps stay with the project's release checklist.

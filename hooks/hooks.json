@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/dart-format.sh"
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/kit-hook.py claude format"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/scan-fixtures.sh"
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/kit-hook.py claude fixtures"
           }
         ]
       }
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/scan-secrets.sh"
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/kit-hook.py claude secrets"
           }
         ]
       }

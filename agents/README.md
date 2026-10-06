@@ -3,10 +3,17 @@
 Specialists the skills delegate to. Each owns one layer or one document, so a skill can fan out
 without any single agent holding the whole feature in context.
 
-These files are the source. `scripts/sync-cursor.sh` generates the `.cursor/agents/` mirror from
-them, and `scripts/sync-opencode.sh` generates the `.opencode/agents/` mirror (converted to
-opencode frontmatter: `mode: subagent`, `tools:` becomes `permission:`, model tier unpinned), so
-edit here and re-run the script. Never edit a mirror.
+These files are the source. `scripts/kit.py` converts them for each harness at install time
+(TOML for Codex, opencode and Cursor frontmatter), so edit here and re-run `kit install`. Never
+edit an installed copy.
+
+## Models
+
+The `model:` line in each file is Claude Code's default and nothing more. Which model an agent
+really runs on is the user's choice: `install/roles.json` puts every agent in a role (explore,
+build, judge, qa) and says what that role needs, the `configure-models` skill picks a model per role
+in each harness the user has, and `kit install` pins it. Without that step, agents outside Claude
+Code inherit the session's model. The tier column below is the reasoning behind each default.
 
 ## Feature layers
 
@@ -39,6 +46,16 @@ Signal Inventory. It used to be five agents, one per document group. One writer 
 because the documents have to agree with each other on governing law, contacts and URLs, and
 separate contexts produced disagreements that the orchestrator then had to reconcile. Consistency is
 cheaper to keep than to repair.
+
+## Delivery
+
+| Agent | Does | Model |
+|-------|------|-------|
+| `qa-engineer` | Tests a sprint's merged build against every ticket's criteria, files each failure as a bug | `sonnet` |
+
+`/fk-sprint qa` sends it the commit a client is about to receive. Each builder proved its own ticket
+on its own branch; this agent tests them together, which is where tickets that passed alone break
+each other. It runs the build and files bugs, and never edits source.
 
 ## When to delegate
 

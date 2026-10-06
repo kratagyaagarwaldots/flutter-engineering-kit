@@ -1,7 +1,6 @@
 ---
 name: store-compliance
-description: Generate the App Store / Google Play metadata, privacy, terms, permissions, SDK-audit and release-checklist pack for this app.
-disable-model-invocation: true
+description: Generate the App Store / Google Play metadata, privacy, terms, permissions, SDK-audit and release-checklist pack for this app. Use when /fk-release reaches the store pack, or when the user asks for store listing or privacy documents.
 ---
 
 # Store compliance
@@ -13,7 +12,7 @@ React Native, or Expo.
 guess, because these documents are published to users and read by a reviewer.
 
 The document specs live in [references/documents.md](references/documents.md). The prose conventions
-live in `rules/store-compliance-docs.md`. This file owns the order and the cross-checks.
+live in [references/doc-conventions.md](references/doc-conventions.md). This file owns the order and the cross-checks.
 
 ## Inputs
 
@@ -63,8 +62,10 @@ keeps the parent's window clear.
 Read [references/documents.md](references/documents.md) and decide which documents this app needs;
 the table there gives the condition for each.
 
-Then delegate to `store-doc-writer`, **once per document**, naming the document and passing the path
-to `_signals.md`. One writer produces every file, which is what keeps the governing law, the
+Then delegate to `store-doc-writer`, **once per document**, naming the document and passing three
+absolute paths: `_signals.md`, and this skill's `references/documents.md` and
+`references/doc-conventions.md`. The writer runs in its own context and cannot find this skill's
+files on its own. One writer produces every file, which is what keeps the governing law, the
 contacts and the URLs consistent without a reconciliation pass.
 
 Write in this order, because each informs the next: privacy pack, then terms and subscription, then

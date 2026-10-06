@@ -66,8 +66,8 @@ Write the outcome down:
   choice, and what it costs. A choice of database, an auth model, an offline strategy, a
   state-management change. Nothing else does this today, which is why decisions get re-argued.
 
-Then tell the user to run `/flutter-implement` with the sketch path. It is user-invoked, so only
-they can start it.
+Then tell the user to run `/fk-build` with the sketch path. It is a command, so only they can
+start it.
 
 ## 5. Scrap
 

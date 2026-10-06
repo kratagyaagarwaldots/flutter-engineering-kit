@@ -1,26 +1,27 @@
 import type { Plugin } from "@opencode-ai/plugin";
+import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
 /**
  * flutter-engineering-kit hooks for opencode.
  *
- * Source of truth: this file. `scripts/sync-opencode.sh` copies it into a
- * Flutter project's `.opencode/plugins/`; never hand-edit the copy.
+ * Source of truth: this file. `scripts/kit.py install --for opencode` links it into
+ * `~/.config/opencode/plugins/`; never hand-edit the installed copy.
  *
- * Parity with the kit's Claude hooks (`hooks/`):
- * - `dart-format.sh` (PostToolUse on Edit|Write) → NOT reimplemented here.
- *   opencode's built-in `dart` formatter covers it; the sync script merges
- *   `"formatter": true` into the project's `opencode.json`, which runs
- *   `dart format` on edited `.dart` files when `dart` is on PATH.
- * - `scan-fixtures.sh` (PreToolUse on Bash) → below: before a `git commit`
+ * Parity with the kit's command hooks (`hooks/kit-hook.py`):
+ * - `format` (after Edit|Write) → below: after an `edit` or `write` of a
+ *   `.dart` file, run `dart format` on it when `dart` is on PATH. Done here
+ *   rather than through opencode's `formatter` key, which would switch on
+ *   every built-in formatter in every project the user opens.
+ * - `fixtures` (before Bash) → below: before a `git commit`
  *   or `git push`, scan `lib/` for fixture-mode artefacts and surface a
  *   heads-up in the tool output. Never blocks, never fails closed.
  *   The hook matches `input.tool === "bash"`: that is opencode's shell tool id
  *   (`packages/opencode/src/tool/shell/id.ts` keeps `ToolID = "bash"` for
  *   compatibility; the `shell.ts` filename and the registry's local variable
  *   name are not the id).
- * - `scan-secrets.sh` (UserPromptSubmit) → below, moved to the file-write
+ * - `secrets` (UserPromptSubmit) → below, moved to the file-write
  *   boundary: opencode has no prompt-submit hook, so `edit` / `write` /
  *   `apply_patch` calls whose *new* content looks like an API key, token,
  *   or JWT are refused with an error. That third id is literal too
@@ -33,7 +34,7 @@ import * as path from "node:path";
  * error in the fixture scan is swallowed so the tool still runs.
  */
 
-// Same shapes as hooks/scan-secrets.sh: Stripe keys, AWS access keys,
+// Same shapes as SECRET_RE in hooks/kit-hook.py: Stripe keys, AWS access keys,
 // GitHub PATs, JWTs, and bearer tokens.
 const SECRET_RE =
   /sk_(live|test)_[A-Za-z0-9]{16,}|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{20,}|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}|Bearer\s+[A-Za-z0-9_\-.=]{20,}/;
@@ -75,7 +76,7 @@ function listDartFiles(root: string, out: string[], budget: { n: number }): void
   }
 }
 
-// Mirror of scan-fixtures.sh: features whose README still says
+// Mirror of the `fixtures` check in hooks/kit-hook.py: features whose README still says
 // "fixture mode", plus dangling FIXTURE_START / FIXTURE_END markers.
 function fixtureHeadsUp(projectRoot: string): string | null {
   const featuresDir = path.join(projectRoot, "lib", "features");
@@ -121,7 +122,7 @@ function fixtureHeadsUp(projectRoot: string): string | null {
     message += ` ${markerCount} FIXTURE_START/FIXTURE_END marker(s) remain in lib/.`;
   }
   message +=
-    " If shipping fixtures is intentional, proceed - otherwise upgrade via flutter-create-feature-e2e first.";
+    " If shipping fixtures is intentional, proceed - otherwise upgrade them with /fk-build first.";
   return message;
 }
 
@@ -159,7 +160,23 @@ function newContent(args: Record<string, unknown>): string {
 }
 
 export default (async ({ client, directory }) => {
+  // The documented place to read a tool's args is `tool.execute.before`, so the
+  // .dart path is recorded there and formatted once the write has landed.
+  const pendingFormat = new Map<string, string>();
   return {
+    "tool.execute.after": async (input: any) => {
+      const key = String(input?.callID ?? input?.tool ?? "");
+      const file = pendingFormat.get(key);
+      if (!file) return;
+      pendingFormat.delete(key);
+      try {
+        if (fs.existsSync(file)) {
+          spawnSync("dart", ["format", file], { stdio: "ignore", timeout: 60_000 });
+        }
+      } catch {
+        // Fail open: formatting never breaks an edit.
+      }
+    },
     "tool.execute.before": async (input: any, output: any) => {
       const tool = input?.tool as string | undefined;
       const args = (output?.args ?? {}) as Record<string, unknown>;
@@ -198,6 +215,13 @@ export default (async ({ client, directory }) => {
 
       // File-write tools: `edit`, `write`, `apply_patch`. All three ids are
       // literal (see the header comment); there is no `patch` tool.
+      if (tool === "edit" || tool === "write") {
+        const file = String(args["filePath"] ?? "");
+        if (file.endsWith(".dart")) {
+          pendingFormat.set(String(input?.callID ?? tool), path.resolve(directory, file));
+        }
+      }
+
       if (tool === "edit" || tool === "write" || tool === "apply_patch") {
         if (SECRET_RE.test(newContent(args))) {
           throw new Error(

@@ -1,7 +1,6 @@
 ---
 name: to-spec
-description: Turn the current conversation into a written spec, with an explicit out-of-scope section.
-disable-model-invocation: true
+description: Turn the current conversation into a written spec, with an explicit out-of-scope section. Use when /fk-plan has settled a requirement, or when the user asks to write a discussion up as a spec.
 ---
 
 # To spec
@@ -12,12 +11,13 @@ does not contain enough to write a spec, say which sections you cannot fill, the
 with `grill` to settle them rather than inventing the gaps.
 
 Write to the directory `docs/agents/project.md` names for specs (`docs/specs/` by default), as
-`docs/specs/<NN>-<slug>.md`. If the project config names a real issue tracker, publish there
-instead and link it from the file.
+`docs/specs/<NN>-<slug>.md`. Where the project tracks work in GitHub, also call the Skill tool with
+`project-tracker` to file the spec as a ticket linking the file, so it can be planned into a
+sprint.
 
 ## Before writing
 
-Read the project's glossary (`CONTEXT.md`) if it exists and use its terms exactly; a spec that
+Read the project's glossary (`GLOSSARY.md`) if it exists and use its terms exactly; a spec that
 renames a domain concept teaches the codebase a second word for the same thing. Respect anything in
 `docs/adr/` covering the area, and do not re-litigate a recorded decision inside a spec.
 
@@ -83,6 +83,6 @@ With the contract confirmed the product is locked, which is the moment the app's
 being free to invent per screen. Where `docs/agents/design.md` does not exist yet, call the Skill tool
 with `flutter-design` to settle it before any screen is built.
 
-Then tell the user which scaffolder to run. Both are user-invoked, so only they can start one:
-`/flutter-create-feature-e2e` when a model and endpoint exist, `/flutter-create-screen-e2e` when they
-do not.
+Then return the spec path. Inside `/fk-plan` the next step is the sketch; on its own, tell the
+user to run `/fk-build` with the spec, which picks the full-feature path when a model and endpoint
+exist and the fixture-mode path when they do not.

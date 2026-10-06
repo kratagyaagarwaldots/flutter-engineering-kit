@@ -1,7 +1,6 @@
 ---
 name: client-questionnaire
-description: Turn decisions you cannot make in-house into a questionnaire for the client to fill in.
-disable-model-invocation: true
+description: Turn decisions you cannot make in-house into a questionnaire for the client to fill in. Use when /fk-plan reaches a question only the client can answer, or when the user asks for a client questionnaire.
 ---
 
 # Client questionnaire
@@ -96,8 +95,8 @@ back half-answered.
 ## After it comes back
 
 Answers are input, not criteria. Call the Skill tool with `grill` over what returned, to close the
-branches the client's answers opened. Then tell the user to run `/to-spec`, which is user-invoked and
-reachable only by them typing it.
+branches the client's answers opened. Then call the Skill tool with `to-spec`; when the answers
+arrive in a later session, tell the user to run `/fk-plan` with the filled questionnaire instead.
 
 Where a question came back blank, that is a live risk: name it in the spec's assumptions rather than
 quietly picking for them.

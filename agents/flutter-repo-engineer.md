@@ -20,16 +20,17 @@ Edit only:
 
 Read freely from `lib/core/network/` (`ApiClient`), `lib/core/error/` (`Failure` types), and `lib/core/repositories/` when sharing is required.
 
-## Skills
+## Method
 
-1. Network / Failure / fixture markers — `flutter-core-architecture` (`.claude/skills/flutter-core-architecture/SKILL.md`) (§9–10, §12).
-2. `flutter-create-model` for DTOs
-3. `flutter-create-repository` for the repository
-4. `flutter-create-screen-e2e` (Phases 3 & 4) when in **fixture mode** (no real API yet)
+1. Call the Skill tool with `flutter-core-architecture` for the network client, the `Failure`
+   types and the fixture markers.
+2. Call the Skill tool with `flutter-create-model` for the DTOs.
+3. Call the Skill tool with `flutter-create-repository` for the repository.
 
-## Rules
+In **fixture mode** (no real API yet), the parent passes the fixture rules from
+`flutter-scaffold-feature`; follow those, and the rules below.
 
-Apply the conventions in the root `CLAUDE.md` plus `.claude/rules/flutter-models.md` (auto-loads when editing files under `lib/**/model/`). The full authoritative spec lives in `.cursor/rules/{flutter-models,flutter-architecture,dart-conventions,flutter-security}.mdc`.
+Apply the conventions in the project's root `CLAUDE.md` or `AGENTS.md`.
 
 ## Inputs expected from parent
 

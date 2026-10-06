@@ -1,7 +1,6 @@
 ---
 name: setup-integration-harness
-description: Stand up an integration test harness that boots the real app, prove it runs once, and record it so verification can reach the top rung.
-disable-model-invocation: true
+description: Stand up an integration test harness that boots the real app, prove it runs once, and record it so verification can reach the top rung. Use when the user asks for integration or device tests, or when a claim needs the device rung and the project has no harness.
 ---
 
 # Setup integration harness

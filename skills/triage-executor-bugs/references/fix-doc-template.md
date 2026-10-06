@@ -43,7 +43,7 @@ Fix exactly the 3 sites in §3. **Change nothing else.**
 You have worked in these files before. Do not:
 - rename anything, even something obviously misnamed
 - extract a helper, even where the same 4 lines repeat
-- reformat (the `dart-format.sh` hook handles formatting on every write)
+- reformat (the kit's format hook handles formatting on every write)
 - fix an unrelated bug you notice — **report it instead, at the end**
 - touch any file not listed in §3
 

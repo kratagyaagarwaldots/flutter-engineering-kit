@@ -1,59 +1,48 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Remote installer for the flutter-engineering-kit opencode mirror. No clone needed:
+# Install the flutter-engineering-kit for your user, for the harnesses you use. No clone needed:
 #
-#   curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- /path/to/flutter-project
+#   curl -fsSL https://raw.githubusercontent.com/kratagyaagarwaldots/flutter-engineering-kit/main/install.sh | bash -s -- --for codex,opencode
+#   curl -fsSL .../install.sh | bash -s -- --detect        # every harness found on this machine
+#   curl -fsSL .../install.sh | bash -s -- uninstall       # remove it again
 #
-# Installs a pinned release tag by default. Flags:
-#   --version vX.Y.Z   install that tag instead of the default pin
-#   --version main     track trunk instead of a release (not reproducible)
-#   --uninstall        remove a previously installed mirror instead of installing
+# Flags it handles itself:
+#   --version vX.Y.Z   install that tag instead of the default pin (main tracks trunk)
+# Everything else is passed to `kit` (scripts/kit.py): install --for/--detect, uninstall,
+# doctor, clean-project. With no command, `install` is assumed.
 #
-# Env overrides: KIT_VERSION (same as --version), KIT_TARBALL_URL (full tarball URL,
-# for local mirrors and testing; skips the tag/main fallback). KIT_VERSION and
-# KIT_TARBALL_URL are only honoured from the environment, never from flags.
+# What it does: downloads the kit tarball into ~/.flutter-kit/versions/<version>, points
+# ~/.flutter-kit/current at it, writes a `kit` launcher to ~/.flutter-kit/bin, then runs
+# that version's own scripts/kit.py. This file carries no kit content, so it cannot drift
+# from what it installs. Pipe it through `less` instead of `bash` to read it first.
 #
-# What it does: downloads the kit tarball (~2 MB), extracts it to a temp dir, and runs
-# that tree's own scripts/sync-opencode.sh against your project. This file carries no kit
-# content itself, so it cannot drift from the skills, agents, or commands it installs.
-# Prefer reading it first (pipe through less instead of bash) over trusting it blind.
+# Env: KIT_VERSION (same as --version), KIT_TARBALL_URL (full tarball URL, for mirrors and
+# tests), FLUTTER_KIT_HOME (default ~/.flutter-kit).
 
 REPO="kratagyaagarwaldots/flutter-engineering-kit"
-DEFAULT_VERSION="v0.4.0"
+DEFAULT_VERSION="v0.9.0"
 
 VERSION="${KIT_VERSION:-$DEFAULT_VERSION}"
-MODE="install"
-TARGET=""
-
-usage() {
-  echo "usage: install.sh [--version vX.Y.Z|main] [--uninstall] /path/to/flutter-project" >&2
-}
+STATE="${FLUTTER_KIT_HOME:-$HOME/.flutter-kit}"
+ARGS=()
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --version) VERSION="${2:?error: --version needs a value}" ; shift 2 ;;
     --version=*) VERSION="${1#--version=}" ; shift ;;
-    --uninstall) MODE="uninstall" ; shift ;;
-    -h|--help) usage ; exit 0 ;;
-    -*) echo "error: unknown flag $1" >&2 ; usage ; exit 2 ;;
-    *) TARGET="$1" ; shift ;;
+    *) ARGS+=("$1") ; shift ;;
   esac
 done
 
-if [ -z "$TARGET" ]; then usage ; exit 2; fi
-if [ ! -d "$TARGET" ]; then echo "error: $TARGET is not a directory" >&2; exit 1; fi
-if [ ! -f "$TARGET/pubspec.yaml" ]; then
-  echo "error: $TARGET has no pubspec.yaml; this does not look like a Flutter project" >&2
-  exit 1
-fi
+case "${ARGS[0]:-}" in
+  install|uninstall|doctor|list|clean-project|models|loop) ;;
+  *) ARGS=(install "${ARGS[@]+"${ARGS[@]}"}") ;;
+esac
 
 for cmd in curl tar python3; do
   command -v "$cmd" >/dev/null 2>&1 || { echo "error: $cmd is required but not on PATH" >&2; exit 1; }
 done
-
-WORK="$(mktemp -d)"
-trap 'rm -rf "$WORK"' EXIT
 
 tarball_url_for() {
   case "$1" in
@@ -62,15 +51,11 @@ tarball_url_for() {
   esac
 }
 
-if [ -n "${KIT_TARBALL_URL:-}" ]; then
-  TARBALL="$KIT_TARBALL_URL"
-else
-  TARBALL="$(tarball_url_for "$VERSION")"
-fi
+WORK="$(mktemp -d)"
+trap 'rm -rf "$WORK"' EXIT
+TARBALL="${KIT_TARBALL_URL:-$(tarball_url_for "$VERSION")}"
 
-echo "kit:     $REPO@$VERSION"
-echo "target:  $TARGET ($MODE)"
-
+echo "kit: $REPO@$VERSION"
 if ! curl -fsSL -o "$WORK/kit.tgz" "$TARBALL"; then
   if [ -n "${KIT_TARBALL_URL:-}" ] || [ "$VERSION" = "main" ] || [ "$VERSION" = "master" ]; then
     echo "error: download failed: $TARBALL" >&2
@@ -82,15 +67,26 @@ if ! curl -fsSL -o "$WORK/kit.tgz" "$TARBALL"; then
   curl -fsSL -o "$WORK/kit.tgz" "$TARBALL" || { echo "error: download failed: $TARBALL" >&2; exit 1; }
 fi
 
-tar -xzf "$WORK/kit.tgz" -C "$WORK" --strip-components=1
-SYNC="$WORK/scripts/sync-opencode.sh"
-if [ ! -f "$SYNC" ]; then
-  echo "error: kit archive has no scripts/sync-opencode.sh; refusing to continue" >&2
+DEST="$STATE/versions/$VERSION"
+rm -rf "$DEST"
+mkdir -p "$DEST"
+tar -xzf "$WORK/kit.tgz" -C "$DEST" --strip-components=1
+if [ ! -f "$DEST/scripts/kit.py" ]; then
+  echo "error: kit archive has no scripts/kit.py; refusing to continue" >&2
   exit 1
 fi
+ln -sfn "$DEST" "$STATE/current"
 
-if [ "$MODE" = "uninstall" ]; then
-  bash "$SYNC" --uninstall "$TARGET"
-else
-  bash "$SYNC" "$TARGET"
-fi
+mkdir -p "$STATE/bin"
+cat > "$STATE/bin/kit" <<LAUNCHER
+#!/usr/bin/env bash
+exec python3 "$STATE/current/scripts/kit.py" "\$@"
+LAUNCHER
+chmod +x "$STATE/bin/kit"
+
+python3 "$STATE/current/scripts/kit.py" "${ARGS[@]}"
+
+case ":$PATH:" in
+  *":$STATE/bin:"*) ;;
+  *) echo "tip: add $STATE/bin to your PATH to run \`kit doctor\` and \`kit uninstall\` directly." ;;
+esac

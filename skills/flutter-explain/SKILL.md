@@ -30,7 +30,7 @@ Five headings, in this order, because it is the order a reader needs them:
 **Overview.** Two or three sentences. What this does and who triggers it.
 
 **Key concepts.** The nouns a reader needs before the rest makes sense, including any term this
-codebase uses differently from its usual meaning. Where `CONTEXT.md` exists, use its vocabulary
+codebase uses differently from its usual meaning. Where `GLOSSARY.md` exists, use its vocabulary
 rather than inventing a parallel one.
 
 **How it works.** The path through the code for the main case, as a numbered sequence with

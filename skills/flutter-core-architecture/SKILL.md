@@ -12,7 +12,7 @@ constants, or folder layout.
 ## Two sources, and which is which
 
 This skill owns the **conventions**: the layout, the naming families, the contracts, the rules. They
-are fixed, they apply to every project the kit is installed in, and `setup-flutter-project` scaffolds
+are fixed, they apply to every project the kit is installed in, and `fk-setup` scaffolds
 them on a greenfield repo.
 
 The **repo owns the inventory**: which shared components, services, utils and constants actually
@@ -236,7 +236,7 @@ fails needs a reason to show the user.
 ## 10. Fixture markers
 
 Sanctioned conventions, not `TODO`s. They survive review, and they are replaced rather than
-hand-edited when the API arrives (`flutter-create-feature-e2e` Upgrade Mode).
+hand-edited when the API arrives (`flutter-scaffold-feature` upgrade mode).
 
 | Marker | Where |
 |--------|-------|
@@ -293,7 +293,7 @@ Call the Skill tool with one of these, one call per need:
 
 | Need | Skill |
 |------|-------|
-| A feature from criteria alone | `flutter-create-feature` |
+| A whole feature folder, real or fixture mode | `flutter-scaffold-feature` |
 | One layer only | `flutter-create-state-layer` / `flutter-create-model` / `flutter-create-repository` |
 | A screen from a design | `flutter-create-screen` |
 | Legacy migration | `flutter-modernize-screen` |
@@ -302,6 +302,3 @@ Call the Skill tool with one of these, one call per need:
 | Security pass | `flutter-security-review` |
 | Prove it works | `flutter-verify` |
 
-The two end-to-end scaffolders are user-invoked, so no skill can reach them. When a request needs a
-full feature or a fixture-mode screen, tell the user to run `/flutter-create-feature-e2e` or
-`/flutter-create-screen-e2e`.

@@ -7,7 +7,7 @@ The point is not to design the app up front. It is to decide the handful of thin
 same everywhere — the type steps, the colour roles, the motion budget, what a loading state looks
 like in *this* app — so that thirty screens do not each answer them separately and disagree.
 
-Create it lazily, the way `domain-glossary` creates `CONTEXT.md`: when there is something real to
+Create it lazily, the way `domain-glossary` creates `GLOSSARY.md`: when there is something real to
 settle, not as an empty scaffold at setup.
 
 ## When this runs

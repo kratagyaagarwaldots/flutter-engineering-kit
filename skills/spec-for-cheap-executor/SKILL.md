@@ -45,7 +45,7 @@ Establish, asking only for what you genuinely cannot determine from the repo:
 - [ ] **Is code in scope at all?** (docs-only specs are legitimate — say so explicitly)
 - [ ] Files/areas that must **not** be touched
 - [ ] Existing docs in `docs/tasks/` that this one overlaps or contradicts → Phase 4 becomes mandatory
-- [ ] Which model executes it (affects verbosity, not rigour — assume Haiku-class if unstated)
+- [ ] Which model executes it (affects verbosity, not rigour — assume a small, fast model if unstated)
 
 Produce the Scope Box (template §1) now. Everything later is checked against it.
 
