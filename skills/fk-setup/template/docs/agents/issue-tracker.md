@@ -30,3 +30,17 @@ One row per closed sprint, appended by `/fk-sprint close`.
 
 | Sprint | Committed | Closed | Notes |
 |---|---|---|---|
+
+## Agent loop
+
+`kit loop run` reads this table. It builds the current sprint's `ready-for-agent` tickets, drives
+each pull request through CI and review, and labels it `ready-for-human` when it is yours to test
+and merge. Which models it runs is a per-user setting (`kit models show`), not a project one.
+
+| Field | Value |
+|---|---|
+| Max parallel builds | `2` |
+| Max review rounds | `3` |
+| Max CI fixes | `3` |
+| One-way door paths | `<extra globs, comma-separated, e.g. lib/core/storage/**>` |
+| Worktrees | `<../<repo>-worktrees>` |

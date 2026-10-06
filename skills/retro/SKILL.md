@@ -44,7 +44,9 @@ You are improving the **environment the agent works in**, not the code it wrote.
      read access, such as a teed log file or an MCP server, often beats any amount of instruction.
    - **Tool economy.** Did the agent pay for an expensive call it could have avoided: a full test
      suite run per slice, a whole-file read where a search would do, a verbose MCP tool? Name the
-     cheaper route and where it should be written down.
+     cheaper route and where it should be written down. Where `kit loop` ran, `kit models report`
+     shows what each role and model cost; a role on a stronger model than its work needs is a
+     `configure-models` change, not a prose rule.
    - **Navigation.** Did the agent spend a long time finding something? A pointer in `CLAUDE.md` or a
      row in `docs/agents/project.md` is cheaper than repeated searching.
    - **Glossary.** Did we and the client mean different things by a word? That is a `GLOSSARY.md`

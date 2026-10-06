@@ -37,6 +37,7 @@ The exact commands for every operation are in [github.md](references/github.md).
 | In review | an open pull request whose body says `Closes #N` |
 | Done | closed by that pull request merging |
 | Dependency | a `Blocked by #N` line in the body |
+| Agent pull request | `agent-loop` while `kit loop` drives it; `agent-stuck` when it stopped and needs a person |
 
 `ready-for-agent` means an agent can take the ticket with nothing but its body. `ready-for-human`
 means it needs a person: a credential, a store console, a signing key, a device in hand, or a

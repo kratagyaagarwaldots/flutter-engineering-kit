@@ -21,6 +21,8 @@ gh label create needs-info      --color F9D0C4 --description "Waiting on an answ
 gh label create ready-for-agent --color 0E8A16 --description "An agent can build this from the ticket alone" --force
 gh label create ready-for-human --color 006B75 --description "Needs a person: access, a device, or a decision" --force
 gh label create wontfix         --color FFFFFF --description "Decided against" --force
+gh label create agent-loop      --color 5319E7 --description "Driven by kit loop" --force
+gh label create agent-stuck     --color B60205 --description "The loop stopped; needs a person" --force
 ```
 
 A module label, created when `project-backlog` defines the module:

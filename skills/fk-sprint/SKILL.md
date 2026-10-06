@@ -67,8 +67,11 @@ tracker, tell the user to run `/fk-setup` first. Where there is no backlog yet, 
 The Committed list records the promise and never changes; the tracker records what happened to each
 ticket.
 
-Then tell the user to run `/fk-build #N` for each ticket, in the order given. Tickets with no edge
-between them can run at the same time, each in its own session, branch and worktree.
+Then tell the user how the tickets get built. By hand: `/fk-build #N` for each, in the order given;
+tickets with no edge between them can run at the same time, each in its own session, branch and
+worktree. Unattended: `kit loop run` (add `--watch 300` to keep it running) builds the
+`ready-for-agent` tickets, gets each pull request reviewed, and labels it `ready-for-human` when it
+is theirs to test and merge.
 
 ## status
 
@@ -105,6 +108,9 @@ the user to run `/fk-release` with a tester group as the target. A fail goes bac
 5. Call the Skill tool with `project-memory` to consolidate the vault.
 6. Where velocity has now been measured twice and the proposal's timeline still rests on a guess,
    call the Skill tool with `project-proposal` to revise the timeline.
+7. Where `kit loop` built tickets this sprint, call the Skill tool with `configure-models` to read
+   the cost report against the review rounds, and propose a model change only where the numbers
+   support one.
 
 Then tell the user to run `/retro` while the round is fresh.
 

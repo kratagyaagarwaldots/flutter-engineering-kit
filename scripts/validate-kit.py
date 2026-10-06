@@ -484,6 +484,53 @@ def main() -> int:
                                 f"layer is stack-neutral; reach engineering through a command")
     check("20.", f"{len(DELIVERY)} delivery-layer skills name no framework")
 
+    # 21. Models are the user's choice, never the kit's. install/roles.json says what each kind of
+    #     work needs and owns every agent exactly once; each harness says how to run one role
+    #     headless; and no skill or loop prompt names a model, because a name frozen into the
+    #     kit is stale within weeks. An agent's `model:` line is Claude Code's default only.
+    roles = json.loads((ROOT / "install/roles.json").read_text())
+    owner_of: dict[str, list[str]] = {}
+    for role, spec in roles["roles"].items():
+        if not spec.get("needs"):
+            FAIL.append(f"roles.json: role '{role}' does not say what it needs")
+        for a in spec.get("agents", []):
+            owner_of.setdefault(a, []).append(role)
+    agent_names = {p.stem for p in (ROOT / "agents").glob("*.md") if p.stem != "README"}
+    for a in sorted(agent_names):
+        if len(owner_of.get(a, [])) != 1:
+            FAIL.append(f"roles.json: agent '{a}' belongs to {len(owner_of.get(a, []))} roles, not one")
+    for a in sorted(set(owner_of) - agent_names):
+        FAIL.append(f"roles.json: names unknown agent '{a}'")
+    for key, role in roles["loop"].items():
+        if not key.startswith("$") and role not in roles["roles"]:
+            FAIL.append(f"roles.json: loop.{key} points at unknown role '{role}'")
+    for h in registry["harnesses"]:
+        hl = h.get("headless") or {}
+        for k in ("argv", "effort", "write", "read", "tail", "invoke"):
+            if k not in hl:
+                FAIL.append(f"harness '{h['id']}' headless template lacks '{k}'")
+        flat = " ".join(hl.get("argv", []) + hl.get("tail", []))
+        if "{prompt}" not in flat or "{model}" not in flat:
+            FAIL.append(f"harness '{h['id']}' headless template never passes the prompt and model")
+    MODEL_NAME = re.compile(r"\b(?:gpt-\d|o\d-|claude-(?:opus|sonnet|haiku|fable)|gemini[- ]\d|"
+                            r"deepseek|glm-?\d|haiku|sonnet|opus|composer-\d)\b", re.I)
+    for f in sorted(list((ROOT / "skills").rglob("*.md")) + list((ROOT / "loop").rglob("*.md"))):
+        for lineno, line in enumerate(f.read_text().splitlines(), 1):
+            if MODEL_NAME.search(line):
+                FAIL.append(f"{f.relative_to(ROOT)}:{lineno} names a model — say what the work needs "
+                            f"and let configure-models choose")
+    check("21.", f"{len(roles['roles'])} roles own all {len(agent_names)} agents; no skill names a model")
+
+    # 22. kit loop and kit models work: the decision table, verdict parsing, model pinning into
+    #     every harness, and one ticket driven from build through a requested change to merged
+    #     and cleaned up, against a fake GitHub and a fake model CLI.
+    r = subprocess.run([sys.executable, str(ROOT / "tests/loop_test.py")], capture_output=True, text=True)
+    if r.returncode != 0:
+        FAIL.extend(ln for ln in r.stdout.splitlines() if ln.startswith("FAIL"))
+        if not any(ln.startswith("FAIL") for ln in r.stdout.splitlines()):
+            FAIL.append(f"tests/loop_test.py crashed: {(r.stderr or r.stdout).strip()[-400:]}")
+    check("22.", "kit loop drives a ticket to merged; kit models pins every harness")
+
     print()
     if FAIL:
         print(f"{len(FAIL)} FAILURE(S):")

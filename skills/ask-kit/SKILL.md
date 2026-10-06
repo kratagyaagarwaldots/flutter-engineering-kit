@@ -48,6 +48,7 @@ Route to one directly when the person wants that single step and nothing around 
 | Cut modules into pointed tickets | `project-backlog` | `/fk-plan`, `/fk-feedback` |
 | File, move or report on tickets and sprints | `project-tracker` | every command |
 | What the project remembers, and where a fact goes | `project-memory` | every command |
+| Which model each kind of agent work runs on, and what it costs | `configure-models` | installing, `/fk-sprint close` |
 | A decision only the client can make | `client-questionnaire` | `/fk-plan` |
 | Settle requirements by interview | `grill` | `/fk-plan` |
 | Terms mean different things to you and the client | `domain-glossary` | `/fk-plan` |

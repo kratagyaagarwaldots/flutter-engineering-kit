@@ -214,6 +214,47 @@ Issues, with milestones as sprints and labels for points, modules and state.
 
 ---
 
+## The agent loop
+
+Once a sprint is planned, agents can build it while you do something else. `kit loop run` is a
+plain script, so watching costs nothing; a model runs only when there is something new to judge.
+
+```
+ticket ready → builder opens a PR → CI (no model) ─ red ─→ builder fixes ─┐
+                                       │                                   │
+                                     green → reviewer ─ changes ─→ builder fixes
+                                                │
+                                             approves → ready-for-human → you test and merge → cleanup
+```
+
+- **Each model run is short and fresh:** its own headless process, capped in dollars or minutes,
+  with the diff and the ticket handed to it rather than searched for.
+- **Cheap by default, stronger on evidence:** the builder starts on the cheapest model in its ladder
+  and climbs only for an 8-point ticket, a second red CI run, or a second round of review. A
+  stronger reviewer runs only when a change crosses a one-way door (stored data, app identity,
+  permissions, an external contract).
+- **The reviewer comes from another model family** than the builder, so they do not miss the same
+  things.
+- **Start-up is the hidden cost.** A fresh headless run loads the harness's whole system prompt
+  before doing anything: measured on Claude Code's smallest model, about $0.07 cold and $0.01 with
+  a warm prompt cache. So reviews run back to back to share that cache, and MCP servers are left out
+  of review runs.
+- **It stops and hands over** after three review rounds, three CI fixes or the pull request's
+  budget, labelled `ready-for-human` and `agent-stuck`, with a desktop notification.
+- **State lives on the pull request** (labels and one marker comment), so any machine can pick it
+  up. `kit loop status` lists each one and what it has cost.
+
+**You choose the models, through your agent.** The kit names none: `install/roles.json` says what
+each kind of work needs (explore, build, review, judge, qa). The `configure-models` skill checks
+what you can reach and today's prices, proposes a model per role for every harness you use, proves
+each one answers, and saves your approved choice with `kit models set`, which pins it everywhere.
+After a sprint, `kit models report` shows what each role cost, and the skill proposes changes
+backed by those numbers.
+
+Each role runs as its own process, so roles can use different harnesses: a builder in opencode on
+one provider and a reviewer in Claude Code, say. Claude Code's headless run is verified; the others'
+are written from their documentation and stay off until you probe them and opt in.
+
 ## Reference
 
 **Commands** are what you type. They cost nothing in context until used, and each one calls the
@@ -403,6 +444,9 @@ Handing work to another session, a cheaper model, or a teammate.
   after a cheap model executed a spec-for-cheap-executor task doc. Batches bug reports, finds root
   causes (which usually cluster), then routes each one to inline repair, a mechanical fix doc for
   the cheap executor, or an amendment to the original spec.
+- **[configure-models](./skills/configure-models/SKILL.md)**: Choose which model each kind of kit
+  agent work runs on, in every harness the user has, from what they can actually reach, today's
+  prices and benchmarks, and their budget, then save it with kit models set.
 
 ### Meta
 
@@ -447,7 +491,7 @@ path-scoped rules it copies into a project; `store-compliance` holds its documen
 is what lets the same skill folder work in every harness's install location.
 
 `CLAUDE.md` in this repo carries the authoring conventions. Run `scripts/validate-kit.py` before
-committing: it checks twenty invariants, including that every skill appears in this README with a
+committing: it checks twenty-two invariants, including that every skill appears in this README with a
 description matching its frontmatter, and that no skill outside `templates/` names a state
 management library.
 

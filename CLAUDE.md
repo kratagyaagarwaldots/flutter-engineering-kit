@@ -84,9 +84,13 @@ that skill is restructured, never add one. A new skill needing stack-specific co
   `project-backlog`) name no framework and call no engineering skill: they describe how a project
   is run. The `fk-` commands are where the delivery layer meets the Flutter skills. Check 20 holds
   this.
+- No skill or loop prompt names a model. `install/roles.json` says what each kind of work needs and
+  puts every agent in exactly one role; `configure-models` chooses models with the user, and
+  `kit install` pins them. An agent's `model:` line is only Claude Code's default. Check 21 holds
+  this, and check 22 runs `tests/loop_test.py`.
 - Run `claude plugin validate . --strict` after touching either manifest.
 
-Run `python3 scripts/validate-kit.py` before committing. It encodes all twenty, so a broken
+Run `python3 scripts/validate-kit.py` before committing. It encodes all twenty-two, so a broken
 invariant fails a check rather than surviving to review.
 
 ## Installing
@@ -102,6 +106,15 @@ Generated files are never edited by hand: change the source here and re-run `kit
 payload shape; `opencode/plugins/flutter-kit.ts` is its opencode equivalent. The root
 `install.sh` downloads a pinned tarball and delegates to `scripts/kit.py`. It carries no kit
 content itself, so keep it that way.
+
+## Models and the loop
+
+`~/.flutter-kit/models.json` is the user's, written by `kit models set` after the
+`configure-models` skill proposes it and the user approves. `scripts/kitloop.py` is `kit loop`: a
+script, not an agent, that runs each role as a short headless process through the `headless`
+template in `install/harnesses.json`. Keep its next-step rule in `decide()`, which is pure, so
+check 22 can test every branch. A headless template stays `verified: false` until it has been run
+against that CLI; the loop refuses an unverified one unless the user opts in.
 
 ## Site
 

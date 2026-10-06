@@ -91,6 +91,10 @@ from step 5 is what fills it, and a ticket's number goes in as `Closes #N`, so m
 
 Then call the Skill tool with `project-memory` to leave the session's log entry.
 
+Under `kit loop`, the prompt names a file for the pull request body. Write the body there and stop
+after the commit; the loop pushes and opens the pull request, so this step's "never push" still
+holds for you.
+
 ## Completion criteria
 
 Every acceptance criterion has code, a test naming it, and a verification rung reported. The

@@ -3,6 +3,28 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.9.0
+
+Agents can now build a planned sprint unattended, on models the user chose, without a model
+sitting in a loop.
+
+- `kit loop run <project>` builds the sprint's `ready-for-agent` tickets in worktrees, opens each
+  pull request, sends red CI back to the builder, has a reviewer from another model family review
+  each new commit, escalates only one-way doors to the strongest model, and labels the pull
+  request `ready-for-human` with a desktop notification. It cleans up the worktree and branch after
+  you merge. It stops and hands over after three review rounds, three CI fixes or the budget.
+- The kit names no models. `install/roles.json` describes five roles; the new `configure-models`
+  skill picks a model per role and harness with the user; `kit models show | discover | probe |
+  set | report` manages and audits the choice.
+- `kit install` pins those models into every harness's agents. Before this, every kit sub-agent
+  outside Claude Code inherited the session's model.
+- The tracker gains the `agent-loop` and `agent-stuck` labels; `issue-tracker.md` gains an Agent loop
+  table.
+
+**Migration:** run `kit install` again, then let your agent run `configure-models`. Without it,
+agents keep inheriting the session's model and `kit loop` refuses to start. The loop creates its
+two labels on its first run.
+
 ## 0.8.0
 
 The kit can now run a project, not only build one: a proposal, a pointed backlog, sprints, a QA
