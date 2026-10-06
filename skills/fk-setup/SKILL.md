@@ -1,5 +1,5 @@
 ---
-name: setup-flutter-project
+name: fk-setup
 description: Configure a Flutter repo for the engineering kit. Run once per project before using the other skills.
 disable-model-invocation: true
 ---
@@ -125,10 +125,8 @@ pointing at it and unfilled here.
 
 Tell the user what was written, then name the next step based on what the project is:
 
-- **Greenfield, no brief yet** → tell them to run `/client-questionnaire`, to get the client's
-  answers before any code exists. It is user-invoked, so only they can start it.
-- **Greenfield with a brief** → call the Skill tool with `grill` to turn the brief into numbered
-  acceptance criteria.
+- **Greenfield** → tell them to run `/fk-plan`. With no brief yet it starts with a questionnaire
+  for the client; with a brief it turns the brief into numbered acceptance criteria.
 - **Existing project** → nothing further. The skills now read `docs/agents/project.md`. Mention that
   `flutter-verify` will report the test baseline recorded in step 1, so a pre-existing failure is
   never mistaken for new breakage. Where the repo already has screens, its design language exists in

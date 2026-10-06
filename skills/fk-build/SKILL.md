@@ -1,28 +1,35 @@
 ---
-name: flutter-implement
-description: Drive a spec or sketch to a reviewed, verified commit: test-first at the agreed seams, then analyze, test, review and prove.
+name: fk-build
+description: Build a ticket, spec or sketch to a reviewed, verified commit, choosing the path from what it is given: a change to existing code, a new feature from a design and an endpoint, or a screen before its API exists.
 disable-model-invocation: true
 ---
 
-# Implement
+# Build
 
 Take a settled piece of work and drive it to a commit that has been reviewed and proven, rather than
 to code that compiles.
 
-Everything here is a call to a skill that owns its part. This skill owns the **order** and the
-**gates**, which is the thing that goes missing when work is done ad hoc: the review happens after
-the claim of doneness, or the suite is run once at the end and its failures attributed to something
-else.
+Everything here is a call to a skill that owns its part. This skill owns the **route**, the
+**order** and the **gates**, which is what goes missing when work is done ad hoc: the review happens
+after the claim of doneness, or the suite is run once at the end and its failures attributed to
+something else.
 
-## What this needs
+## 0. Route
 
-A spec from `/to-spec`, a sketch from `flutter-plan-change`, or an acceptance-criteria list. Where
-none exists and the criteria are thin, stop and tell the user to run `/to-spec`, or call the Skill
-tool with `grill` to settle them first.
+Read what you were given, then take the first row that fits.
 
-**Where this is a new feature folder with a design and an endpoint**, this is the wrong skill. Tell
-the user to run `/flutter-create-feature-e2e`, which scaffolds all five layers from a Figma node and
-an API contract. This skill is for changing code that already exists.
+| The work | Path |
+|---|---|
+| No spec, sketch or numbered acceptance criteria, or criteria naming only the happy path | Stop. Tell the user to run `/fk-plan` first, or call the Skill tool with `grill` when only a criterion or two is missing. |
+| A **new feature folder**, with a design and a real endpoint | Call the Skill tool with `flutter-create-feature-e2e`. It runs its own phases and gates; return here only for step 6. |
+| A **fixture-mode feature** whose API now exists | Call the Skill tool with `flutter-create-feature-e2e`; it detects upgrade mode from the feature's README. |
+| A **new screen** with a design but no API yet | Call the Skill tool with `flutter-create-screen-e2e`. |
+| A change to **code that already exists** | Steps 1 to 6 below. |
+
+Where the user wants a cheaper model to do the build, tell them to run `/spec-for-cheap-executor`,
+which writes the task doc that model works from.
+
+The step is done when you have named the path and why, in one line, before writing any code.
 
 ## 1. Orient
 

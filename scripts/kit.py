@@ -401,7 +401,7 @@ def install(ids: list[str]) -> None:
         for n in r["notes"]:
             print(f"    - {n}")
     write_json(RECORD, record)
-    print("\nNext: open a Flutter project and run /setup-flutter-project once.")
+    print("\nNext: open a Flutter project and run /fk-setup once.")
     print("Check the result any time with: kit doctor")
 
 
@@ -448,9 +448,13 @@ def doctor() -> int:
     return 1 if problems else 0
 
 
+# Skill names earlier kit versions used, so clean-project still recognises their copies.
+RETIRED_SKILLS = {"setup-flutter-project", "flutter-implement"}
+
+
 def clean_project(target: pathlib.Path) -> None:
     """Remove the per-project mirrors earlier kit versions wrote. Only kit-named paths go."""
-    names = {d.name for d in skills()} | set(user_invoked())
+    names = {d.name for d in skills()} | RETIRED_SKILLS
     agent_files = {a.name for a in agents()}
     removed = []
     for base in (".opencode", ".cursor", ".claude"):

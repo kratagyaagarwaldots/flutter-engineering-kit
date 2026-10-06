@@ -12,7 +12,7 @@ constants, or folder layout.
 ## Two sources, and which is which
 
 This skill owns the **conventions**: the layout, the naming families, the contracts, the rules. They
-are fixed, they apply to every project the kit is installed in, and `setup-flutter-project` scaffolds
+are fixed, they apply to every project the kit is installed in, and `fk-setup` scaffolds
 them on a greenfield repo.
 
 The **repo owns the inventory**: which shared components, services, utils and constants actually
@@ -302,6 +302,5 @@ Call the Skill tool with one of these, one call per need:
 | Security pass | `flutter-security-review` |
 | Prove it works | `flutter-verify` |
 
-The two end-to-end scaffolders are user-invoked, so no skill can reach them. When a request needs a
-full feature or a fixture-mode screen, tell the user to run `/flutter-create-feature-e2e` or
-`/flutter-create-screen-e2e`.
+When a request needs a full feature folder or a fixture-mode screen, call the Skill tool with
+`flutter-create-feature-e2e` or `flutter-create-screen-e2e`; `/fk-build` routes between them.

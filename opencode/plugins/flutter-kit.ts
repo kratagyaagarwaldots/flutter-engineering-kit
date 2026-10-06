@@ -122,7 +122,7 @@ function fixtureHeadsUp(projectRoot: string): string | null {
     message += ` ${markerCount} FIXTURE_START/FIXTURE_END marker(s) remain in lib/.`;
   }
   message +=
-    " If shipping fixtures is intentional, proceed - otherwise upgrade via flutter-create-feature-e2e first.";
+    " If shipping fixtures is intentional, proceed - otherwise upgrade them with /fk-build first.";
   return message;
 }
 

@@ -1,7 +1,6 @@
 ---
 name: store-compliance
-description: Generate the App Store / Google Play metadata, privacy, terms, permissions, SDK-audit and release-checklist pack for this app.
-disable-model-invocation: true
+description: Generate the App Store / Google Play metadata, privacy, terms, permissions, SDK-audit and release-checklist pack for this app. Use when /fk-release reaches the store pack, or when the user asks for store listing or privacy documents.
 ---
 
 # Store compliance

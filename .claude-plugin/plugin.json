@@ -1,6 +1,6 @@
 {
   "name": "flutter-engineering-kit",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Skills and agents for engineering Flutter apps: understand the code, design the change, build it test-first, prove it works, and ship it.",
   "author": {
     "name": "Kratagya Devvratt Agarwal"
@@ -25,6 +25,10 @@
     "./skills/client-questionnaire",
     "./skills/domain-glossary",
     "./skills/engineering-principles",
+    "./skills/fk-build",
+    "./skills/fk-plan",
+    "./skills/fk-release",
+    "./skills/fk-setup",
     "./skills/flutter-accessibility",
     "./skills/flutter-build-failure",
     "./skills/flutter-code-review",
@@ -39,7 +43,6 @@
     "./skills/flutter-design",
     "./skills/flutter-diagnose-bug",
     "./skills/flutter-explain",
-    "./skills/flutter-implement",
     "./skills/flutter-localization",
     "./skills/flutter-merge-conflicts",
     "./skills/flutter-modernize-screen",
@@ -58,7 +61,6 @@
     "./skills/release-readiness",
     "./skills/retro",
     "./skills/setup-ci",
-    "./skills/setup-flutter-project",
     "./skills/setup-integration-harness",
     "./skills/setup-wizard",
     "./skills/spec-for-cheap-executor",

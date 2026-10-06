@@ -32,7 +32,7 @@ You are improving the **environment the agent works in**, not the code it wrote.
      hook, and the command table in `docs/agents/project.md`. A check that exists but is unwired,
      disabled or silently failing is the finding, not a reason to add a second one. A repo where
      nothing runs `flutter analyze` and `flutter test` on every change, neither a pre-commit hook nor
-     a CI job, is itself a finding: tell the user to run `/setup-ci`.
+     a CI job, is itself a finding: propose a pipeline built with `setup-ci`.
    - **Review rules.** Did the reviewer miss something it should have caught, or keep flagging noise?
      Conventions belong to the reviewer, not the implementer: the implementing agent is under the
      most context pressure and the reviewing agent is under the least. A judgement call true of every

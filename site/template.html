@@ -141,7 +141,7 @@ h3 { font-size: 17px; margin: 0 0 6px; letter-spacing: -.01em; }
 .chip { font: 500 12px "JetBrains Mono", monospace; padding: 3px 8px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
 
 /* Workflow */
-.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: step; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--bg-card); }
+.flow { display: grid; grid-template-columns: repeat(var(--cols, 4), 1fr); gap: 0; counter-reset: step; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--bg-card); }
 @media (max-width: 900px) { .flow { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .flow { grid-template-columns: 1fr; } }
 .step { padding: 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); position: relative; }
@@ -424,7 +424,10 @@ document.getElementById("count-agents").textContent = KIT.agents.length + " agen
 (function () {
   const flow = document.getElementById("flow");
   const render = track => {
-    flow.replaceChildren(...KIT.tracks[track].map(s =>
+    const steps = KIT.tracks[track];
+    // Fill whole rows where the count allows: 6 steps as 3+3, 8 as 4+4, 7 as 4+3.
+    flow.style.setProperty("--cols", String(steps.length % 3 === 0 && steps.length % 4 ? 3 : 4));
+    flow.replaceChildren(...steps.map(s =>
       el("div", { class: "step" }, el("h3", { text: s.step }), el("p", { class: "mono", text: s.skills }))));
   };
   document.querySelectorAll(".track-switch button").forEach(b => b.addEventListener("click", () => {

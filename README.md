@@ -15,7 +15,7 @@ Built from what worked across a run of real apps, and from three public skill se
 
 The kit installs **once for your user**, not into each project, and works with Claude Code, Codex,
 opencode, Antigravity and Cursor, alone or side by side. Projects only ever carry their own
-configuration, which `/setup-flutter-project` writes.
+configuration, which `/fk-setup` writes.
 
 ### 1. Get the kit
 
@@ -60,7 +60,7 @@ shows up twice. `kit uninstall` removes exactly what was installed and keeps you
 Upgrading from a kit version that copied itself into a project? `kit clean-project <path>` removes
 the old `.opencode/`, `.cursor/` or `.claude/` copy and keeps the project's own files.
 
-### 2. Run `/setup-flutter-project`
+### 2. Run `/fk-setup`
 
 Once per project, before any other skill. It will:
 
@@ -90,11 +90,11 @@ turns out something else was meant. The gap was never in the implementation. It 
 conversation before it.
 
 **The fix** is to front-load alignment, before there is code to throw away:
-[`/grill`](./skills/grill/SKILL.md) interviews you until every undefined state has an answer,
+[`grill`](./skills/grill/SKILL.md) interviews you until every undefined state has an answer,
 [`domain-glossary`](./skills/domain-glossary/SKILL.md) settles the words, and
-[`/to-spec`](./skills/to-spec/SKILL.md) writes it down including what is *out* of scope. On client
-work, [`/client-questionnaire`](./skills/client-questionnaire/SKILL.md) asks the things only they
-can answer.
+[`to-spec`](./skills/to-spec/SKILL.md) writes it down including what is *out* of scope. On client
+work, [`client-questionnaire`](./skills/client-questionnaire/SKILL.md) asks the things only they
+can answer. `/fk-plan` runs them in that order.
 
 ### #2. We wrote code before we knew the shape
 
@@ -118,7 +118,7 @@ Nobody ran the error state. Nobody checked it against the spec, only against tas
 [`flutter-tdd`](./skills/flutter-tdd/SKILL.md) writes the failing test before the code,
 [`flutter-write-tests`](./skills/flutter-write-tests/SKILL.md) covers logic, widget and golden
 levels, and [`flutter-verify`](./skills/flutter-verify/SKILL.md) makes you **name the rung** you
-actually reached. [`/setup-integration-harness`](./skills/setup-integration-harness/SKILL.md) builds
+actually reached. [`setup-integration-harness`](./skills/setup-integration-harness/SKILL.md) builds
 the top rung when the project has none.
 
 ### #4. It got slow and nobody measured
@@ -162,41 +162,38 @@ name what it chose not to do.
 
 ### The engineering loop
 
-The default. Each step's output is the next step's input.
+The default. Each step's output is the next step's input, and each command calls the skills it
+needs, so the only thing to remember is where you are.
 
-| # | Step | Skill |
+| # | Step | Command |
 |---|---|---|
-| 1 | Configure the repo, once | `setup-flutter-project` |
+| 1 | Configure the repo, once | `/fk-setup` |
 | 2 | Understand what is there | `flutter-explain` |
-| 3 | Settle the requirement | `grill` |
-| 4 | Settle how it should look and move | `flutter-design` |
-| 5 | Design the shape of the change | `flutter-plan-change` |
-| 6 | Build it, test-first, to a reviewed commit | `flutter-implement` |
-| 7 | Prove it, and name the rung | `flutter-verify` |
-| 8 | Ship it | `setup-ci`, `release-readiness` |
+| 3 | Settle the requirement, write the spec, sketch the shape | `/fk-plan` |
+| 4 | Build it test-first, review it, prove it, commit | `/fk-build` |
+| 5 | Prove the release is safe and ship it | `/fk-release` |
+| 6 | Make the next round shorter | `/retro` |
 
-Step 6 drives steps of its own: `flutter-tdd` per slice, then the analyzer, the suite,
-`flutter-code-review` and `flutter-verify`, stopping at a commit.
-
-Step 4 is settled once per app rather than once per change: it writes `docs/agents/design.md`, and
-every later screen reads it instead of deciding again.
+`/fk-plan` runs `grill`, `flutter-design` (once per app), `to-spec` and `flutter-plan-change`.
+`/fk-build` picks its path from what it is given (a change to existing code, a new feature from a
+design and an endpoint, or a screen before its API exists) and drives `flutter-tdd`, the analyzer,
+`flutter-code-review` and `flutter-verify` to a commit. `/fk-release` runs `release-readiness`,
+`setup-ci` where no CI exists, and `store-compliance`.
 
 ### Client delivery
 
 Everything above still applies. This track adds what a paying client needs on top, and is optional
 if you are building your own product.
 
-| # | Step | Skill |
+| # | Step | Command |
 |---|---|---|
-| 1 | Ask the client what only they know | `client-questionnaire` |
-| 2 | Turn answers or a feedback round into numbered criteria | `grill` |
+| 1 | Ask the client what only they know | `/fk-plan` → `client-questionnaire` |
+| 2 | Turn answers or a feedback round into numbered criteria | `/fk-plan` → `grill` |
 | 3 | Fix the vocabulary you and the client share | `domain-glossary` |
-| 4 | Write it down, including what you are *not* building | `to-spec` |
-| 5 | Settle the app's design language, once | `flutter-design` |
-| 6 | Scaffold from a design and an endpoint | `flutter-create-feature-e2e` |
-| 7 | Check the release, prove the one safety fact | `release-readiness` |
-| 8 | Ship the store pack | `store-compliance` |
-| 9 | Fold what you learned back into the kit | `retro` |
+| 4 | Write it down, including what you are *not* building | `/fk-plan` → `to-spec` |
+| 5 | Scaffold from a design and an endpoint | `/fk-build` → `flutter-create-feature-e2e` |
+| 6 | Prove the release, ship the store pack | `/fk-release` |
+| 7 | Fold what you learned back into the kit | `/retro` |
 
 The alignment steps are the cheapest in the kit and the ones most often skipped.
 
@@ -204,37 +201,57 @@ The alignment steps are the cheapest in the kit and the ones most often skipped.
 
 ## Reference
 
-These split on one axis: who can invoke them. **User-invoked** skills carry
-`disable-model-invocation: true`, so they are reachable only when you type them (`/to-spec`, say).
-Their job is to orchestrate, and they cost nothing in context until used. **Model-invoked** skills
-can be invoked by you or reached for automatically by the agent when the task fits; they hold the
-reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another
-user-invoked one.
+**Commands** are what you type. They cost nothing in context until used, and each one calls the
+skills its job needs, in order. **Background skills** hold the reusable discipline: the commands
+reach them, and the agent can also reach for one on its own when a request clearly needs it. A
+command may call background skills, but never another command.
+
+### Commands
+
+The work starts here. Every other skill is reached through one of these.
+
+- **[fk-setup](./skills/fk-setup/SKILL.md)**: Configure a Flutter repo for the engineering kit. Run
+  once per project before using the other skills.
+- **[fk-plan](./skills/fk-plan/SKILL.md)**: Turn an idea, a brief or a client's request into a
+  written spec and a sketch of the change, settling every requirement before any code exists.
+- **[fk-build](./skills/fk-build/SKILL.md)**: Build a ticket, spec or sketch to a reviewed, verified
+  commit, choosing the path from what it is given: a change to existing code, a new feature from a
+  design and an endpoint, or a screen before its API exists.
+- **[fk-release](./skills/fk-release/SKILL.md)**: Get a build ready to ship: find what it could
+  break and prove the fact its safety rests on, confirm CI gates it, and produce or refresh the
+  store submission pack.
+- **[retro](./skills/retro/SKILL.md)**: After a round of work, propose improvements to the kit and
+  the project's agent environment so the next round is shorter.
+- **[ask-kit](./skills/ask-kit/SKILL.md)**: Ask which kit skill fits what you are about to do. A
+  router over every skill in the engineering kit.
+
+### Tools
+
+Commands for moving work between sessions and models, and for prose others will read.
+
+- **[handoff](./skills/handoff/SKILL.md)**: Compact the current conversation into a handoff document
+  another session can pick up.
+- **[spec-for-cheap-executor](./skills/spec-for-cheap-executor/SKILL.md)**: Turn a feature request
+  into one self-contained task doc a cheaper model can execute end to end.
+- **[unslop](./skills/unslop/SKILL.md)**: Cut AI tells from any writing. Must always apply.
 
 ### Understand
 
 Working out what the code does, and what it should do, before changing it.
 
-**User-invoked**
-
-- **[ask-kit](./skills/ask-kit/SKILL.md)**: Ask which kit skill fits what you are about to do. A
-  router over every skill in the engineering kit.
-- **[client-questionnaire](./skills/client-questionnaire/SKILL.md)**: Turn decisions you cannot
-  make in-house into a questionnaire for the client to fill in.
-- **[to-spec](./skills/to-spec/SKILL.md)**: Turn the current conversation into a written spec,
-  with an explicit out-of-scope section.
-
-**Model-invoked**
-
-- **[flutter-explain](./skills/flutter-explain/SKILL.md)**: Explain how a Flutter feature,
-  subsystem or codebase actually works, and why it was built that way.
+- **[client-questionnaire](./skills/client-questionnaire/SKILL.md)**: Turn decisions you cannot make
+  in-house into a questionnaire for the client to fill in.
+- **[to-spec](./skills/to-spec/SKILL.md)**: Turn the current conversation into a written spec, with
+  an explicit out-of-scope section.
+- **[flutter-explain](./skills/flutter-explain/SKILL.md)**: Explain how a Flutter feature, subsystem
+  or codebase actually works, and why it was built that way.
 - **[grill](./skills/grill/SKILL.md)**: Interview the user until a feature's requirements are
   settled.
 - **[domain-glossary](./skills/domain-glossary/SKILL.md)**: Build and sharpen the project's shared
   vocabulary in GLOSSARY.md, and record hard-to-reverse decisions as ADRs.
-- **[project-conventions](./skills/project-conventions/SKILL.md)**: Resolve which state
-  management, serialization, navigation, sizing and test tooling this project actually uses,
-  before generating code.
+- **[project-conventions](./skills/project-conventions/SKILL.md)**: Resolve which state management,
+  serialization, navigation, sizing and test tooling this project actually uses, before generating
+  code.
 - **[flutter-core-architecture](./skills/flutter-core-architecture/SKILL.md)**: The kit's lib/core
   conventions: project structure, barrel imports, constants families, shared components, services,
   network, failures, router, and fixture markers.
@@ -243,31 +260,23 @@ Working out what the code does, and what it should do, before changing it.
 
 Deciding the shape of a change while it is still cheap to change.
 
-**Model-invoked**
-
 - **[flutter-plan-change](./skills/flutter-plan-change/SKILL.md)**: Design a change before writing
   it: the types, signatures and module boundaries it needs, and the order the work lands in.
 - **[engineering-principles](./skills/engineering-principles/SKILL.md)**: Four principles that
-  change how a change is shaped rather than what it does: root causes, subtraction, reader load,
-  and modelling the domain in types.
+  change how a change is shaped rather than what it does: root causes, subtraction, reader load, and
+  modelling the domain in types.
 
 ### Build
 
-Writing the code. `flutter-implement` is the entry point for changing existing code; the two end-to-end scaffolders are for a new feature folder built from a design and an endpoint.
+Writing the code. `fk-build` is the entry point for changing existing code; the two end-to-end
+scaffolders are for a new feature folder built from a design and an endpoint.
 
-**User-invoked**
-
-- **[flutter-implement](./skills/flutter-implement/SKILL.md)**: Drive a spec or sketch to a
-  reviewed, verified commit: test-first at the agreed seams, then analyze, test, review and prove.
-- **[flutter-create-feature-e2e](./skills/flutter-create-feature-e2e/SKILL.md)**: Build or upgrade
-  a complete feature (model, repo, bloc, view, widgets, tests) from a model spec, one API
+- **[flutter-create-feature-e2e](./skills/flutter-create-feature-e2e/SKILL.md)**: Build or upgrade a
+  complete feature (model, repo, state layer, view, widgets, tests) from a model spec, one API
   endpoint, acceptance criteria and a Figma node.
 - **[flutter-create-screen-e2e](./skills/flutter-create-screen-e2e/SKILL.md)**: Build a screen
   backed by a FIXTURE repo from acceptance criteria and a Figma node, before the model and API
   exist.
-
-**Model-invoked**
-
 - **[flutter-tdd](./skills/flutter-tdd/SKILL.md)**: Build a change test-first: a failing test at a
   named seam, then the smallest code that passes it.
 - **[flutter-create-feature](./skills/flutter-create-feature/SKILL.md)**: Scaffold a complete
@@ -275,12 +284,12 @@ Writing the code. `flutter-implement` is the entry point for changing existing c
 - **[flutter-create-state-layer](./skills/flutter-create-state-layer/SKILL.md)**: Generate a
   feature's state layer in whichever state management the project uses: the seam holding its
   behaviour, its actions, and the state the UI reads back.
-- **[flutter-create-model](./skills/flutter-create-model/SKILL.md)**: Generate request and
-  response DTO classes for a feature, immutable and with JSON serialization in whichever mechanism
-  the project uses.
+- **[flutter-create-model](./skills/flutter-create-model/SKILL.md)**: Generate request and response
+  DTO classes for a feature, immutable and with JSON serialization in whichever mechanism the
+  project uses.
 - **[flutter-create-repository](./skills/flutter-create-repository/SKILL.md)**: Generate a
-  Repository class for a feature with dependency-injected API client and proper error handling
-  using Either.
+  Repository class for a feature with dependency-injected API client and proper error handling using
+  Either.
 - **[flutter-create-screen](./skills/flutter-create-screen/SKILL.md)**: Generate a screen (view +
   widgets) from a Figma node URL (read via the Figma MCP server), or a pasted CSS + screenshot
   fallback, or a written spec.
@@ -290,21 +299,16 @@ Writing the code. `flutter-implement` is the entry point for changing existing c
 - **[flutter-navigation](./skills/flutter-navigation/SKILL.md)**: Wire routes, typed arguments and
   deep links, and test that they arrive.
 - **[flutter-modernize-screen](./skills/flutter-modernize-screen/SKILL.md)**: Migrate a legacy
-  screen onto the project's current state management, sizing and widget conventions without
-  changing what it renders.
+  screen onto the project's current state management, sizing and widget conventions without changing
+  what it renders.
 
 ### Prove
 
 Separating *does it work* from *is it written well*, and answering both out loud.
 
-**User-invoked**
-
 - **[setup-integration-harness](./skills/setup-integration-harness/SKILL.md)**: Stand up an
   integration test harness that boots the real app, prove it runs once, and record it so
   verification can reach the top rung.
-
-**Model-invoked**
-
 - **[pr](./skills/pr/SKILL.md)**: Shape a pull request body for fast human review: the smallest
   visual that shows the change, before-and-after evidence that it works, and how dangerous it is to
   merge.
@@ -315,8 +319,8 @@ Separating *does it work* from *is it written well*, and answering both out loud
 - **[flutter-code-review](./skills/flutter-code-review/SKILL.md)**: Review changes on two
   independent axes: does the code follow the project's conventions, and does it do what the spec
   asked.
-- **[flutter-diagnose-bug](./skills/flutter-diagnose-bug/SKILL.md)**: Disciplined diagnosis loop
-  for hard Flutter bugs, jank, and regressions.
+- **[flutter-diagnose-bug](./skills/flutter-diagnose-bug/SKILL.md)**: Disciplined diagnosis loop for
+  hard Flutter bugs, jank, and regressions.
 - **[flutter-performance](./skills/flutter-performance/SKILL.md)**: Measure and improve Flutter
   performance against a budget: jank, dropped frames, slow startup, memory growth, and app size.
 - **[flutter-security-review](./skills/flutter-security-review/SKILL.md)**: Security and quality
@@ -326,18 +330,15 @@ Separating *does it work* from *is it written well*, and answering both out loud
 
 The work that stops a codebase decaying between features.
 
-**Model-invoked**
-
 - **[flutter-upgrade-deps](./skills/flutter-upgrade-deps/SKILL.md)**: Upgrade Flutter and Dart
-  dependencies one at a time, with the breaking changes read first and the suite green between
-  each.
+  dependencies one at a time, with the breaking changes read first and the suite green between each.
 - **[flutter-build-failure](./skills/flutter-build-failure/SKILL.md)**: Diagnose a native build
   failure: Gradle, AGP, Kotlin, JDK, CocoaPods, Xcode or signing.
 - **[flutter-merge-conflicts](./skills/flutter-merge-conflicts/SKILL.md)**: Resolve conflicts in a
   Flutter repo by intent, including the generated files and lockfiles that must be regenerated
   rather than merged.
-- **[flutter-accessibility](./skills/flutter-accessibility/SKILL.md)**: Make a Flutter screen
-  usable with a screen reader, large text and low vision, and add the tests that keep it that way.
+- **[flutter-accessibility](./skills/flutter-accessibility/SKILL.md)**: Make a Flutter screen usable
+  with a screen reader, large text and low vision, and add the tests that keep it that way.
 - **[flutter-localization](./skills/flutter-localization/SKILL.md)**: Add or extend localization:
   ARB files, plurals, RTL layouts and locale-aware formatting, including migrating off a static
   strings class.
@@ -346,56 +347,32 @@ The work that stops a codebase decaying between features.
 
 Everything between "it works on my machine" and "it is live".
 
-**User-invoked**
-
 - **[setup-ci](./skills/setup-ci/SKILL.md)**: Generate a CI pipeline that runs the verification
   ladder on every push, and builds per flavor.
-- **[release-readiness](./skills/release-readiness/SKILL.md)**: Before shipping to a live app,
-  find what a change could break elsewhere and prove the one fact its safety depends on by running
-  code.
+- **[release-readiness](./skills/release-readiness/SKILL.md)**: Before shipping to a live app, find
+  what a change could break elsewhere and prove the one fact its safety depends on by running code.
 - **[store-compliance](./skills/store-compliance/SKILL.md)**: Generate the App Store / Google Play
   metadata, privacy, terms, permissions, SDK-audit and release-checklist pack for this app.
-
-**Model-invoked**
-
 - **[setup-wizard](./skills/setup-wizard/SKILL.md)**: Generate an interactive script that walks a
-  human through setup steps only they can perform, such as provisioning credentials, store
-  accounts, or signing.
+  human through setup steps only they can perform, such as provisioning credentials, store accounts,
+  or signing.
 
 ### Working across sessions and models
 
 Handing work to another session, a cheaper model, or a teammate.
 
-**User-invoked**
-
-- **[handoff](./skills/handoff/SKILL.md)**: Compact the current conversation into a handoff
-  document another session can pick up.
-- **[spec-for-cheap-executor](./skills/spec-for-cheap-executor/SKILL.md)**: Turn a feature request
-  into one self-contained task doc a cheaper model can execute end to end.
-
-**Model-invoked**
-
-- **[triage-executor-bugs](./skills/triage-executor-bugs/SKILL.md)**: Diagnose and route bugs
-  found after a cheap model executed a spec-for-cheap-executor task doc. Batches bug reports,
-  finds root causes (which usually cluster), then routes each one to inline repair, a mechanical
-  fix doc for the cheap executor, or an amendment to the original spec.
+- **[triage-executor-bugs](./skills/triage-executor-bugs/SKILL.md)**: Diagnose and route bugs found
+  after a cheap model executed a spec-for-cheap-executor task doc. Batches bug reports, finds root
+  causes (which usually cluster), then routes each one to inline repair, a mechanical fix doc for
+  the cheap executor, or an amendment to the original spec.
 
 ### Meta
 
 Configuring the kit and editing it.
 
-**User-invoked**
-
-- **[setup-flutter-project](./skills/setup-flutter-project/SKILL.md)**: Configure a Flutter repo
-  for the engineering kit. Run once per project before using the other skills.
-- **[retro](./skills/retro/SKILL.md)**: After a round of work, propose improvements to the kit and
-  the project's agent environment so the next round is shorter.
-- **[unslop](./skills/unslop/SKILL.md)**: Cut AI tells from any writing. Must always apply.
-
-**Model-invoked**
-
 - **[writing-for-agents](./skills/writing-for-agents/SKILL.md)**: How to write documents agents
   consume: skills, CLAUDE.md, and any doc reached by a pointer.
+
 ## Agents
 
 Layer specialists the scaffolding skills delegate to: `flutter-explore`, `flutter-architect`,
@@ -417,7 +394,7 @@ What the kit still imposes, and `flutter-core-architecture` owns:
 - Fixture mode: screens can ship before their API exists, explicitly marked, then upgraded
 
 Its defaults for a greenfield repo are `flutter_bloc`, `dartz` and `dio`, which is what
-`setup-flutter-project` scaffolds when nothing contradicts it.
+`fk-setup` scaffolds when nothing contradicts it.
 
 ## Editing the kit
 
@@ -426,7 +403,7 @@ site from the kit, and `install/harnesses.json` is the one list of supported har
 in a skill.** If it is true of one app but not of every Flutter app, it belongs in
 `docs/agents/project.md`.
 
-A skill carries everything it reads. `setup-flutter-project` holds the project templates and the
+A skill carries everything it reads. `fk-setup` holds the project templates and the
 path-scoped rules it copies into a project; `store-compliance` holds its document conventions. That
 is what lets the same skill folder work in every harness's install location.
 

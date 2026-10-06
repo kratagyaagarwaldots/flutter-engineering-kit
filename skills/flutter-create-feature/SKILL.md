@@ -8,8 +8,7 @@ description: Scaffold a complete feature folder (bloc + model + repo + view + wi
 Generate a complete feature folder from acceptance criteria.
 
 This skill is for the design-incomplete case. When the feature has a defined API endpoint **and** a
-Figma design, tell the user to run `/flutter-create-feature-e2e` instead, which is user-invoked and
-reachable only by them typing it.
+Figma design, call the Skill tool with `flutter-create-feature-e2e` instead.
 
 ## Architecture
 

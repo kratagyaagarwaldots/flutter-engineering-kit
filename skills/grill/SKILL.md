@@ -89,6 +89,6 @@ Once the criteria are settled the states are known, which is the cheapest moment
 look like everywhere rather than once per screen. Where `docs/agents/design.md` does not exist yet,
 call the Skill tool with `flutter-design` to settle the app's design language against this list.
 
-Then tell the user which scaffolder to run against it. Both are user-invoked, so only they can start
-one: `/flutter-create-feature-e2e` when the endpoint exists, `/flutter-create-screen-e2e` when the
-fixture boundary settled the other way.
+Then hand the criteria back. Inside `/fk-plan` the next step is the spec; on its own, tell the user
+that `/fk-build` takes them from here, and picks the full-feature or the fixture-mode path from
+whether the endpoint exists.

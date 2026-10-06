@@ -55,13 +55,16 @@ that skill is restructured, never add one. A new skill needing stack-specific co
   user-invoked and therefore cannot be called at all. That is the one sanctioned cross-link, and it
   is why `triage-executor-bugs` links into `spec-for-cheap-executor/references/`. Anywhere the owner
   is model-invoked, call it instead.
+- The command surface is fixed: `ask-kit`, the four `fk-` commands, `retro`, and the tools
+  `handoff`, `unslop` and `spec-for-cheap-executor`. Every other skill is model-invoked and reached
+  through a command. Check 19 holds the list.
 - Nothing calls a user-invoked skill. A user-invoked skill is reachable only by a human typing it,
   so a step needing one tells the user to run it.
 - `ask-kit` routes every user-invoked skill. Adding, renaming or removing one means updating the
   router, or it lies.
 - `README.md`'s Reference lists every skill, with the bullet text equal to the frontmatter
   description minus its trailing trigger sentence. Check 9 compares them, so the two cannot drift.
-- `setup-flutter-project/template/AGENTS.md` twins its `CLAUDE.md`. Both carry the same sections;
+- `fk-setup/template/AGENTS.md` twins its `CLAUDE.md`. Both carry the same sections;
   every harness but Claude Code reads the AGENTS.md one.
 - A skill carries every file it reads, inside its own folder. Nothing links out to `../../`, so a
   skill works from any harness's install location.
@@ -79,7 +82,7 @@ that skill is restructured, never add one. A new skill needing stack-specific co
   hold both directions, so match those ids and nothing else.
 - Run `claude plugin validate . --strict` after touching either manifest.
 
-Run `python3 scripts/validate-kit.py` before committing. It encodes all eighteen, so a broken
+Run `python3 scripts/validate-kit.py` before committing. It encodes all nineteen, so a broken
 invariant fails a check rather than surviving to review.
 
 ## Installing

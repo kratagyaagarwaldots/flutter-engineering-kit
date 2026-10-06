@@ -1,7 +1,6 @@
 ---
 name: flutter-create-screen-e2e
-description: Build a screen backed by a FIXTURE repo from acceptance criteria and a Figma node, before the model and API exist.
-disable-model-invocation: true
+description: Build a screen backed by a FIXTURE repo from acceptance criteria and a Figma node, before the model and API exist. Use when /fk-build is given a new screen with a design but no API yet.
 ---
 
 # Screen-first end-to-end feature
@@ -324,13 +323,13 @@ real model existed. It runs on a FIXTURE repository.
 
 ## How to upgrade
 
-Once the model spec and API endpoint are known, a human runs `/flutter-create-feature-e2e` in
-**upgrade mode**. It is user-invoked, so no skill can start it:
+Once the model spec and API endpoint are known, `/fk-build` on this feature routes to
+`flutter-create-feature-e2e` in **upgrade mode**. The request reads:
 
 > "Use `flutter-create-feature-e2e` to upgrade the `{feature}` feature.
 > Model: <paste model spec>
 > Endpoint: <paste endpoint>
-> Keep existing AC, Figma design, BLoC events, and screen layout unchanged."
+> Keep existing AC, Figma design, state-layer actions, and screen layout unchanged."
 
 The upgrade phase will:
 1. Diff inferred schema (Phase 1b) against the real model and report mismatches

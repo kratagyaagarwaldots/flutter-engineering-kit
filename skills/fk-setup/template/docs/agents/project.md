@@ -1,6 +1,6 @@
 # Project configuration
 
-Written by `/setup-flutter-project`. Every kit skill reads this file for anything that differs
+Written by `/fk-setup`. Every kit skill reads this file for anything that differs
 between client apps. If a skill needs a fact that is not here, the fact belongs here.
 
 Edit this file directly when something changes. Re-run the setup skill only to start over.

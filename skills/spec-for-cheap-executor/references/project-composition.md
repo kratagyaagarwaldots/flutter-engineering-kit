@@ -30,10 +30,9 @@ dropped into prose reads as a label, and the executor will treat it as one.
 | `flutter-write-tests` | Any bloc test work | "Call the Skill tool with `flutter-write-tests`, then replace its generated assertions with the exact ones in §10.2." |
 | `flutter-security-review` | Storage / network / secrets / WebView touched | "Step 7: call the Skill tool with `flutter-security-review` — this task adds a token to storage." |
 
-The two end-to-end scaffolders and `store-compliance` are user-invoked, so no doc instruction can
-start them. When the task's scope is one of those, say so in §1 and tell the reader which command a
-human has to type: `/flutter-create-feature-e2e`, `/flutter-create-screen-e2e`, or
-`/store-compliance`.
+The two end-to-end scaffolders and `store-compliance` are whole workflows, not steps inside a task
+doc. When the task's scope is one of those, say so in §1 and name the command a human runs instead:
+`/fk-build` for a new feature or fixture-mode screen, `/fk-release` for the store pack.
 
 **Precedence must be stated.** A skill generates its own defaults; your doc's §3 / §5 / §10 are
 authoritative. Say which wins, explicitly: *"Where `flutter-write-tests` output differs from §10.2,
@@ -60,7 +59,6 @@ pass §1, §5 and §11 verbatim as its brief."*
 | `.claude/rules/flutter-bloc.md` | `**/bloc/**/*.dart` |
 | `.claude/rules/flutter-models.md` | `**/model/**/*.dart` |
 | `.claude/rules/flutter-ui.md` | `lib/**/*.dart` |
-| `.claude/rules/store-compliance-docs.md` | `docs/store/**/*.md` |
 
 The architecture source of truth is the `flutter-core-architecture` skill. The Cursor mirror under
 `.cursor/` is generated from the same sources, so cite the skill rather than a mirrored path.

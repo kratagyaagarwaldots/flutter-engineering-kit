@@ -106,8 +106,8 @@ def fixture_heads_up(root: pathlib.Path) -> str:
         msg += f" Features in fixture mode: {','.join(features)}."
     if markers:
         msg += f" {markers} FIXTURE_START/FIXTURE_END marker(s) remain in lib/."
-    return msg + (" If shipping fixtures is intentional, proceed - otherwise upgrade via "
-                  "flutter-create-feature-e2e first.")
+    return msg + (" If shipping fixtures is intentional, proceed - otherwise upgrade them with "
+                  "/fk-build first.")
 
 
 def reply(obj: dict) -> None:

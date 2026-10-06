@@ -1,7 +1,6 @@
 ---
 name: setup-ci
-description: Generate a CI pipeline that runs the verification ladder on every push, and builds per flavor.
-disable-model-invocation: true
+description: Generate a CI pipeline that runs the verification ladder on every push, and builds per flavor. Use when /fk-setup or /fk-release finds no CI, or when the user asks to set up CI.
 ---
 
 # Setup CI
@@ -78,7 +77,7 @@ pipeline from the secrets, rather than the file being committed.
 Only after the ladder passes. Signing needs the certificate and provisioning profile as secrets, and
 the upload needs a store credential.
 
-Where those do not exist yet, stop before this stage and tell the user to run `/setup-wizard`. A
+Where those do not exist yet, stop before this stage and call the Skill tool with `setup-wizard`. A
 pipeline that builds and verifies is worth having on its own; half-configured signing that fails
 every run teaches the team to ignore red builds, which costs more than not having it.
 

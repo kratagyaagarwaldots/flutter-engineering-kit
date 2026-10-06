@@ -1,7 +1,6 @@
 ---
 name: flutter-create-feature-e2e
-description: Build or upgrade a complete feature (model, repo, bloc, view, widgets, tests) from a model spec, one API endpoint, acceptance criteria and a Figma node.
-disable-model-invocation: true
+description: Build or upgrade a complete feature (model, repo, state layer, view, widgets, tests) from a model spec, one API endpoint, acceptance criteria and a Figma node. Use when /fk-build is given a new feature with a design and an endpoint, or a fixture-mode feature whose API now exists.
 ---
 
 # End-to-end feature

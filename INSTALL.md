@@ -43,7 +43,7 @@ kit's skills once. A line starting with `!` is a problem to report, with the fix
 ## 4. Tell the user what changed and what is next
 
 - Restart each harness so it loads the new skills.
-- In each Flutter project, run `/setup-flutter-project` once. It records that project's stack, so
+- In each Flutter project, run `/fk-setup` once. It records that project's stack, so
   every skill writes code the way the project already does.
 - If a project still has a `.opencode/`, `.cursor/` or `.claude/` copy of the kit from an older
   version, `~/.flutter-kit/bin/kit clean-project <path>` removes the kit's files from it and keeps

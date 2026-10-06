@@ -87,8 +87,8 @@ Navigation is testable, and almost never tested:
 - **A unit test** on the argument parsing covers the deep-link cases: valid, absent, wrong type,
   unknown id. This is the cheapest high-value test in this skill, because those are the paths no
   human tries.
-- **An integration test** covers the real thing, including cold start. Where no harness exists, tell
-  the user to run `/setup-integration-harness`.
+- **An integration test** covers the real thing, including cold start. Where no harness exists, say so
+  and offer to stand one up; on a yes, call the Skill tool with `setup-integration-harness`.
 
 Call the Skill tool with `flutter-write-tests` for the shapes.
 

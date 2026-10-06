@@ -198,7 +198,7 @@ def main() -> int:
     )
     STACK_OPINIONATED = {
         "flutter-create-feature-e2e", "flutter-create-screen-e2e",
-        "setup-flutter-project",
+        "fk-setup",
     }
     # A detector has to name what it detects, which is the opposite of generating in its shape.
     STACK_DETECTORS = {"project-conventions"}
@@ -226,11 +226,11 @@ def main() -> int:
 
     # 11. The setup skill's AGENTS.md template twins its CLAUDE.md: every harness other than
     #     Claude Code reads AGENTS.md, so it must carry the same sections.
-    template = ROOT / "skills/setup-flutter-project/template"
+    template = ROOT / "skills/fk-setup/template"
     try:
         agents_md = (template / "AGENTS.md").read_text()
     except FileNotFoundError:
-        FAIL.append("setup-flutter-project/template/AGENTS.md missing — the twin of CLAUDE.md")
+        FAIL.append("fk-setup/template/AGENTS.md missing — the twin of CLAUDE.md")
         agents_md = ""
     if agents_md:
         for section in ("## Project", "## Architecture", "## Hard rules",
@@ -453,6 +453,19 @@ def main() -> int:
                             f"through `project-conventions`")
     check("18.", f"agents: {agent_calls} Skill-tool calls resolve, no harness paths, "
                  f"no state library")
+
+    # 19. The command surface is fixed. Every user-invoked skill is a command a person has to
+    #     know about, and the kit's promise is that there are few of them. A new workflow becomes
+    #     a step one of these calls; adding a command means changing this list on purpose.
+    COMMANDS = {"ask-kit", "fk-setup", "fk-plan", "fk-build", "fk-release", "retro"}
+    TOOLS = {"handoff", "unslop", "spec-for-cheap-executor"}
+    user_skills = {n for n, u in skills.items() if u}
+    for extra in sorted(user_skills - COMMANDS - TOOLS):
+        FAIL.append(f"'{extra}' is user-invoked but not a listed command — make it a step a "
+                    f"command calls, or add it to COMMANDS on purpose")
+    for missing in sorted((COMMANDS | TOOLS) - user_skills):
+        FAIL.append(f"command '{missing}' is missing or no longer user-invoked")
+    check("19.", f"{len(COMMANDS)} commands and {len(TOOLS)} tools, nothing else user-invoked")
 
     print()
     if FAIL:
