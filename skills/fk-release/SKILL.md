@@ -16,6 +16,10 @@ Read `docs/agents/project.md` for the flavors, the safe flavor, and the release 
 is being released: the version, the commits since the last release, and the target (store, a tester
 group, a backend cutover).
 
+Where `docs/vault/proposal.md` exists and this is the first store release, look for the UAT
+sign-off in its revision table. A first store release without one is reported in the first line,
+whatever else passes: the client has not yet accepted what is about to go live.
+
 ## 2. Find what it could break
 
 Call the Skill tool with `release-readiness`. It traces the blast radius past the diff and proves,
@@ -46,3 +50,6 @@ Report, in this order:
   needed)` item and who owns it.
 
 A release with any of these unknown is not ready, and the report says so in its first line.
+
+Then call the Skill tool with `project-memory` to leave a log entry naming the version, the target
+and the result.

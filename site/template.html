@@ -274,7 +274,7 @@ footer nav a { color: var(--ink-2); }
     <p class="sub">Each step's output is the next step's input. Use the whole loop, or only the steps you need: nothing here owns your process.</p>
     <div class="track-switch" role="group" aria-label="Choose a track">
       <button aria-pressed="true" data-track="eng">Engineering loop</button>
-      <button aria-pressed="false" data-track="client">Client delivery</button>
+      <button aria-pressed="false" data-track="delivery">Project delivery</button>
     </div>
     <div class="flow" id="flow"></div>
   </div>
@@ -287,11 +287,11 @@ footer nav a { color: var(--ink-2); }
     <p class="sub">Setup records what the repo already uses, so every generator writes in that style. A Riverpod app gets Riverpod; a GetX app gets GetX.</p>
     <div class="grid g3">
       <div class="card ptype"><h3>From scratch <span class="tag">greenfield</span></h3><p>The full loop, with the kit's defaults scaffolded into <code>lib/core</code>.</p>
-        <ol><li>Settle requirements and the design language</li><li>Screens first, on fixture data</li><li>Upgrade to the real API when it lands</li></ol></div>
+        <ol><li>Proposal, design language and a pointed backlog</li><li>Sprints of tickets, screens first on fixture data</li><li>QA, feedback and acceptance, then the store</li></ol></div>
       <div class="card ptype"><h3>Your existing app <span class="tag">brownfield</span></h3><p>Setup learns your stack; you start at the change.</p>
-        <ol><li>Explain the area you are touching</li><li>Sketch the change, then build test-first</li><li>Review and prove before committing</li></ol></div>
+        <ol><li>Plan the next phase, or take one change</li><li>Sketch it, then build test-first</li><li>Review and prove before it merges</li></ol></div>
       <div class="card ptype"><h3>An inherited app <span class="tag">takeover</span></h3><p>Code you didn't write and don't trust yet.</p>
-        <ol><li>Audit: build health, dependencies, security</li><li>Fix the foundation before features</li><li>Modernize only the screens you touch</li></ol></div>
+        <ol><li>Audit: builds, tests, drift, security</li><li>A first sprint that stabilises what it found</li><li>Then the same loop, modernizing what you touch</li></ol></div>
     </div>
   </div>
 </section>

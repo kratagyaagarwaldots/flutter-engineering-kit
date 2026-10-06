@@ -1,7 +1,7 @@
 # CLAUDE.md — Flutter Engineering Kit
 
 This repo is a Claude Code plugin, not an app. Its product is the skills under `skills/`, the agents
-under `agents/`, and the project structure under `template/`.
+under `agents/`, and the project templates under `skills/fk-setup/template/`.
 
 ## Before editing any skill
 
@@ -55,7 +55,7 @@ that skill is restructured, never add one. A new skill needing stack-specific co
   user-invoked and therefore cannot be called at all. That is the one sanctioned cross-link, and it
   is why `triage-executor-bugs` links into `spec-for-cheap-executor/references/`. Anywhere the owner
   is model-invoked, call it instead.
-- The command surface is fixed: `ask-kit`, the four `fk-` commands, `retro`, and the tools
+- The command surface is fixed: `ask-kit`, the six `fk-` commands, `retro`, and the tools
   `handoff`, `unslop` and `spec-for-cheap-executor`. Every other skill is model-invoked and reached
   through a command. Check 19 holds the list.
 - Nothing calls a user-invoked skill. A user-invoked skill is reachable only by a human typing it,
@@ -80,9 +80,13 @@ that skill is restructured, never add one. A new skill needing stack-specific co
   (`Tool.define("apply_patch", ...)`). A source filename (`shell.ts`) and a registry variable
   (`tool.patch`) are not ids — reading either as one silently kills the hook. Checks 13 and 17
   hold both directions, so match those ids and nothing else.
+- The delivery skills (`project-memory`, `project-tracker`, `project-proposal`,
+  `project-backlog`) name no framework and call no engineering skill: they describe how a project
+  is run. The `fk-` commands are where the delivery layer meets the Flutter skills. Check 20 holds
+  this.
 - Run `claude plugin validate . --strict` after touching either manifest.
 
-Run `python3 scripts/validate-kit.py` before committing. It encodes all nineteen, so a broken
+Run `python3 scripts/validate-kit.py` before committing. It encodes all twenty, so a broken
 invariant fails a check rather than surviving to review.
 
 ## Installing

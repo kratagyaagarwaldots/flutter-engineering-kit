@@ -39,6 +39,16 @@ because the documents have to agree with each other on governing law, contacts a
 separate contexts produced disagreements that the orchestrator then had to reconcile. Consistency is
 cheaper to keep than to repair.
 
+## Delivery
+
+| Agent | Does | Model |
+|-------|------|-------|
+| `qa-engineer` | Tests a sprint's merged build against every ticket's criteria, files each failure as a bug | `sonnet` |
+
+`/fk-sprint qa` sends it the commit a client is about to receive. Each builder proved its own ticket
+on its own branch; this agent tests them together, which is where tickets that passed alone break
+each other. It runs the build and files bugs, and never edits source.
+
 ## When to delegate
 
 Reach for `flutter-explore` for discovery, and `flutter-architect` for judgement before any code

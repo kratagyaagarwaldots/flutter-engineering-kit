@@ -11,8 +11,9 @@ does not contain enough to write a spec, say which sections you cannot fill, the
 with `grill` to settle them rather than inventing the gaps.
 
 Write to the directory `docs/agents/project.md` names for specs (`docs/specs/` by default), as
-`docs/specs/<NN>-<slug>.md`. If the project config names a real issue tracker, publish there
-instead and link it from the file.
+`docs/specs/<NN>-<slug>.md`. Where the project tracks work in GitHub, also call the Skill tool with
+`project-tracker` to file the spec as a ticket linking the file, so it can be planned into a
+sprint.
 
 ## Before writing
 

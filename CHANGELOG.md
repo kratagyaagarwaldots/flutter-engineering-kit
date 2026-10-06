@@ -3,6 +3,30 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.8.0
+
+The kit can now run a project, not only build one: a proposal, a pointed backlog, sprints, a QA
+gate, feedback triage and acceptance testing, with the project's memory in the repo and its tickets
+in GitHub.
+
+- `/fk-sprint` (new): `plan`, `status`, `qa`, `close` and `uat`.
+- `/fk-feedback` (new): sorts feedback into bugs, change requests and questions against the
+  proposal, files them and drafts the reply.
+- `/fk-plan` gains a product path: proposal, agreement, design language, backlog. The feature path
+  is unchanged.
+- `/fk-build` takes a ticket number, closes it through the pull request, and leaves a log entry.
+- `/fk-setup` asks whether the code is inherited, recommends GitHub Issues as the tracker, writes
+  `docs/vault/` and `docs/agents/issue-tracker.md`, creates the labels, and audits an inherited app.
+- New background skills: `project-memory`, `project-tracker`, `project-proposal`,
+  `project-backlog` (stack-neutral, held by check 20) and `takeover-audit`.
+- New agent: `qa-engineer`.
+- Project templates: `CLAUDE.md` and `AGENTS.md` gain a Memory section and list six commands;
+  `project.md`'s Documents table names the vault and the tracker.
+
+**Migration:** for an existing project, re-run `/fk-setup` to add the vault, the tracker conventions
+and the labels; nothing it wrote before is replaced. Re-run `kit install` so the other harnesses get
+the two new commands and the new agent.
+
 ## 0.7.0
 
 - `flutter-create-feature-e2e`, `flutter-create-screen-e2e` and `flutter-create-feature` are one

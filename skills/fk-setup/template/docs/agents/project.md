@@ -63,15 +63,17 @@ The Value column below is filled with the kit's default. Replace each with what 
 
 | Field | Value |
 |---|---|
+| Project memory | `docs/vault/` |
 | Acceptance criteria and specs | `docs/specs/` |
 | Domain glossary | `GLOSSARY.md` |
 | Decisions worth recording | `docs/adr/` |
 | Client questionnaires | `docs/client/` |
 | Store and compliance pack | `docs/store/` |
-| Issue tracker | `<none — specs and AC live in docs/>` |
+| Issue tracker | `<GitHub — see docs/agents/issue-tracker.md>` or `<none>` |
 
-When the tracker is `none`, skills that would publish an issue write a file under `docs/specs/`
-instead. Set it to GitHub, Linear, or Jira once the project actually uses one.
+With GitHub, `project-tracker` files and moves tickets, and `docs/agents/issue-tracker.md` records
+the repo, the board and the sprint rhythm. With `none`, the backlog is a table in
+`docs/vault/backlog.md` and ticket bodies are files under `docs/specs/`.
 
 ## Integrations
 

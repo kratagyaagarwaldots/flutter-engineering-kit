@@ -1,7 +1,9 @@
 # Flutter Engineering Kit
 
 Skills and agents for **engineering** Flutter apps rather than vibe-coding them: understand the
-code, design the change, build it test-first, prove it works, and ship it.
+code, design the change, build it test-first, prove it works, and ship it. Run as a project, the
+same kit writes the proposal, cuts the backlog, plans the sprints, gates each build and sorts the
+feedback, keeping the project's memory in the repo and its tickets in GitHub.
 
 Every skill is small, readable, and adapts to the stack the project already uses. Nothing here owns
 your process; you compose the parts you want.
@@ -67,8 +69,9 @@ Once per project, before any other skill. It will:
 - Explore the repo and ask only the few things it cannot observe
 - Fill in the **Architecture table**, which records the stack this project actually uses
 - Write `docs/agents/project.md`, a `CLAUDE.md`, and an `AGENTS.md` twin for every other harness
+- Start the project's memory vault in `docs/vault/`, and set up GitHub Issues as its tracker
 - Add the path-scoped rules that match the project's stack
-- Scaffold `lib/core` if the repo is greenfield
+- Scaffold `lib/core` if the repo is greenfield, or audit it if it was inherited
 
 Every other skill reads `docs/agents/project.md`, which is what makes one kit serve many apps.
 
@@ -180,22 +183,34 @@ design and an endpoint, or a screen before its API exists) and drives `flutter-t
 `flutter-code-review` and `flutter-verify` to a commit. `/fk-release` runs `release-readiness`,
 `setup-ci` where no CI exists, and `store-compliance`.
 
-### Client delivery
+### Project delivery
 
-Everything above still applies. This track adds what a paying client needs on top, and is optional
-if you are building your own product.
+The engineering loop, run as a project: a proposal everything is measured against, a pointed
+backlog in GitHub Issues, short sprints, a QA gate before anyone outside the team sees a build, and
+feedback sorted into bugs and change requests against what was agreed. It suits client work and
+your own product alike; a one-off change needs only the loop above.
 
 | # | Step | Command |
 |---|---|---|
-| 1 | Ask the client what only they know | `/fk-plan` → `client-questionnaire` |
-| 2 | Turn answers or a feedback round into numbered criteria | `/fk-plan` → `grill` |
-| 3 | Fix the vocabulary you and the client share | `domain-glossary` |
-| 4 | Write it down, including what you are *not* building | `/fk-plan` → `to-spec` |
-| 5 | Scaffold from a design and an endpoint | `/fk-build` → `flutter-scaffold-feature` |
-| 6 | Prove the release, ship the store pack | `/fk-release` |
-| 7 | Fold what you learned back into the kit | `/retro` |
+| 1 | Configure the repo, its memory and its tracker, and audit it if inherited | `/fk-setup` |
+| 2 | Write the proposal, the design language and the pointed backlog | `/fk-plan` |
+| 3 | Plan the sprint from the ready tickets | `/fk-sprint plan` |
+| 4 | Build each ticket to a reviewed, proven pull request | `/fk-build #N` |
+| 5 | Test the merged build before it leaves the team | `/fk-sprint qa` |
+| 6 | Send the build to the client or testers | `/fk-release` |
+| 7 | Sort what comes back into bugs, change requests and questions | `/fk-feedback` |
+| 8 | Close the sprint, record its velocity, improve the kit | `/fk-sprint close`, `/retro` |
+| 9 | Acceptance testing, then the store | `/fk-sprint uat`, `/fk-release` |
 
-The alignment steps are the cheapest in the kit and the ones most often skipped.
+**Where you start changes the first steps, not the rest.** A new app runs every step. Your own
+existing app skips the scaffold: `/fk-plan` writes a proposal for the next phase, or `/fk-build`
+takes a single change straight away. An inherited app gets an audit from `/fk-setup` before anyone
+estimates anything, and its first sprint stabilises what the audit found.
+
+**Memory and tickets each live in one place.** Every command reads `docs/vault/` at the start and
+leaves a log entry at the end: the proposal, module notes, sprint notes, feedback rounds and a short
+`memory.md`, all plain Markdown that Obsidian opens as a vault. Ticket status lives only in GitHub
+Issues, with milestones as sprints and labels for points, modules and state.
 
 ---
 
@@ -212,11 +227,18 @@ The work starts here. Every other skill is reached through one of these.
 
 - **[fk-setup](./skills/fk-setup/SKILL.md)**: Configure a Flutter repo for the engineering kit. Run
   once per project before using the other skills.
-- **[fk-plan](./skills/fk-plan/SKILL.md)**: Turn an idea, a brief or a client's request into a
-  written spec and a sketch of the change, settling every requirement before any code exists.
+- **[fk-plan](./skills/fk-plan/SKILL.md)**: Turn an idea, a brief or a client's request into an
+  agreed proposal and a pointed backlog, or a single requirement into a spec and a sketch, settling
+  it before any code exists.
+- **[fk-sprint](./skills/fk-sprint/SKILL.md)**: Run the sprint, from planning it out of the ready
+  tickets and reporting where it stands, through gating its build with QA before anyone outside sees
+  it, to closing it with velocity and a review, or running the final acceptance window.
 - **[fk-build](./skills/fk-build/SKILL.md)**: Build a ticket, spec or sketch to a reviewed, verified
   commit, choosing the path from what it is given: a change to existing code, a new feature from a
   design and an endpoint, or a screen before its API exists.
+- **[fk-feedback](./skills/fk-feedback/SKILL.md)**: Sort a round of client or tester feedback into
+  bugs, change requests and questions against the agreed proposal, file each one, and draft the
+  reply.
 - **[fk-release](./skills/fk-release/SKILL.md)**: Get a build ready to ship: find what it could
   break and prove the fact its safety rests on, confirm CI gates it, and produce or refresh the
   store submission pack.
@@ -234,6 +256,23 @@ Commands for moving work between sessions and models, and for prose others will 
 - **[spec-for-cheap-executor](./skills/spec-for-cheap-executor/SKILL.md)**: Turn a feature request
   into one self-contained task doc a cheaper model can execute end to end.
 - **[unslop](./skills/unslop/SKILL.md)**: Cut AI tells from any writing. Must always apply.
+
+### Deliver
+
+Running the work as a project. These name no framework: they hold the process, and the commands
+connect it to the engineering skills below.
+
+- **[project-proposal](./skills/project-proposal/SKILL.md)**: Write or revise the project's proposal
+  in docs/vault/proposal.md, covering objective, users, deliverables, modules, technical approach,
+  assumptions, what the client provides, out of scope and timeline, under a revision history.
+- **[project-backlog](./skills/project-backlog/SKILL.md)**: Break the proposal's modules into tickets
+  with acceptance criteria, story points and blocking edges, write a note per module, and file the
+  tickets in the tracker.
+- **[project-tracker](./skills/project-tracker/SKILL.md)**: File, move and report on the project's
+  tickets, modules and sprints in its issue tracker, following docs/agents/issue-tracker.md.
+- **[project-memory](./skills/project-memory/SKILL.md)**: Read and keep the project's memory vault in
+  docs/vault/, deciding what to read at the start of a session, which file each kind of fact belongs
+  in, and how to write without overwriting another agent.
 
 ### Understand
 
@@ -255,6 +294,9 @@ Working out what the code does, and what it should do, before changing it.
 - **[flutter-core-architecture](./skills/flutter-core-architecture/SKILL.md)**: The kit's lib/core
   conventions: project structure, barrel imports, constants families, shared components, services,
   network, failures, router, and fixture markers.
+- **[takeover-audit](./skills/takeover-audit/SKILL.md)**: Audit an inherited Flutter codebase before
+  committing to work on it, covering whether it builds, what its tests prove, how far it has
+  drifted, where the risk sits, and what must be stabilised first.
 
 ### Design
 
@@ -373,7 +415,8 @@ Configuring the kit and editing it.
 
 Layer specialists the scaffolding skills delegate to: `flutter-explore`, `flutter-architect`,
 `flutter-state-engineer`, `flutter-repo-engineer`, `flutter-ui-engineer`, `flutter-test-engineer`,
-plus the store-pack writer. See [agents/README.md](./agents/README.md).
+plus the store-pack writer and the `qa-engineer` that `/fk-sprint` sends to test a sprint's build.
+See [agents/README.md](./agents/README.md).
 
 ## What the kit assumes
 
@@ -404,7 +447,7 @@ path-scoped rules it copies into a project; `store-compliance` holds its documen
 is what lets the same skill folder work in every harness's install location.
 
 `CLAUDE.md` in this repo carries the authoring conventions. Run `scripts/validate-kit.py` before
-committing: it checks eighteen invariants, including that every skill appears in this README with a
+committing: it checks twenty invariants, including that every skill appears in this README with a
 description matching its frontmatter, and that no skill outside `templates/` names a state
 management library.
 

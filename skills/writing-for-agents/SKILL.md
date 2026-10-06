@@ -37,7 +37,7 @@ Every skill is one of two things, and the choice is a trade between those budget
 
 Pick model-invocation only when the agent must reach the skill on its own, or another skill must. A
 heavy orchestrator that should never auto-fire on a vague request is user-invoked. In this kit that
-is the four `fk-` commands, `retro`, the tools (`handoff`, `unslop`, `spec-for-cheap-executor`) and
+is the six `fk-` commands, `retro`, the tools (`handoff`, `unslop`, `spec-for-cheap-executor`) and
 the router itself, and the list is held fixed: check 19 fails when a command is added outside it.
 A new workflow becomes a step one of those commands calls, not a command of its own.
 

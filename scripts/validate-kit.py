@@ -233,7 +233,7 @@ def main() -> int:
         agents_md = ""
     if agents_md:
         for section in ("## Project", "## Architecture", "## Hard rules",
-                        "## Skills", "## Verification"):
+                        "## Skills", "## Memory", "## Verification"):
             if section not in agents_md:
                 FAIL.append(f"template/AGENTS.md omits section '{section}'")
         if "docs/agents/project.md" not in agents_md:
@@ -456,7 +456,8 @@ def main() -> int:
     # 19. The command surface is fixed. Every user-invoked skill is a command a person has to
     #     know about, and the kit's promise is that there are few of them. A new workflow becomes
     #     a step one of these calls; adding a command means changing this list on purpose.
-    COMMANDS = {"ask-kit", "fk-setup", "fk-plan", "fk-build", "fk-release", "retro"}
+    COMMANDS = {"ask-kit", "fk-setup", "fk-plan", "fk-sprint", "fk-build", "fk-feedback",
+                "fk-release", "retro"}
     TOOLS = {"handoff", "unslop", "spec-for-cheap-executor"}
     user_skills = {n for n, u in skills.items() if u}
     for extra in sorted(user_skills - COMMANDS - TOOLS):
@@ -465,6 +466,23 @@ def main() -> int:
     for missing in sorted((COMMANDS | TOOLS) - user_skills):
         FAIL.append(f"command '{missing}' is missing or no longer user-invoked")
     check("19.", f"{len(COMMANDS)} commands and {len(TOOLS)} tools, nothing else user-invoked")
+
+    # 20. The delivery layer is stack-neutral. Memory, tracking, the proposal and the backlog
+    #     describe how a project is run, not how its code is written, so they name no framework
+    #     and call no engineering skill. The fk- commands are where the two layers meet.
+    DELIVERY = {"project-memory", "project-tracker", "project-proposal", "project-backlog"}
+    STACK_WORD = re.compile(r"\b(?:flutter|dart|pubspec)\b", re.I)
+    for name in sorted(DELIVERY):
+        folder = ROOT / "skills" / name
+        if not (folder / "SKILL.md").exists():
+            FAIL.append(f"delivery skill '{name}' is missing")
+            continue
+        for f in sorted(folder.rglob("*.md")):
+            for lineno, line in enumerate(f.read_text().splitlines(), 1):
+                if STACK_WORD.search(line):
+                    FAIL.append(f"{f.relative_to(ROOT)}:{lineno} names the stack — the delivery "
+                                f"layer is stack-neutral; reach engineering through a command")
+    check("20.", f"{len(DELIVERY)} delivery-layer skills name no framework")
 
     print()
     if FAIL:

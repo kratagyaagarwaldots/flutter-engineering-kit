@@ -20,9 +20,11 @@ only has to know where they are.
 
 | Where you are | Command |
 |---|---|
-| New repo, or kit not configured for this repo yet | `/fk-setup` |
-| An idea, a brief, a client request, or criteria that are still thin | `/fk-plan` |
-| A spec, sketch or ticket ready to build, including a new feature from a design | `/fk-build` |
+| New repo, inherited repo, or kit not configured for this repo yet | `/fk-setup` |
+| An idea, a brief, a new phase, a client request, or criteria that are still thin | `/fk-plan` |
+| A backlog to schedule, a sprint to check on, a build to gate, a sprint to close, or UAT | `/fk-sprint` |
+| A spec, sketch or ticket (`#N`) ready to build, including a new feature from a design | `/fk-build` |
+| Feedback has come back from a client or tester | `/fk-feedback` |
 | About to ship: store submission, tester build, or a backend cutover | `/fk-release` |
 | A round of work finished, and the next one should be shorter | `/retro` |
 
@@ -41,6 +43,11 @@ Route to one directly when the person wants that single step and nothing around 
 
 | Step | Skill | Reached through |
 |---|---|---|
+| Audit a codebase you inherited | `takeover-audit` | `/fk-setup` |
+| Write or revise the proposal | `project-proposal` | `/fk-plan`, `/fk-feedback` |
+| Cut modules into pointed tickets | `project-backlog` | `/fk-plan`, `/fk-feedback` |
+| File, move or report on tickets and sprints | `project-tracker` | every command |
+| What the project remembers, and where a fact goes | `project-memory` | every command |
 | A decision only the client can make | `client-questionnaire` | `/fk-plan` |
 | Settle requirements by interview | `grill` | `/fk-plan` |
 | Terms mean different things to you and the client | `domain-glossary` | `/fk-plan` |

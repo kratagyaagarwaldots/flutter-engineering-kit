@@ -20,6 +20,7 @@ Read what you were given, then take the first row that fits.
 
 | The work | Path |
 |---|---|
+| A ticket number, such as `#12` | Call the Skill tool with `project-tracker` to read the ticket and start it. Its body is the spec; take the next row that fits it. |
 | No spec, sketch or numbered acceptance criteria, or criteria naming only the happy path | Stop. Tell the user to run `/fk-plan` first, or call the Skill tool with `grill` when only a criterion or two is missing. |
 | A **new feature folder**, with or without its API yet, or a **fixture-mode feature** whose API now exists | Call the Skill tool with `flutter-scaffold-feature`. It picks real, fixture or upgrade mode from what exists, runs its own phases and gates, and returns here only for step 6. |
 | A change to **code that already exists** | Steps 1 to 6 below. |
@@ -86,7 +87,9 @@ why, and show it to the user before committing. Never push.
 Where the branch is the default branch, branch first.
 
 Where the work goes up as a pull request, call the Skill tool with `pr` for its body. The evidence
-from step 5 is what fills it.
+from step 5 is what fills it, and a ticket's number goes in as `Closes #N`, so merging closes it.
+
+Then call the Skill tool with `project-memory` to leave the session's log entry.
 
 ## Completion criteria
 

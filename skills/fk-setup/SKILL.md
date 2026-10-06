@@ -6,10 +6,11 @@ disable-model-invocation: true
 
 # Setup Flutter project
 
-Every other skill in this kit assumes two things exist: `docs/agents/project.md` (what differs
-between client apps) and a `CLAUDE.md` carrying the always-on conventions, with an `AGENTS.md` twin
-for Codex, opencode, Antigravity and Cursor. This skill writes them, and scaffolds the core
-structure when the repo does not have it yet.
+Every other skill in this kit assumes these exist: `docs/agents/project.md` (what differs between
+client apps), a `CLAUDE.md` carrying the always-on conventions with an `AGENTS.md` twin for Codex,
+opencode, Antigravity and Cursor, the memory vault at `docs/vault/`, and the tracker conventions in
+`docs/agents/issue-tracker.md`. This skill writes them, and scaffolds the core structure when the
+repo does not have it yet.
 
 The kit itself is installed once per user, not into the project. What this skill writes is the
 project's own configuration, and it is the only kit-shaped thing a project carries.
@@ -22,6 +23,9 @@ confirmation, then write. Never overwrite a file the project already has without
 Answer these from the repo. Only ask the user what you genuinely cannot observe.
 
 - **Is this greenfield or existing?** `lib/features/` present with real features means existing.
+- **Whose code is it?** `git log --reverse --format='%an %ad' | head` and the contributor list. A
+  history written by people the user does not name, or one squashed import commit, suggests an
+  inherited codebase. Confirm in step 2; an inherited one gets an audit before any estimate.
 - **The stack.** Fill every row of the Architecture table from the repo, not from the kit's
   defaults. `pubspec.yaml` says what is available; an existing feature under `lib/features/` and its
   tests say what is actually used, and they win. On an existing project this is the most consequential
@@ -48,13 +52,18 @@ Show the user a filled-in draft of `docs/agents/project.md` using
 settled already filled and only the genuine unknowns marked. Then ask, one question at a time, in
 this order. Lead each with your recommended answer so it can be accepted in a word.
 
-1. **Safe flavor for verification.** Which flavor is safe to drive without creating real data. If
+1. **Whose code is this**, on an existing repo: the user's own, or inherited from someone else.
+   Lead with what the history suggested.
+2. **Safe flavor for verification.** Which flavor is safe to drive without creating real data. If
    the app has no flavors and talks to one live backend, say so plainly: verification will be
    limited to widget level until a staging environment exists.
-2. **Design source.** Figma MCP server, pasted CSS plus screenshot, or written spec only.
-3. **Issue tracker.** Default `none`, which routes specs and acceptance criteria to `docs/specs/`.
-   Only name a real tracker if the project actually uses one.
-4. **Test account.** Whether a credential exists for driving flows behind sign-in, and where it
+3. **Design source.** Figma MCP server, pasted CSS plus screenshot, or written spec only.
+4. **Issue tracker.** Recommend GitHub Issues when the remote is on GitHub and `gh auth status`
+   succeeds: tickets, sprints and parallel agents all depend on it. Otherwise `none`, which keeps the
+   backlog in the vault. Where the team already runs Linear or Jira, record it in `project.md` and
+   use `none` for the kit's own tracking, since `project-tracker` speaks only GitHub. With GitHub,
+   also ask the sprint length (recommend one week) and whether to create a project board.
+5. **Test account.** Whether a credential exists for driving flows behind sign-in, and where it
    lives. Never write the credential itself into any file; record where it is kept.
 
 Skip any question exploration already answered.
@@ -112,6 +121,21 @@ Write, showing each for approval first:
   rule only where the project has no file of that name, and say which you skipped.
 - **`docs/specs/.gitkeep`**, `docs/client/.gitkeep`, `docs/adr/.gitkeep` for whichever the answers
   above put in play.
+- **`docs/vault/index.md`** and **`docs/vault/memory.md`** from [template/docs/vault/](template/docs/vault/),
+  with the app name and today's date filled in. Create no other vault note: each is written by the
+  skill that owns it, when it has something to say. Where a vault already exists, leave it.
+- **`.gitattributes`** gains two lines, so agents on parallel branches merge their memory rather
+  than conflict on it:
+
+  ```
+  docs/vault/memory.md merge=union
+  docs/vault/index.md merge=union
+  ```
+
+- **With GitHub as the tracker**, `docs/agents/issue-tracker.md` from
+  [issue-tracker.md](template/docs/agents/issue-tracker.md) with the repo, board and sprint answers
+  filled in. Then call the Skill tool with `project-tracker` to set up the labels and, if the user
+  wanted one, the board.
 
 Hooks are not this skill's job: the user-level install wires them for every harness. Where the
 user reports that formatting or the secret scan is not running, tell them to run `kit doctor`.
@@ -125,13 +149,17 @@ pointing at it and unfilled here.
 
 Tell the user what was written, then name the next step based on what the project is:
 
-- **Greenfield** → tell them to run `/fk-plan`. With no brief yet it starts with a questionnaire
-  for the client; with a brief it turns the brief into numbered acceptance criteria.
-- **Existing project** → nothing further. The skills now read `docs/agents/project.md`. Mention that
+- **Greenfield** → tell them to run `/fk-plan`. It writes the proposal, the design language and the
+  backlog, starting with a questionnaire for the client where there is no brief yet.
+- **The user's own existing app** → the skills now read `docs/agents/project.md`. Mention that
   `flutter-verify` will report the test baseline recorded in step 1, so a pre-existing failure is
   never mistaken for new breakage. Where the repo already has screens, its design language exists in
   practice but nowhere in writing; call the Skill tool with `flutter-design` to recover it into
-  `docs/agents/design.md` before the next screen adds to the drift.
+  `docs/agents/design.md` before the next screen adds to the drift. Then tell them to run `/fk-plan`
+  for the next phase of work, or `/fk-build` for a single change.
+- **An inherited app** → call the Skill tool with `takeover-audit` before anything else. An
+  estimate given before the audit is a guess about code nobody here has run. Then tell them to run
+  `/fk-plan`, which builds the proposal on the audit's findings.
 
 Where exploration found integrations whose keys a human has to fetch by hand, call the Skill tool
 with `setup-wizard`.

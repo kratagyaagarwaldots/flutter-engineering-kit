@@ -19,7 +19,8 @@ You are improving the **environment the agent works in**, not the code it wrote.
 
 2. Read the primary sources for the round: the diff, the spec, the acceptance criteria, the review
    findings, and what the client came back with. If the round produced a feedback round, that is the
-   most valuable input on the page.
+   most valuable input on the page. Where the project has `docs/vault/`, the sprint note, the
+   feedback rounds and the log entries since the last retro are the round's record: read them first.
 
 3. Look for candidates in these categories, in roughly this order of value.
 
@@ -58,7 +59,8 @@ You are improving the **environment the agent works in**, not the code it wrote.
    evidence from this round that motivates it. No general advice.
 
 5. Apply only what the user approves. Skill changes affect every future project, so nothing lands
-   automatically.
+   automatically. Where the round was a sprint, add a Retro section to its sprint note listing each
+   applied edit, so the next retro can see whether it worked.
 
 ## The structural test
 

@@ -64,7 +64,7 @@ def readme_tracks(readme: str) -> dict[str, list[dict]]:
             raise SystemExit(f"README section '{heading}' has no step table")
         return rows
 
-    return {"eng": table("### The engineering loop"), "client": table("### Client delivery")}
+    return {"eng": table("### The engineering loop"), "delivery": table("### Project delivery")}
 
 
 def agents() -> list[dict]:

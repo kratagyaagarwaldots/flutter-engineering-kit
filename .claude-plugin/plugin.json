@@ -1,7 +1,7 @@
 {
   "name": "flutter-engineering-kit",
-  "version": "0.7.0",
-  "description": "Skills and agents for engineering Flutter apps: understand the code, design the change, build it test-first, prove it works, and ship it.",
+  "version": "0.8.0",
+  "description": "Skills and agents for engineering Flutter apps and running them as projects: propose, plan sprints, build test-first, prove it works, take feedback, and ship.",
   "author": {
     "name": "Kratagya Devvratt Agarwal"
   },
@@ -18,7 +18,10 @@
     "app-store",
     "ui",
     "design",
-    "animation"
+    "animation",
+    "agile",
+    "sprints",
+    "project-management"
   ],
   "skills": [
     "./skills/ask-kit",
@@ -26,9 +29,11 @@
     "./skills/domain-glossary",
     "./skills/engineering-principles",
     "./skills/fk-build",
+    "./skills/fk-feedback",
     "./skills/fk-plan",
     "./skills/fk-release",
     "./skills/fk-setup",
+    "./skills/fk-sprint",
     "./skills/flutter-accessibility",
     "./skills/flutter-build-failure",
     "./skills/flutter-code-review",
@@ -55,7 +60,11 @@
     "./skills/grill",
     "./skills/handoff",
     "./skills/pr",
+    "./skills/project-backlog",
     "./skills/project-conventions",
+    "./skills/project-memory",
+    "./skills/project-proposal",
+    "./skills/project-tracker",
     "./skills/release-readiness",
     "./skills/retro",
     "./skills/setup-ci",
@@ -63,6 +72,7 @@
     "./skills/setup-wizard",
     "./skills/spec-for-cheap-executor",
     "./skills/store-compliance",
+    "./skills/takeover-audit",
     "./skills/to-spec",
     "./skills/triage-executor-bugs",
     "./skills/unslop",
@@ -75,6 +85,7 @@
     "./agents/flutter-state-engineer.md",
     "./agents/flutter-test-engineer.md",
     "./agents/flutter-ui-engineer.md",
+    "./agents/qa-engineer.md",
     "./agents/store-doc-writer.md"
   ],
   "hooks": "./hooks/hooks.json"

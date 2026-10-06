@@ -42,14 +42,23 @@ lib/
 
 ## Skills
 
-Four commands carry the work, and every other skill is reached through them:
+Six commands carry the work, and every other skill is reached through them:
 
-- `/fk-plan`: settle the requirement and write the spec before any code.
-- `/fk-build`: build a spec or ticket to a reviewed, proven commit.
+- `/fk-plan`: write the proposal and backlog, or settle one requirement into a spec, before any code.
+- `/fk-sprint`: plan a sprint, report on it, gate its build through QA, close it, or run UAT.
+- `/fk-build`: build a ticket or spec to a reviewed, proven commit.
+- `/fk-feedback`: sort client or tester feedback into bugs, change requests and questions.
 - `/fk-release`: prove the release is safe, confirm CI, produce the store pack.
 - `/fk-setup`: re-run only to reconfigure this project.
 
 Type `/ask-kit` when unsure which fits.
+
+## Memory
+
+`docs/vault/` is this project's memory. Read `docs/vault/index.md` and `docs/vault/memory.md` at the
+start of every session, and leave a log entry when the session changed code, plan or a decision; the
+kit's `project-memory` skill decides what goes where. Ticket status lives in the tracker that
+`docs/agents/issue-tracker.md` names, never in the vault.
 
 ## Verification
 
