@@ -27,6 +27,7 @@ The default route for changing an app that exists. Each step's output is the nex
 | Ready to build against a spec or sketch | `flutter-implement` | type it |
 | Building one slice, test-first | `flutter-tdd` | either |
 | About to claim it works | `flutter-verify` | either |
+| Opening a pull request | `pr` | either |
 | Ready for CI | `setup-ci` | type it |
 
 `flutter-implement` is the entry point for the build: it drives `flutter-tdd` per slice, then the

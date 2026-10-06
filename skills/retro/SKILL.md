@@ -28,11 +28,22 @@ You are improving the **environment the agent works in**, not the code it wrote.
      assumptions section? This is the highest-value category on client work, and the one most often
      skipped in favour of code cleanup.
    - **Automated checks.** Could a lint, a test, a hook, or an analyzer rule have caught the mistake?
-     Prefer this over any amount of added prose.
-   - **Review rules.** Should `flutter-code-review`'s baseline gain an item, or lose one that keeps
-     producing noise? Conventions belong to the reviewer, not the implementer: the implementing agent
-     is under the most context pressure and the reviewing agent is under the least, so a rule lands
-     better in the review skill than in `CLAUDE.md`.
+     Read what the repo already runs first: `analysis_options.yaml`, the CI workflow, any pre-commit
+     hook, and the command table in `docs/agents/project.md`. A check that exists but is unwired,
+     disabled or silently failing is the finding, not a reason to add a second one. A repo where
+     nothing runs `flutter analyze` and `flutter test` on every change, neither a pre-commit hook nor
+     a CI job, is itself a finding: tell the user to run `/setup-ci`.
+   - **Review rules.** Did the reviewer miss something it should have caught, or keep flagging noise?
+     Conventions belong to the reviewer, not the implementer: the implementing agent is under the
+     most context pressure and the reviewing agent is under the least. A judgement call true of every
+     Flutter app goes into `flutter-code-review`'s baseline; one true of this project goes into its
+     `docs/agents/coding-standards.md`, which only the reviewer reads. Neither goes into `CLAUDE.md`.
+   - **Information access.** Was something the agent needed simply unavailable: the running app's
+     logs, a device screenshot, the backend's response, a third-party dashboard? Giving the agent
+     read access, such as a teed log file or an MCP server, often beats any amount of instruction.
+   - **Tool economy.** Did the agent pay for an expensive call it could have avoided: a full test
+     suite run per slice, a whole-file read where a search would do, a verbose MCP tool? Name the
+     cheaper route and where it should be written down.
    - **Navigation.** Did the agent spend a long time finding something? A pointer in `CLAUDE.md` or a
      row in `docs/agents/project.md` is cheaper than repeated searching.
    - **Glossary.** Did we and the client mean different things by a word? That is a `GLOSSARY.md`
@@ -51,6 +62,13 @@ You are improving the **environment the agent works in**, not the code it wrote.
 
 ## The structural test
 
-Before writing any candidate as prose, ask whether a lint rule, a test, a hook, or a type could
-enforce it instead. If one could, that is the candidate, and the prose version is the fallback. A rule
-that has to be remembered will be forgotten; a rule that fails a build will not.
+Before writing any candidate as prose, classify the mistake behind it.
+
+- **Mechanical**: a fixed pattern a tool can see. A banned API, an import shape, a file in the wrong
+  folder, a literal where a token belongs. This gets a deterministic check, full stop: an
+  `analysis_options.yaml` rule, a custom lint rule, a test, a hook or a CI step, whichever the repo's
+  existing guardrail makes cheapest. The prose version is never the candidate.
+- **Judgement**: needs reading, not matching. Consistency across files, whether a name fits the
+  domain, whether a state is handled sensibly. This becomes a review rule, as above.
+
+A rule that has to be remembered will be forgotten; a rule that fails a build will not.

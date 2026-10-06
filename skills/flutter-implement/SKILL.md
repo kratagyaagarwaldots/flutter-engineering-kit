@@ -80,6 +80,9 @@ why, and show it to the user before committing. Never push.
 
 Where the branch is the default branch, branch first.
 
+Where the work goes up as a pull request, call the Skill tool with `pr` for its body. The evidence
+from step 5 is what fills it.
+
 ## Completion criteria
 
 Every acceptance criterion has code, a test naming it, and a verification rung reported. The

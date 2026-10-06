@@ -1,6 +1,6 @@
 {
   "name": "flutter-engineering-kit",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Skills and agents for engineering Flutter apps: understand the code, design the change, build it test-first, prove it works, and ship it.",
   "author": {
     "name": "Kratagya Devvratt Agarwal"
@@ -53,6 +53,7 @@
     "./skills/flutter-write-tests",
     "./skills/grill",
     "./skills/handoff",
+    "./skills/pr",
     "./skills/project-conventions",
     "./skills/release-readiness",
     "./skills/retro",

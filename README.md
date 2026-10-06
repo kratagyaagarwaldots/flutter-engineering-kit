@@ -305,6 +305,9 @@ Separating *does it work* from *is it written well*, and answering both out loud
 
 **Model-invoked**
 
+- **[pr](./skills/pr/SKILL.md)**: Shape a pull request body for fast human review: the smallest
+  visual that shows the change, before-and-after evidence that it works, and how dangerous it is to
+  merge.
 - **[flutter-write-tests](./skills/flutter-write-tests/SKILL.md)**: Write the tests for a feature:
   logic tests at the state seam, widget tests for what the user sees, and goldens for the pixels.
 - **[flutter-verify](./skills/flutter-verify/SKILL.md)**: Prove a Flutter change actually works
@@ -435,8 +438,9 @@ management library.
 ## Credits
 
 The alignment skills adapt `grilling`, `to-questionnaire`, `to-spec`, `domain-modeling`,
-`code-review`, `diagnosing-bugs`, `tdd`, `wizard`, `handoff` and `writing-for-agents` from
-**mattpocock/skills** (MIT). The verification ladder, `release-readiness`, the harness generator and
+`code-review`, `diagnosing-bugs`, `tdd`, `wizard`, `handoff`, `writing-for-agents`, `retro` and
+`pr` from **mattpocock/skills** (MIT); `pr` there credits Dex Horthy's `show-me` skill from
+[humanlayer/skills](https://github.com/humanlayer/skills). The verification ladder, `release-readiness`, the harness generator and
 the principles adapt `create-verification-skill`, `prove-it-works`, `blast-radius`, `hillclimb` and
 the principle set from **pstack** (MIT). `flutter-design` adapts its motion judgment — the frequency
 and purpose gates, the duration budgets, the physicality and interruptibility rules, and the habit of
