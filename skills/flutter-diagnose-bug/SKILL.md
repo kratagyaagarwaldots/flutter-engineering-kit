@@ -121,6 +121,12 @@ the bug from being locked down.
 With a seam: turn the minimised repro into a failing test, watch it fail, apply the fix, watch it
 pass, then re-run the Phase 1 loop against the original un-minimised scenario.
 
+**When two fixes have failed the same loop, stop fixing.** Write down the one sentence both fixes
+assumed, such as "the list rebuilds because its state changed", and test that sentence before any
+third fix. Each failure under a shared assumption is evidence against the assumption, not a reason
+to write another fix on top of it. If the test shows the assumption holds, look for the cause
+elsewhere, and go back to the Phase 3 list.
+
 ## Phase 6: Clean up
 
 Before declaring done:

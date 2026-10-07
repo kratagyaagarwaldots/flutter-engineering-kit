@@ -3,6 +3,27 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.9.1
+
+Sync with [pstack](https://github.com/cursor/plugins/tree/main/pstack) (Lauren Tan, MIT) from
+0.14.5, where the kit forked it, to 0.15.15, rewritten for Flutter. The kit now credits pstack.
+
+- `engineering-principles` gains a fifth principle, design for agent contributors: one owner per
+  piece of state, one way per task, no hand-kept duplicate lists, nothing feature-private callable
+  from everywhere. `flutter-plan-change` sketches owners, and `flutter-code-review` flags a second
+  writer, way or list.
+- `flutter-write-tests` requires every test to be able to fail: a test that would still pass if
+  every function it calls returned `null` gets rewritten or deleted. The review baseline flags it.
+- `retro` proposes the highest fix level that works (remove the cause, make it unwritable, a lint
+  whose error names the fix, a test), proves each new check fails on the round's own mistake, and
+  records what enforces each applied edit.
+- `flutter-performance` checks a number before trusting it: repeated alternating runs, what bounds
+  it, whether the work happened, equal setups, and its share of what the user waits for.
+- `pr` adds a Scope section and keeps long evidence out of the body.
+- `flutter-verify` labels every claim as measured, inferred or guess.
+- `flutter-diagnose-bug` stops after two failed fixes to test the assumption they shared.
+- `unslop` drops "Adding soul" and gains rules 32 (mannered prose) and 33 (over-compression).
+
 ## 0.9.0
 
 Agents can now build a planned sprint unattended, on models the user chose, without a model

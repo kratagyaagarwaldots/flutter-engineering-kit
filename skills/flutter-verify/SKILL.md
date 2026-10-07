@@ -104,6 +104,11 @@ simulator or attached device, capturing a screenshot at each asserted state.
 State the rung, the exact command, and its real output. Paste the counts, not a paraphrase. Never
 report a command you did not run in this session.
 
+Every other claim in the report, such as a cause, a prediction, or why something now passes,
+carries its basis in the same sentence: **measured** (you ran it), **inferred** (from code you
+read), or **guess**. Where a check you could run would turn an inference into a measurement, run it
+rather than asking the user to.
+
 For a bug fix, evidence is the **same command twice**: red before the fix, green after. One green run
 proves the code passes a test, not that it fixed anything.
 

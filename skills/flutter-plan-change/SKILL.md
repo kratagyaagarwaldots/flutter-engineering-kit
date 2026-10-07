@@ -38,6 +38,9 @@ Write the shape, with no bodies. Signatures, types, and the boundaries between t
 - **Repository signatures.** What each method takes and returns, including its failure shape.
 - **Widget boundaries.** Which parts of the tree are their own widgets, and what each takes.
 - **What is deleted.** A change that only adds is usually a change that missed something.
+- **Owners.** For each piece of state the change writes, the one place that writes it; for each task
+  it introduces, whether the code already has a way to do it. A second writer, a second way or a
+  second hand-kept list is what the next agent will copy from.
 
 Keep it to signatures. The moment you write a body you are implementing, and the point of the sketch
 is that it is cheap to throw away.

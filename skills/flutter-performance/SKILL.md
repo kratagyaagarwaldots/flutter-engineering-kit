@@ -97,10 +97,37 @@ leaves five changes in the codebase for no reason.
 
 Where a change helps, commit it on its own with the before and after numbers in the message.
 
+## 6. Check the number before trusting it
+
+*Adapted from `principle-explain-the-number` and `benchmark-checklist` in
+[pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan (MIT).*
+
+A run that went wrong still prints a plausible number. Before keeping, reverting or reporting on one,
+answer each of these from a run, not from reading the code:
+
+- **Is it repeatable?** Run each side at least five times, alternating before and after, so warm-up
+  and caches do not favour one. Report the median and the range. A gap smaller than the range is no
+  measurable difference.
+- **What bounds it?** Name what stops it being twice as good: the UI thread, the raster thread, a
+  platform channel, the network, one isolate. Take it from the timeline. If a change did not move
+  the number, this is why, so find it before calling the change useless.
+- **Was the work done?** The flow ran inside the measured window: the list reached its end, the
+  screen showed data rather than its failure state, the image decoded. A request that failed renders
+  fast.
+- **Were both sides run the same way?** Profile mode, the same device, the same data size, caches
+  equally warm or cold. Otherwise you compared two setups, not two versions of the code.
+- **Is it possible?** Removing work that took 10% of the time can make the whole at most about 11%
+  faster. A bigger gain means the run measured something else.
+- **Does the user feel it?** Report a micro result as a share of what the user waits for. A parse
+  made 40% faster that is 3% of the time to first frame saves about 1%.
+
+Where you cannot answer one of these, call the result inconclusive and name the gap.
+
 ## Completion criteria
 
-The metric is stated with its before and after value, the command that produced both is shown, and
-each kept change is tied to the measurement that justified it.
+The metric is stated with its before and after value, its run count and range, and what bounds it.
+The command that produced both is shown, and each kept change is tied to the measurement that
+justified it.
 
 Name what you tried that did **not** help and reverted. That list is the most useful part of the
 report, because it stops the next person spending the same day on it.
