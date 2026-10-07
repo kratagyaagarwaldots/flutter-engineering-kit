@@ -370,9 +370,9 @@ Deciding the shape of a change while it is still cheap to change.
 
 - **[flutter-plan-change](./skills/flutter-plan-change/SKILL.md)**: Design a change before writing
   it: the types, signatures and module boundaries it needs, and the order the work lands in.
-- **[engineering-principles](./skills/engineering-principles/SKILL.md)**: Four principles that
-  change how a change is shaped rather than what it does: root causes, subtraction, reader load, and
-  modelling the domain in types.
+- **[engineering-principles](./skills/engineering-principles/SKILL.md)**: Five principles that
+  change how a change is shaped rather than what it does: root causes, subtraction, reader load,
+  modelling the domain in types, and designing for the agent that changes it next.
 
 ### Build
 

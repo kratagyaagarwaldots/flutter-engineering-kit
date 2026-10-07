@@ -67,7 +67,8 @@ testWidgets('tapping retry dispatches the action', (tester) async {
   await tester.tap(find.text(AppStrings.retry));
   await tester.pump();
 
-  // assert the action reached the seam, via a mock or a spy notifier
+  // assert what the tap produced: the state the seam moved to, or the
+  // arguments the mock received, captured and compared to literals
 });
 ```
 
@@ -122,6 +123,16 @@ baseline has to be generated in the same environment that checks it; `setup-ci` 
 The test file's import shape belongs to `flutter-core-architecture`; call it rather than working from
 a copy. What is specific to this skill:
 
+- Give every test a way to fail for a defect. Before keeping one, ask whether it would still pass
+  if every function it calls returned `null` or did nothing. If it would, it observes no behaviour.
+  Rewrite it to call the subject with one concrete input and compare the output, or the state
+  after, against a literal; delete it if no such assertion exists. The shapes that pass that way:
+  - only `findsWidgets`, `isNotNull`, `isA<...>()` or `returnsNormally`
+  - only `verify(...).called(1)` or `verifyNever(...)`, with nothing about the arguments or the
+    state that followed
+  - an expected value computed by the code under test
+  - an assertion that restates a constant, such as a token, a default or a string table row
+  - an assertion on the fixture the test built, with the subject never run
 - Name each test for what it asserts, so a failure line is a bug report.
 - Assert on the fields the criterion is about, not every property. A test asserting everything fails
   on changes it was never written to catch, and gets deleted rather than fixed.

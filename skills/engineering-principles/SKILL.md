@@ -1,13 +1,17 @@
 ---
 name: engineering-principles
-description: Four principles that change how a change is shaped rather than what it does: root causes, subtraction, reader load, and modelling the domain in types. Use when choosing between implementation shapes, when a fix could be made at more than one level, or when reviewing whether a change was built the right way.
+description: Five principles that change how a change is shaped rather than what it does: root causes, subtraction, reader load, modelling the domain in types, and designing for the agent that changes it next. Use when choosing between implementation shapes, when a fix could be made at more than one level, or when reviewing whether a change was built the right way.
 ---
 
 # Engineering principles
 
-Four principles that survived the test the kit applies to everything else: does stating this change
+*Adapted from the `principle-*`, `architect` and `correct` skills in
+[pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan (MIT), rewritten for
+Flutter.*
+
+Five principles that survived the test the kit applies to everything else: does stating this change
 what gets built, versus not stating it? Each is one file. Read the one that bears on the decision in
-front of you, rather than all four.
+front of you, rather than all five.
 
 | The situation | Read |
 |---|---|
@@ -15,6 +19,7 @@ front of you, rather than all four.
 | The change is only adding things | [references/subtract-before-you-add.md](references/subtract-before-you-add.md) |
 | The code works but is hard to follow | [references/minimize-reader-load.md](references/minimize-reader-load.md) |
 | Invalid states are possible and guarded against at runtime | [references/model-the-domain.md](references/model-the-domain.md) |
+| State gains a second writer, a task a second way, or a list a second copy | [references/design-for-agent-contributors.md](references/design-for-agent-contributors.md) |
 
 These govern **shape**, not behaviour. Where the question is what the software should do, that is a
 requirement, and calling the Skill tool with `grill` settles it faster than any principle will.

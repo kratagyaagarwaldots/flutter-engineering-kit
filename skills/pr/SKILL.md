@@ -9,12 +9,19 @@ The reader is the person who decides whether to merge, often between other thing
 thirty seconds they will give it before choosing to read the diff or not. Use the project's words
 from `GLOSSARY.md`, and skip any preamble.
 
+Keep the body to what fits those thirty seconds. Full logs, run tables and file-by-file notes go in
+a linked artifact or a collapsed `<details>` block, never inline.
+
 ## The body
 
 ```markdown
 ## Summary
 
 <the smallest visual that makes the change clear>
+
+## Scope
+
+<what this covers, and what it deliberately leaves out>
 
 ## Evidence
 
@@ -61,6 +68,12 @@ question open.
 Keep only the widgets, files, states and calls the reader needs. Leave out everything else, however
 true.
 
+## Scope
+
+One to three short items: what the PR covers, and what it deliberately leaves out, such as a
+follow-up, a known gap, or a criterion deferred to another ticket. Without it, the reviewer cannot
+tell an omission from an oversight, and asks.
+
 ## Evidence
 
 Show it working, as a before and an after. Ranked by how much they prove:
@@ -96,6 +109,6 @@ wider radius than its diff suggests; say so.
 
 ## Completion criteria
 
-The summary has one visual, the evidence shows a before and an after with the rung named, and the
-door and blast radius are both stated. Where one of them cannot be stated yet, the PR is not ready
-to be marked ready for review.
+The summary has one visual, the scope names what is left out (or says nothing is), the evidence
+shows a before and an after with the rung named, and the door and blast radius are both stated.
+Where one of them cannot be stated yet, the PR is not ready to be marked ready for review.

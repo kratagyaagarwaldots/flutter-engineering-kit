@@ -78,6 +78,12 @@ Each reads *what it is* → *why it matters here*.
   barrel requires it. → Compiles locally, breaks the next importer.
 - **A fixture or placeholder marker left in code the change presents as finished**, where the
   project treats those markers as a temporary state. → Ships a stub as a feature.
+- **A second writer, a second way, or a second list.** The change writes state another place already
+  writes, adds a way to do a task the code already does, or adds a list that must be kept in step
+  with an existing one by hand. → The next agent copies whichever it finds first, and they drift.
+- **A test that cannot fail.** It would still pass if every function it calls returned `null`:
+  only `findsWidgets`, `isNotNull` or `verify(...).called(1)`, an expected value computed by the code
+  under test, or a restated constant. → Costs CI time and catches nothing.
 
 ### General smells
 
