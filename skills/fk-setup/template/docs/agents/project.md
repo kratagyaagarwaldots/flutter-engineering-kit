@@ -1,7 +1,7 @@
 # Project configuration
 
 Written by `/fk-setup`. Every kit skill reads this file for anything that differs
-between client apps. If a skill needs a fact that is not here, the fact belongs here.
+between projects. If a skill needs a fact that is not here, the fact belongs here.
 
 Edit this file directly when something changes. Re-run the setup skill only to start over.
 
@@ -9,55 +9,39 @@ Edit this file directly when something changes. Re-run the setup skill only to s
 
 | Field | Value |
 |---|---|
-| App display name | `<App Name>` |
-| Dart package name | `<dart_package_name>` |
-| Android application id | `<com.client.app>` |
-| iOS bundle id | `<com.client.app>` |
+| Product name | `<Product Name>` |
 | Client | `<client or internal>` |
 | Repo | `<git remote url>` |
 
-## Flavors
+## Components
 
-| Field | Value |
-|---|---|
-| Flavors | `<staging, live>` or `none` |
-| Selected by | `<how the flavor is chosen, e.g. a FLAVOR key in a gitignored .env>` |
-| Secret layers | `<Dart envied codegen, Android build.gradle.kts, iOS Secrets.xcconfig>` |
-| Safe flavor for verification | `<staging>` |
+Contract: 1
 
-**Never verify against the live flavor** when the app writes real data (orders, payments,
-messages). Name the safe flavor above and use it.
+| Component | Kind | Stack | Kit | Path | Install | Check | Test | Run | Build |
+|---|---|---|---|---|---|---|---|---|---|
+| `<app>` | `<client>` | `<as the project names it>` | `<stack kit, or none>` | `<path>` | `<command>` | `<command>` | `<command>` | `<command>` | `<command>` |
 
-## Architecture
+`project-stack` owns what each column holds and routes every stack question through this table. A
+stack kit's setup fills its components' commands and adds its own section below.
 
-`flutter-core-architecture` documents the kit's defaults. This table records what **this** project
-actually uses, and it wins wherever the two differ. `flutter-supabase-conventions` resolves these rows for
-every skill that generates code, so a wrong row here produces code in the wrong style.
+## Environments
 
-The Value column below is filled with the kit's default. Replace each with what the repo does.
-
-| Field | Value | Common alternatives |
+| Environment | What it is | Safe for verification |
 |---|---|---|
-| Logic seam | `Bloc<Event, State>` | `Notifier` / `AsyncNotifier`, `ChangeNotifier`, plain class |
-| Logic test tool | `bloc_test` | `ProviderContainer`, `addListener`, plain `test` |
-| Widget-test wrapper | `BlocProvider.value` | `ProviderScope(overrides:)`, `ChangeNotifierProvider.value` |
-| Dependency injection | constructor | `ref.watch`, `get_it`, `InheritedWidget` |
-| Serialization | hand-written `fromJson` | `json_serializable`, `freezed` |
-| Navigation | `AppRouter.onGenerateRoute` | `go_router`, `auto_route` |
-| Data return contract | reads `Future<T?>`, writes `Future<Either<Failure, T>>` | a `Result` type, throwing |
-| Sizing strategy | tokens + breakpoints | `flutter_screenutil` |
-| Barrel path | `lib/core/router/exports.dart` | per-file imports |
-| Other deviations | `<none>` | |
+| `<staging>` | `<a copy of the backend with test data>` | yes |
+| `<production>` | real users and real data | no |
+
+**Never verify against an environment that writes real data** (orders, payments, messages). Name
+the safe one above and use it.
 
 ## Design source
 
 | Field | Value |
 |---|---|
 | Source | `<Figma MCP server>` / `<pasted CSS + screenshot>` / `<written spec only>` |
-| Figma file or project | `<url>` |
+| Design file or project | `<url>` |
 | Token strategy | `<get_variable_defs first, then get_design_context>` |
-| Theme location | `<lib/core/constants/>` — where colour, type and component defaults are centralised |
-| Design language | `<docs/agents/design.md>` — personality, type steps, colour roles, motion tokens and state patterns. Written by `flutter-design` once there is something to settle; `<not yet settled>` until then |
+| Design language | `<docs/agents/design.md>` — personality, type steps, colour roles, motion tokens and state patterns. Written through `project-stack`'s `design` slot once there is something to settle; `<not yet settled>` until then |
 
 ## Documents
 
@@ -77,40 +61,29 @@ the repo, the board and the sprint rhythm. With `none`, the backlog is a table i
 
 ## Integrations
 
-Only what is wired. An empty row means the app does not do this.
+Only what is wired. An empty row means the product does not do this.
 
-| Concern | Provider |
-|---|---|
-| Crash and error reporting | `<Sentry>` |
-| Push notifications | `<OneSignal / FCM>` |
-| Remote config or force-update | `<Firebase Remote Config>` |
-| Maps and places | `<Google Places>` |
-| Payments | `<>` |
-| Auth | `<email + social>` |
-| Analytics | `<>` |
+| Concern | Provider | Component |
+|---|---|---|
+| Crash and error reporting | `<Sentry>` | |
+| Push notifications | `<OneSignal / FCM>` | |
+| Remote config or force-update | `<>` | |
+| Maps and places | `<>` | |
+| Payments | `<>` | |
+| Auth | `<email + social>` | |
+| Analytics | `<>` | |
 
 ## Verification
 
 | Field | Value |
 |---|---|
-| Platforms | `<android, ios>` |
-| Drivable surface | `<iOS simulator>` |
-| Integration harness | `<none yet>` / `<integration_test + flutter drive>` |
-| Test account | `<none — most flows need sign-in>` |
-| Startup gates in `main()` | `<Firebase, Remote Config, force-update, connectivity, push, Sentry>` |
-| Known failing tests | `<none>` |
+| Test account | `<none — most flows need sign-in>` / `<where the credential is kept, never the credential>` |
 
-`verify` reads the last two rows. Startup gates decide whether a driver can boot the app;
-known failing tests stop an agent reporting a pre-existing failure as its own breakage.
-
-## Commands
-
-| Purpose | Command |
+| Component | Known failing tests on a clean checkout |
 |---|---|
-| Install deps | `flutter pub get` |
-| Lint | `flutter analyze` |
-| Format | `dart format .` |
-| Test | `flutter test` |
-| Single test file | `flutter test <path>` |
-| Codegen | `dart run build_runner build --delete-conflicting-outputs` |
-| Switch flavor | `<the project's flavor-switching command>` |
+| `<app>` | `<none>` |
+
+`verify` reads this section. Known failing tests stop an agent reporting a pre-existing failure as
+its own breakage, so record each by name, per component, with the command that showed it.
+
+<!-- Each stack kit's setup appends its own section below this line, one per component it serves. -->

@@ -82,9 +82,9 @@ failures do not look like Dart failures and are not fixed like them. Call the Sk
 Some upgrades pass every test and break the app, because the change is in a platform channel, a
 push token, a webview, or an image decoder that no unit test touches.
 
-Call the Skill tool with `verify` and reach the highest rung available. Where the project
-has an integration harness, run it; the harness exists exactly for this. Where an upgrade touched a
-permission, a notification path or a payment SDK, drive that flow on a device.
+Call the Skill tool with `flutter-supabase-verify` and reach the highest rung available. Where the
+project has an integration harness, run it; the harness exists exactly for this. Where an upgrade
+touched a permission, a notification path or a payment SDK, drive that flow on a device.
 
 ## Completion criteria
 

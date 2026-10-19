@@ -5,26 +5,27 @@ description: Write the tests for a feature: logic tests at the state seam, widge
 
 # Write tests
 
-Write the tests that map back to acceptance criteria. `verify` owns which rung a claim
-needs; this skill writes rungs 2, 3 and 4.
+Write the tests that map back to acceptance criteria: logic tests, widget tests and goldens.
 
-Where the code does not exist yet, call the Skill tool with `tdd` instead: it owns the order,
-and a test written after the code tests the code rather than the requirement.
+Where the code does not exist yet, write each test first, run it, and see it fail on the assertion
+you meant before writing the code. A test written after the code tests the code rather than the
+requirement.
 
 ## Which test for which criterion
 
-| The criterion is about | Write | Rung |
-|---|---|---|
-| A status transition, a computed value, error mapping | A logic test | 2 |
-| What the user reads, taps, or does not see | A widget test | 3 |
-| Matching an approved design | A golden | 4 |
+| The criterion is about | Write |
+|---|---|
+| A status transition, a computed value, error mapping | A logic test |
+| What the user reads, taps, or does not see | A widget test |
+| Matching an approved design | A golden |
 
 Most criteria want a widget test, and most suites have none. It runs in under a second, needs no
 device, and catches the regressions users actually report.
 
 ## 1. Logic tests
 
-Call the Skill tool with `flutter-supabase-conventions` for the Logic test tool row, then read the template:
+Call the Skill tool with `flutter-supabase-conventions` for the Test tooling and layout aspect, then
+read the template for its Logic test tool row:
 
 | Logic test tool | Template |
 |---|---|
@@ -90,7 +91,7 @@ a widget test renders as an error box and takes the assertion with it.
 
 ## 3. Goldens
 
-A golden asserts the rendered pixels against an approved file. It is the right rung for "it does not
+A golden asserts the rendered pixels against an approved file. It is the right test for "it does not
 match the design".
 
 ```bash
@@ -116,7 +117,7 @@ Two rules keep a golden honest:
   why. `--update-goldens` on a red suite turns a caught regression into an approved one, silently.
 
 Goldens render differently across machines, mostly through fonts. Where the suite runs in CI, the
-baseline has to be generated in the same environment that checks it; `setup-ci` owns that.
+baseline has to be generated in the same environment that checks it.
 
 ## Conventions
 
@@ -148,5 +149,6 @@ Every acceptance criterion appears in the `AC coverage` group against a named te
 the three logic cases above, and `flutter test` passes against the baseline in
 `docs/agents/project.md`.
 
-Name any criterion no test here can reach and which `verify` rung it needs instead. A
-criterion silently left uncovered reads as covered, which is worse than an admitted gap.
+Name any criterion no test here can reach and the proof it needs instead: an integration run on a
+device, or a manual check. A criterion silently left uncovered reads as covered, which is worse than
+an admitted gap.

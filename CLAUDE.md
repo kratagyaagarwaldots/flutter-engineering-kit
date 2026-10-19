@@ -1,7 +1,24 @@
 # CLAUDE.md — Flutter Engineering Kit
 
 This repo is a Claude Code plugin, not an app. Its product is the skills under `skills/`, the agents
-under `agents/`, and the project templates under `skills/fk-setup/template/`.
+under `agents/`, and the project templates the setup skills write.
+
+## Two kits in one repo
+
+This repo will split into two, and `kits.json` says along which line:
+
+- **product-engineer** runs a product and its engineering for any stack: proposal, features,
+  sprints, change, feedback, and the method skills (plan-change, tdd, verify, code-review,
+  security-audit, diagnose-bug). **It names no stack.** It reaches a stack only by calling
+  `project-stack`, which reads the project's Components table and calls the stack kit's slot skills
+  (`<kit>-setup`, `-conventions`, `-design`, `-build`, `-verify`, `-release`) when they are
+  installed, and falls back to each component's commands when they are not.
+- **flutter-supabase** is one stack kit. It fills those slots as `flutter-supabase-<slot>` and owns
+  every Flutter and Supabase skill. **It never calls a product-engineer skill**, so it works alone.
+
+Each skill, agent and hook check belongs to exactly one kit in `kits.json`; adding one means adding
+it there. `validate-kit.py` check 23 fails on a call across the line or a stack named inside
+product-engineer, so the split stays a move rather than a rewrite.
 
 ## Before editing any skill
 
@@ -31,10 +48,10 @@ Every other skill cites that skill rather than restating them.
 
 ## The stack rule
 
-**A skill never names a state-management library.** The project's stack is a project fact, so it
-lives in the Architecture table of `docs/agents/project.md`, and a skill reaches it by calling
-`flutter-supabase-conventions`. `flutter_bloc` is the kit's *default* for a greenfield repo, not its
-assumption.
+**A flutter-supabase skill never names a state-management library.** Which one a project uses is a
+project fact, so it lives in the Architecture table of `docs/agents/project.md`, and a skill reaches
+it by calling `flutter-supabase-conventions`. `flutter_bloc` is the kit's *default* for a greenfield
+repo, not its assumption.
 
 Where a skill genuinely needs per-stack code, it goes in `skills/<name>/templates/<stack>.md` and
 `SKILL.md` becomes a stack-neutral procedure routing to it. `flutter-create-state-layer` is the
@@ -90,7 +107,7 @@ that skill is restructured, never add one. A new skill needing stack-specific co
   this, and check 22 runs `tests/loop_test.py`.
 - Run `claude plugin validate . --strict` after touching either manifest.
 
-Run `python3 scripts/validate-kit.py` before committing. It encodes all twenty-two, so a broken
+Run `python3 scripts/validate-kit.py` before committing. It encodes all twenty-three, so a broken
 invariant fails a check rather than surviving to review.
 
 ## Installing

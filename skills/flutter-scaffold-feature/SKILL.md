@@ -1,6 +1,6 @@
 ---
 name: flutter-scaffold-feature
-description: Scaffold a complete feature folder (model, repository, state layer, view, widgets, tests) from acceptance criteria, in one of three modes: real (a model and endpoint exist), fixture (build the screen first, the API comes later) or upgrade (move a fixture-mode feature onto its real API). Use when /fk-build is given a new feature or screen, or a fixture-mode feature whose API now exists.
+description: Scaffold a complete feature folder (model, repository, state layer, view, widgets, tests) from acceptance criteria, in one of three modes: real (a model and endpoint exist), fixture (build the screen first, the API comes later) or upgrade (move a fixture-mode feature onto its real API). Use when building a new feature or screen in a Flutter project, or a fixture-mode feature whose API now exists, including when flutter-supabase-build routes a ticket here.
 ---
 
 # Scaffold a feature
@@ -35,9 +35,9 @@ Confirm the inputs the mode needs and stop to ask for anything missing; never in
 - Fixture: confirmation from the user that the model and endpoint really do arrive later.
 
 Then judge whether the criteria are settled. They are not when any names only the happy path,
-leaves loading, empty or failure behaviour unstated, or arrived as client prose. Call the Skill tool
-with `grill` and use the list it produces. Scaffolding on thin criteria is how a feature reaches
-Phase 9 and then needs rebuilding.
+leaves loading, empty or failure behaviour unstated, or arrived as client prose. Stop, list each
+unsettled criterion with the one question that settles it, and wait for the answers. Scaffolding on
+thin criteria is how a feature reaches Phase 9 and then needs rebuilding.
 
 ## Phase 0.5 – Reuse before you add
 
@@ -115,9 +115,9 @@ An empty cell is unfinished work. Finish it before Phase 10.
 
 ## Phase 10 – Prove it
 
-Call the Skill tool with `verify` and report the rung reached for each criterion. A
-fixture-mode feature is provable to the widget rung and no further, since there is no real network
-path yet: say so, and name every criterion whose proof waits for the API.
+Call the Skill tool with `flutter-supabase-verify` and report the rung reached for each criterion.
+A fixture-mode feature is provable to the widget rung and no further, since there is no real
+network path yet: say so, and name every criterion whose proof waits for the API.
 
 Then confirm each new file imports only the barrel and is exported from it, and that snackbars,
 dialogs and navigation use the shared helpers `flutter-core-architecture` lists.

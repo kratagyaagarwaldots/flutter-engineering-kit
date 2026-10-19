@@ -5,9 +5,9 @@ description: Diagnose a native build failure: Gradle, AGP, Kotlin, JDK, CocoaPod
 
 # Flutter build failure
 
-The build breaking before your Dart code compiles is a different problem from a bug, and
-`diagnose-bug` cannot help: its method starts with a failing *test*, and there is no test
-for a Gradle version conflict.
+The build breaking before your Dart code compiles is a different problem from a bug, and a
+bug-diagnosis loop cannot help: it starts with a failing *test*, and there is no test for a Gradle
+version conflict.
 
 These failures are almost always **a version mismatch between toolchain layers**, and the error
 message almost never names the layer that is wrong.
@@ -99,7 +99,9 @@ A native build fix is invisible in Dart and will be rediscovered by the next per
 any step a fresh clone needs.
 
 Where the fix was a human-only step, meaning a certificate, a provisioning profile, a store account
-or a local SDK install, call the Skill tool with `setup-wizard` to make it repeatable.
+or a local SDK install, list it for the user as numbered manual steps: what to install or request,
+where, and the command whose output proves it took. Add the same steps under that heading in
+`project.md`, so a fresh clone repeats them rather than rediscovering them.
 
 ## Completion criteria
 

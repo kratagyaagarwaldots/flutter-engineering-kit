@@ -15,6 +15,10 @@ build, judge, qa) and says what that role needs, the `configure-models` skill pi
 in each harness the user has, and `kit install` pins it. Without that step, agents outside Claude
 Code inherit the session's model. The tier column below is the reasoning behind each default.
 
+Each agent belongs to one kit in `kits.json`. `codebase-explorer`, `solution-architect` and
+`qa-engineer` are product-engineer's and name no stack; the `flutter-*` engineers and
+`store-doc-writer` are flutter-supabase's, reached through its `build` and `release` slots.
+
 ## Feature layers
 
 The model tier tracks how much judgement the layer needs, not how much code it writes.

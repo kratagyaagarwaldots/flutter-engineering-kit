@@ -124,8 +124,9 @@ finding, not a copy finding, and adding words is the workaround rather than the 
 Microcopy is part of the hierarchy, because it is read before anything is pressed.
 
 - **Buttons name their action**, not their acknowledgement. "Save changes" beats "OK".
-- **Titles say what the screen is**, in the vocabulary the user brought. Call the Skill tool with
-  `domain-glossary` where the term is contested.
+- **Titles say what the screen is**, in the vocabulary the user brought: the project's
+  `GLOSSARY.md` term where it has one. Where the term is contested, name it as an open question for
+  the user rather than picking one.
 - **Specific labels beat safe generic ones.** A navigation item named for its contents is
   predictable; an umbrella term is not.
 

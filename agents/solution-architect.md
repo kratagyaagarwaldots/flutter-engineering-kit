@@ -23,16 +23,17 @@ that fits, rather than working from your own recollection of the steps:
 | Design a change: types, signatures, boundaries, sequence | `plan-change` |
 | Root-cause a failure that resists a first look | `diagnose-bug` |
 | Choosing between shapes rather than behaviours | `engineering-principles` |
-| What this project's stack actually is | `flutter-supabase-conventions` |
-| The shared conventions and what `lib/core` holds | `flutter-core-architecture` |
+| A component's stack, its conventions, and what its shared code holds | `project-stack`, asking for the component's `conventions` |
 
-Where the parent asked for a feature's planning tables, follow the shapes in
-`flutter-scaffold-feature`'s `references/planning-tables.md`; that skill owns them.
+Where the parent asked for a feature's planning tables, call the Skill tool with `project-stack`,
+asking for the component's `conventions`, aspect "planning tables", and follow the shapes it
+returns; the stack kit owns them. Where no kit answers, write one table per layer the feature
+touches, every row filled.
 
 ## Scope
 
 - Diagnose complex failures with evidence: `file:line`, stack traces, the command and its output.
-- Propose cross-feature designs that respect `lib/core` as the only sharing path.
+- Propose cross-feature designs that share code only through the path the conventions name.
 - Default to **analyze and specify**. Edit only when the parent explicitly asks you to apply a
   change, so a design review never silently becomes an implementation.
 
@@ -42,5 +43,5 @@ Where the parent asked for a feature's planning tables, follow the shapes in
 - Exhaustive tables when producing planning artifacts. "Follow the usual pattern" is not a table,
   and a layer engineer handed one cannot build from it.
 - An explicit file list and build order when proposing implementation.
-- Hand mechanical codegen to the `flutter-*-engineer` agents once the tables stop moving. Handing
+- Hand mechanical codegen to the layer engineers once the tables stop moving. Handing
   over a table that is still changing costs more to reconcile than doing the layers in sequence.

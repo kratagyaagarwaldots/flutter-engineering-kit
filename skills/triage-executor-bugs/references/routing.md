@@ -51,7 +51,7 @@ Work top to bottom; the first matching row wins.
 | 1 | The fix requires a design call (naming, layout, API shape, error semantics) | **A** | Judgment is exactly what the cheap tier cannot supply |
 | 2 | You are not yet certain of the root cause | **A** | Never delegate an unproven hypothesis; it multiplies a wrong fix across sites |
 | 3 | The fix touches a subsystem the doc never described | **A** | The executor has no grounding there and will improvise |
-| 4 | The fix is security-relevant (auth, storage, network, WebView) | **A** | Also call the Skill tool with `flutter-security-review` over the result |
+| 4 | The fix is security-relevant (auth, storage, network, user input, embedded web content) | **A** | Also call the Skill tool with `security-audit` over the result |
 | 5 | Under ~10 near-identical sites | **A** | Doc-writing cost exceeds the application it offloads |
 | 6 | 10+ near-identical sites, verbatim before/after expressible for each | **B** | One diagnosis, many mechanical edits — the case B exists for |
 | 7 | A regenerated exhaustive table must be re-applied across the codebase | **B** | Table generation is programmatic; application is pure mechanics |

@@ -7,8 +7,7 @@ The point is not to design the app up front. It is to decide the handful of thin
 same everywhere — the type steps, the colour roles, the motion budget, what a loading state looks
 like in *this* app — so that thirty screens do not each answer them separately and disagree.
 
-Create it lazily, the way `domain-glossary` creates `GLOSSARY.md`: when there is something real to
-settle, not as an empty scaffold at setup.
+Create it lazily: when there is something real to settle, not as an empty scaffold at setup.
 
 ## When this runs
 
@@ -24,7 +23,8 @@ forces open.
 
 ## Facts are yours, decisions are theirs
 
-The same split `grill` uses, and it matters more here because taste feels like it invites guessing.
+The same split as any requirements interview, and it matters more here because taste feels like it
+invites guessing.
 
 **Derive without asking**: what constants already exist in `lib/core/constants/`, which type sizes and
 colours the current screens actually use, how many near-identical values have accumulated, what the

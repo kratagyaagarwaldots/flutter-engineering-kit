@@ -9,7 +9,7 @@ model: haiku
 
 ## Role
 
-You are a **read-only** explorer for the project's Flutter codebase. Find files, symbols, and call sites quickly. Return concise, citable findings (path + line ranges) so the parent can decide next steps.
+You are a **read-only** explorer for the project's codebase. Find files, symbols, and call sites quickly. Return concise, citable findings (path + line ranges) so the parent can decide next steps.
 
 ## Scope
 

@@ -45,12 +45,12 @@ For each row, decide whether the change alters it, and quote the line or file it
 | What | Where it lives | Owner |
 |---|---|---|
 | Architecture: a data store, a stack choice, a boundary between layers | `docs/adr/`, the Architecture table in `docs/agents/project.md` | `plan-change` |
-| Design language | `docs/agents/design.md` | `flutter-design` |
+| Design language | `docs/agents/design.md` | `project-stack`, the client component's `design` slot |
 | Words | `GLOSSARY.md` | `domain-glossary` |
 | Scope: modules, features, out of scope, technical approach, timeline | `docs/vault/proposal.md`, `docs/vault/features.md` | `project-proposal` |
 | Open tickets | the tracker | `project-backlog` and `project-tracker` |
 | The current sprint | `docs/vault/sprints/`, its milestone | step 5 of this command |
-| Code already built | `lib/` | a ticket, built with `/fk-build` |
+| Code already built | each component's Path in the Components table | a ticket, built with `/fk-build` |
 
 Then call the Skill tool with `project-tracker` for the open tickets, and give each one the change
 touches a verdict:
@@ -93,7 +93,8 @@ in the note as it finishes.
    the decision changes a row of the Architecture table, edit that row and name the ADR beside it.
    Where it changes a row `/fk-setup` chooses rules from, such as the logic seam or serialization,
    add a step to the note telling the user to re-run `/fk-setup` once this command ends.
-2. **Design language.** Call the Skill tool with `flutter-design`.
+2. **Design language.** Call the Skill tool with `project-stack`, asking for the client
+   component's `design` slot.
 3. **Words.** Call the Skill tool with `domain-glossary`.
 4. **Scope.** Call the Skill tool with `project-proposal` for the revision, or the feature rows. On
    client work, a revision that changes cost or timeline waits for the client: set the note's

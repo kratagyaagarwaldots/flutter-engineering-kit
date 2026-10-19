@@ -29,9 +29,9 @@ other.
 
 ## Steps
 
-1. Check out the commit in a clean worktree. Run the analyzer and the full suite, and compare with
-   the known-failing baseline in `docs/agents/project.md`. Anything worse is a bug against the
-   sprint.
+1. Check out the commit in a clean worktree. Run every component's Check and Test commands from the
+   Components table, and compare with the known-failing baseline in `docs/agents/project.md`.
+   Anything worse is a bug against the sprint.
 2. For each ticket, for each acceptance criterion, prove it at the highest rung the project can
    reach. Record the rung, the command and the result: pass, fail, or not proven with the rung it
    would need.

@@ -46,7 +46,7 @@ Cheap executors add and do not remove. Walk it deliberately:
 
 - [ ] For every thing §1 says to **create**, ask: what does it make obsolete? Is that in §6?
 - [ ] For every §6 deletion, is the replacement named — including "**Nothing.**"?
-- [ ] Are dead constants, strings, assets and `exports.dart` lines included, not just classes?
+- [ ] Are dead constants, strings, assets and barrel export lines included, not just classes?
 - [ ] Are obsolete **tests** deleted too, not just source?
 - [ ] Does the §6 `rg` command cover every identifier removed?
 

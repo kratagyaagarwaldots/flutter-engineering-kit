@@ -43,7 +43,8 @@ a linked artifact or a collapsed `<details>` block, never inline.
 Pick the one view that answers "what changed", and add a second only if the first leaves a real
 question open.
 
-- **A screen or widget change** → the widget tree, marking what is new and where state is read:
+- **A screen or UI component change** → the component tree, marking what is new and where state is
+  read:
 
   ```diff
    SettingsPage
@@ -65,8 +66,8 @@ question open.
   two parts talk to each other.
 - **A refactor or a moved feature** → a shallow file tree as a `diff`, so the move reads at a glance.
 
-Keep only the widgets, files, states and calls the reader needs. Leave out everything else, however
-true.
+Keep only the components, files, states and calls the reader needs. Leave out everything else,
+however true.
 
 ## Scope
 
@@ -82,7 +83,7 @@ Show it working, as a before and an after. Ranked by how much they prove:
    change; a golden diff a reviewer can see beats a sentence describing it.
 2. **Execution**: the test that failed before and passes after, named, with its exact command and
    the counts. For a bug fix, the same command twice: red, then green.
-3. **Static**: the analyzer clean. True of every PR, so it is never the evidence on its own.
+3. **Static**: the Check command clean. True of every PR, so it is never the evidence on its own.
 
 Then the rung. Call the Skill tool with `verify` if no rung was reported yet, and copy its
 two lines: the rung reached for each acceptance criterion, and what is **not** proven. A PR that
@@ -90,8 +91,8 @@ hides a gap gets merged with it.
 
 ## Merge danger
 
-**Door.** A two-way door can be walked back by reverting. A one-way door cannot. In a Flutter app
-the one-way doors are:
+**Door.** A two-way door can be walked back by reverting. A one-way door cannot. The one-way doors
+are:
 
 - A change to **stored data on the device**: a local database schema, a stored-preference key, a
   secure-storage key. Users who update carry the old shape forward.
@@ -103,8 +104,8 @@ the one-way doors are:
 
 Everything else is two-way. Say which, and for a one-way door, say what the rollback plan is.
 
-**Blast radius.** Name what it can touch: one screen, a shared widget in `lib/core`, one platform, a
-minimum OS version, every user on startup. A change to `main()`, routing or a core component has a
+**Blast radius.** Name what it can touch: one screen, a shared component, one platform, a minimum OS
+version, every user on startup. A change to the app's entry point, routing or a core component has a
 wider radius than its diff suggests; say so.
 
 ## Completion criteria

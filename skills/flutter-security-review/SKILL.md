@@ -1,19 +1,33 @@
 ---
 name: flutter-security-review
-description: Security and quality audit for the codebase covering secrets, storage, network, state, webview, and code quality. Use before releases, for security audits, code reviews, or quality assessments.
+description: The Flutter and Supabase depth behind a security review, covering secrets, device storage, the network layer, state, WebView, the Supabase backend's access rules, and code quality, with the patterns and fixes in Dart. Use when a security review asks a Flutter + Supabase component for its security conventions, before a release of a Flutter app, or for a security audit of one.
 ---
 
 # Flutter security review
 
-An audit across six pillars, run before a release or over a feature that touches credentials,
-storage, the network, or a WebView.
+The stack depth behind a security review: what secrets, storage, the network, state, a WebView and a
+Supabase backend look like when they go wrong in a Flutter app, and the fix in this stack's terms.
+
+A generic review asks this kit's `conventions` slot for the aspect `security`. Answer it with these
+pillars, each filed under the generic pillar it deepens:
+
+| This pillar | Deepens the generic pillar |
+|---|---|
+| 1, secrets and keys | Secrets |
+| 2, local storage, and 4, state | Data at rest |
+| 3, network security | Data in transit |
+| 5, WebView | Input handling |
+| 7, Supabase backend | Authentication and authorisation |
+| 6, code quality | None: report these beside the generic findings, as this kit's own |
+
+Run on its own, over a feature or before a release, it is a complete audit of a Flutter component.
 
 This skill reads and reports. Fixes land only once the user has approved them, because a security
 edit made silently is one nobody reviewed.
 
 For the conventions a finding is judged against, call the Skill tool with
-`flutter-core-architecture`. For whether a branch does what the spec asked, call the Skill tool with
-`code-review`; that is a different question from this one and the two do not substitute.
+`flutter-core-architecture`. Whether a branch does what the spec asked is a different question,
+which this audit does not answer.
 
 ## Required context
 
@@ -118,6 +132,19 @@ Pillar 6 judges against `flutter-core-architecture` and whatever the project doc
 `lib/core/` for the components and helpers that actually exist before reporting a reuse finding; a
 recommendation to use something the repo does not have costs more than the finding is worth.
 
+## Pillar 7 – Supabase backend
+
+| Pattern | Severity |
+|---------|----------|
+| The `service_role` key in app source, a `--dart-define` or a bundled `.env` | Critical |
+| A table the app reads or writes with row level security disabled | Critical |
+| A policy of `using (true)` on rows that belong to one user | Critical |
+| A policy that trusts a user-editable column, such as a role in `user_metadata` | High |
+| An Edge Function that skips verifying the caller's JWT | High |
+
+The anon key is meant to ship in the app; the policies are what protect the data. Read the policies
+under `supabase/migrations/` for every table the scope touches.
+
 ## Findings table
 
 Every finding cites a real `file:line` you have read. A pattern you expect to exist but did not find
@@ -133,7 +160,7 @@ of any real credential value, including in the description column.
 
 ## Workflow
 
-1. Run all six pillars over the scope, in order.
+1. Run all seven pillars over the scope, in order.
 2. Present the findings table, worst severity first.
 3. Apply the fixes the user approves, Critical first.
 4. Re-run `flutter analyze` and the test suite, and compare against the baseline in
@@ -141,7 +168,7 @@ of any real credential value, including in the description column.
 
 ## Completion criteria
 
-The audit is done when all six pillars have been run over the whole scope and each has an explicit
+The audit is done when all seven pillars have been run over the whole scope and each has an explicit
 result, including the ones that found nothing. Report:
 
 - The findings table, or "no findings" per pillar.

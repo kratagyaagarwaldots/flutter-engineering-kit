@@ -10,8 +10,8 @@ because the usual advice (`const`, `RepaintBoundary`) is cheap to apply and rare
 
 Measure, change one thing, measure again, keep or revert. This skill owns that loop.
 
-Where the complaint is a specific reported symptom whose cause is unknown, call the Skill tool with
-`diagnose-bug` first: it owns building a reproduction. Come back here once the cause is
+Where the complaint is a specific reported symptom whose cause is unknown, reproduce it first: a
+failing test or a scripted run that shows the symptom every time. Come back here once the cause is
 known to be cost rather than a defect.
 
 ## 1. Profile mode, always

@@ -92,52 +92,30 @@ The rest run inside their command too:
 | File, move or report on tickets, features and sprints | `project-tracker` | every command |
 | What the project remembers, and where a fact goes | `project-memory` | every command |
 | Which model each kind of agent work runs on, what it costs, or putting builds on a cheaper model | `configure-models` | installing, `/fk-sprint close` |
-| New feature folder, with or before its API | `flutter-scaffold-feature` | `/fk-build` |
 | One slice, test-first | `tdd` | `/fk-build` |
 | Prove it works, and name the rung | `verify` | `/fk-build` |
 | Review against conventions and spec | `code-review` | `/fk-build` |
 | Opening a pull request | `pr` | `/fk-build` |
 | What a release could break | `release-readiness` | `/fk-release` |
 | CI pipeline | `setup-ci` | `/fk-setup`, `/fk-release` |
-| Store metadata, privacy, terms, release pack | `store-compliance` | `/fk-release` |
+| A component's stack, commands, and the stack kit serving it | `project-stack` | every command that touches code |
+| Security review of a change or a release | `security-audit` | `/fk-build`, `/fk-release` |
 
-## Build one layer
+## Inside one component
 
-| Layer | Skill |
-|---|---|
-| Actions, state shape, handlers | `flutter-create-state-layer` |
-| Request and response DTOs | `flutter-create-model` |
-| Repository over an endpoint | `flutter-create-repository` |
-| View and widgets | `flutter-create-screen` |
-| Hierarchy, the states nobody drew, whether it should animate | `flutter-design` |
-| Routes, typed arguments, deep links | `flutter-navigation` |
-| Tests: logic, widget, golden | `flutter-write-tests` |
-| Legacy screen onto current conventions | `flutter-modernize-screen` |
-
-All model-invoked, so they also fire on their own when a request clearly names one layer. Route here
-when the caller wants exactly one layer touched.
+Work inside one component's code, such as a screen, a data layer, a build that fails before it
+compiles, or a package upgrade, belongs to the stack kit that serves that component. Call the Skill
+tool with `project-stack` to name the component, its stack and its kit. That kit's skills fire on
+their own when a request names the layer; where no kit is installed, `project-stack` answers from the
+component's commands.
 
 ## Diagnose
 
 | Situation | Skill |
 |---|---|
 | Broken, and reading the code has not helped | `diagnose-bug` |
-| Slow, janky, or too large, and you need numbers | `flutter-performance` |
-| Fails before Dart compiles: Gradle, pods, signing | `flutter-build-failure` |
 | A merge or rebase is conflicting | `merge-conflicts` |
-| Which core widget, util or constant to reuse | `flutter-core-architecture` |
-| Which stack this project actually uses | `flutter-supabase-conventions` |
 | Choosing between two shapes rather than behaviours | `engineering-principles` |
-
-## Keep it working
-
-| Situation | Skill |
-|---|---|
-| Packages or the SDK are behind | `flutter-upgrade-deps` |
-| Screen reader, large text, contrast, tap targets | `flutter-accessibility` |
-| Adding a language, or RTL | `flutter-localization` |
-| Pre-release security and quality audit | `flutter-security-review` |
-| Verification cannot reach the top rung yet | `setup-integration-harness` |
 | Diagnose bugs in what a cheaper model shipped | `triage-executor-bugs` |
 | Human-only setup: keys, signing, provider dashboards | `setup-wizard` |
 
@@ -150,4 +128,4 @@ when the caller wants exactly one layer touched.
 ## Not covered by any skill
 
 Say so rather than forcing a fit. A one-file change or a question answerable by reading one file
-needs no skill. `flutter-core-architecture` is still worth reading before touching anything shared.
+needs no skill.

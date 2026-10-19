@@ -7,7 +7,7 @@ description: Five principles that change how a change is shaped rather than what
 
 *Adapted from the `principle-*`, `architect` and `correct` skills in
 [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan (MIT), rewritten for
-Flutter.*
+product teams.*
 
 Five principles that survived the test the kit applies to everything else: does stating this change
 what gets built, versus not stating it? Each is one file. Read the one that bears on the decision in

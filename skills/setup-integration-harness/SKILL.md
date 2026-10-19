@@ -5,7 +5,7 @@ description: Stand up an integration test harness that boots the real app, prove
 
 # Setup integration harness
 
-`verify`'s top rung drives the real app on a real surface. On most projects that rung reads
+`flutter-supabase-verify`'s top rung drives the real app on a real surface. On most projects that rung reads
 "unavailable, no integration harness", and it stays that way because nothing in the kit builds one.
 This skill builds it.
 
@@ -15,7 +15,7 @@ every later verification.
 
 ## 1. Check the three prerequisites
 
-`verify` names these, and none is an agent's decision. Establish each before writing code,
+`flutter-supabase-verify` names these, and none is an agent's decision. Establish each before writing code,
 because a harness missing any of them produces confident output about nothing.
 
 **A safe flavor.** Driving real flows against a live backend creates real records: orders, payments,
@@ -84,7 +84,7 @@ Update `docs/agents/project.md`:
 - **Drivable surface** row: what it was proven on.
 - **Test account** row: where the credential lives, never the credential.
 
-This step is the point of the skill. The harness only helps if `verify` can find it.
+This step is the point of the skill. The harness only helps if `flutter-supabase-verify` can find it.
 
 ## Completion criteria
 

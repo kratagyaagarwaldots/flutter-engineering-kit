@@ -25,7 +25,7 @@ set -euo pipefail
 
 REPO="kratagyaagarwaldots/flutter-engineering-kit"
 # Only used when the latest release cannot be looked up. Keep it on the newest tag.
-FALLBACK_VERSION="v0.11.0"
+FALLBACK_VERSION="v0.12.0"
 
 VERSION="${KIT_VERSION:-}"
 STATE="${FLUTTER_KIT_HOME:-$HOME/.flutter-kit}"

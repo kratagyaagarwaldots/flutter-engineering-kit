@@ -695,7 +695,7 @@ def install(ids: list[str]) -> None:
         for n in r["notes"]:
             print(f"    - {n}")
     write_json(RECORD, record)
-    print("\nNext: open a Flutter project and run /fk-setup once.")
+    print("\nNext: open a project and run /fk-setup once.")
     print("Check the result any time with: kit doctor")
 
 

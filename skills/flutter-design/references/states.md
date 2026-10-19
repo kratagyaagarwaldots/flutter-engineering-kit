@@ -1,8 +1,8 @@
 # The states a build skips
 
 The happy path gets designed because it is what the feature is for. Everything else gets a spinner, a
-centred `Text('No data')`, and whatever the exception's `toString()` returns. `code-review`
-calls missing state branches the single most common source of a client feedback round, and this is
+centred `Text('No data')`, and whatever the exception's `toString()` returns. Missing state
+branches are the single most common source of a client feedback round, and this is
 why: the states are not missing from the code so much as missing from the design.
 
 `flutter-create-screen` requires that every state the logic seam can emit has a branch. This file is

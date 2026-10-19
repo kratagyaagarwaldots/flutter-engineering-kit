@@ -37,23 +37,23 @@ write code until the user confirms the understanding is shared.
 ## Facts are yours, decisions are theirs
 
 Never ask the user something you could observe. Dispatch `codebase-explorer` for anything in the
-codebase (does a constant already exist, what does the existing bloc emit, which route id is free)
-and read the design yourself through whatever `docs/agents/project.md` names as the design source.
-A running exploration is an unsettled prerequisite: only questions downstream of it wait, so ask the
-rest of the frontier now.
+codebase (does a constant already exist, what does the existing state layer emit, which route id is
+free) and read the design yourself through whatever `docs/agents/project.md` names as the design
+source. A running exploration is an unsettled prerequisite: only questions downstream of it wait, so
+ask the rest of the frontier now.
 
 Put the **decisions** to the user and wait. What the feature should do, which tradeoff to take, what
 an edge case means for the user, is theirs.
 
-## Where the tree branches on a Flutter client app
+## Where the tree branches on a client app
 
 Walk these. They are where client work is underspecified in practice, and each one has produced a
 rebuild on a real project.
 
-- **State coverage.** Every criterion implies a `{Feature}Status`. What does the screen show on
-  `loading`, on `failure`, and on success with an empty list? A criterion that names only the happy
-  path is one third of a spec. Settle *whether* each state exists here; for what the user should see
-  in one, call the Skill tool with `flutter-design`.
+- **State coverage.** Every criterion implies a status. What does the screen show on `loading`, on
+  `failure`, and on success with an empty list? A criterion that names only the happy path is one
+  third of a spec. Settle *whether* each state exists here; for what the user should see in one,
+  call the Skill tool with `project-stack`, asking for the client component's `design`.
 - **The fixture boundary.** Is there a real endpoint now, or is this screen-first? This decides
   whether the feature is scaffolded in real or fixture mode, so settle it in round one.
 - **Validation and limits.** Which fields are required, what the bounds are, and what the user sees
@@ -87,7 +87,8 @@ project's config names that directory.
 
 Once the criteria are settled the states are known, which is the cheapest moment to decide what they
 look like everywhere rather than once per screen. Where `docs/agents/design.md` does not exist yet,
-call the Skill tool with `flutter-design` to settle the app's design language against this list.
+call the Skill tool with `project-stack`, asking for the client component's `design`, to settle the
+app's design language against this list.
 
 Then hand the criteria back. Inside `/fk-plan` the next step is the spec; on its own, tell the user
 that `/fk-build` takes them from here, and picks the full-feature or the fixture-mode path from

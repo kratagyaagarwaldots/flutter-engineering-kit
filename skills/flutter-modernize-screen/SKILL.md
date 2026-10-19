@@ -241,7 +241,7 @@ Leave `// FIXTURE_START`, `// FIXTURE_END` and `/// FIXTURE:` markers exactly as
 A refactor is done when the screen renders identically and the migration is total. Prove both:
 
 - **Identical output.** A golden test captured before the change and passing after it, per
-  `verify` rung 4. Where no golden exists, say the visual match is unverified rather than
+  `flutter-supabase-verify` rung 4. Where no golden exists, say the visual match is unverified rather than
   implying you checked.
 - **No half-migration.** Every item 1 to 13 either applied or explicitly not applicable. A screen
   left between two patterns is worse than the one you started with, because the next reader cannot

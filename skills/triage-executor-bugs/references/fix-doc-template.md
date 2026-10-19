@@ -22,7 +22,7 @@ Path: `docs/tasks/{NN}-fix-{slug}.md`.
 |---|---|
 | **Type** | Mechanical fix — no design decisions in this doc |
 | **Fixes bugs** | B1, B2, B5 (cluster C1) |
-| **Root cause** | `OrderStatusChip` wired into the confirmed state only |
+| **Root cause** | `statusChip` wired into the confirmed state only |
 | **Origin doc** | [docs/tasks/05-order-status-chip.md](docs/tasks/05-order-status-chip.md) §5 — **amended**, re-read it before starting |
 | **Sites** | 3 |
 | **Design decisions required** | **None.** If you find one, stop and report it. |
@@ -43,11 +43,11 @@ Fix exactly the 3 sites in §3. **Change nothing else.**
 You have worked in these files before. Do not:
 - rename anything, even something obviously misnamed
 - extract a helper, even where the same 4 lines repeat
-- reformat (the kit's format hook handles formatting on every write)
+- reformat a line §3 does not change
 - fix an unrelated bug you notice — **report it instead, at the end**
 - touch any file not listed in §3
 
-**Files touched:** `lib/features/order/widget/order_card.dart` only.
+**Files touched:** `src/order/order_card.ts` only.
 ```
 
 **Fails when** omitted: the executor "improves" the surrounding code, and your three-line fix
@@ -63,7 +63,7 @@ arrives inside a 300-line diff nobody can review.
 Run this first:
 
 ```bash
-rg -n 'OrderStatus\.(pending|declined|cancelled)' lib/features/order/widget/order_card.dart
+rg -n 'OrderStatus\.(pending|declined|cancelled)' src/order/order_card.ts
 ```
 
 **Expected: exactly 3 matches**, at lines 142, 158 and 174.
@@ -85,43 +85,43 @@ stop condition rather than something to reconcile.
 ````markdown
 ## 3. Edits
 
-### Site 1 of 3 — [order_card.dart:142](lib/features/order/widget/order_card.dart#L142)
+### Site 1 of 3 — [order_card.ts:142](src/order/order_card.ts#L142)
 
 Find exactly:
 
-```dart
+```ts
       case OrderStatus.pending:
-        return const SizedBox.shrink();
+        return emptyView();
 ```
 
 Replace with exactly:
 
-```dart
+```ts
       case OrderStatus.pending:
-        return OrderStatusChip(status: OrderStatus.pending);
+        return statusChip(OrderStatus.pending);
 ```
 
 - [ ] Applied
 
-### Site 2 of 3 — [order_card.dart:158](lib/features/order/widget/order_card.dart#L158)
+### Site 2 of 3 — [order_card.ts:158](src/order/order_card.ts#L158)
 
 Find exactly:
 
-```dart
+```ts
       case OrderStatus.declined:
-        return const SizedBox.shrink();
+        return emptyView();
 ```
 
 Replace with exactly:
 
-```dart
+```ts
       case OrderStatus.declined:
-        return OrderStatusChip(status: OrderStatus.declined);
+        return statusChip(OrderStatus.declined);
 ```
 
 - [ ] Applied
 
-### Site 3 of 3 — [order_card.dart:174](lib/features/order/widget/order_card.dart#L174)
+### Site 3 of 3 — [order_card.ts:174](src/order/order_card.ts#L174)
 
 … (never "and the same for the remaining sites")
 ````
@@ -143,13 +143,13 @@ so: *"the two surrounding lines are included to disambiguate — match all four.
 After all sites are applied, this must print **nothing**:
 
 ```bash
-rg -n 'case OrderStatus\.(pending|declined|cancelled):\s*$' -A1 lib/features/order/widget/order_card.dart | rg 'SizedBox.shrink'
+rg -n 'case OrderStatus\.(pending|declined|cancelled):\s*$' -A1 src/order/order_card.ts | rg 'emptyView'
 ```
 
 And this must print **exactly 4 matches** (one per status):
 
 ```bash
-rg -c 'OrderStatusChip\(status:' lib/features/order/widget/order_card.dart
+rg -c 'statusChip\(OrderStatus' src/order/order_card.ts
 ```
 
 Both conditions must hold. One passing and one failing means a partial application — report it,
@@ -166,24 +166,20 @@ assertion is the only thing that mechanically distinguishes "done" from "mostly 
 ````markdown
 ## 5. Regression tests
 
-Add to [order_card_test.dart](test/features/order/widget/order_card_test.dart), in the existing
+Add to [order_card.test.ts](src/order/order_card.test.ts), in the existing
 `OrderCard` group. Run them **before** editing §3: all three must fail.
 
-```dart
-for (final OrderStatus status in <OrderStatus>[
-  OrderStatus.pending,
-  OrderStatus.declined,
-  OrderStatus.cancelled,
-]) {
-  testWidgets('renders a status chip for ${status.name}', (WidgetTester tester) async {
-    await tester.pumpWidget(_wrap(OrderCard(order: _order(status: status))));
-    expect(find.byType(OrderStatusChip), findsOneWidget);
+```ts
+for (const status of [OrderStatus.pending, OrderStatus.declined, OrderStatus.cancelled]) {
+  test(`renders a status chip for ${status}`, () => {
+    const card = renderOrderCard(orderWith({ status }));
+    expect(card.findAll('status-chip')).toHaveLength(1);
   });
 }
 ```
 
-Expected failure before §3: `Expected: exactly one matching candidate / Actual: no matching
-candidates`. **Any other failure message means the tree does not match this doc — stop.**
+Expected failure before §3: `Expected length: 1 / Received length: 0`. **Any other failure
+message means the tree does not match this doc — stop.**
 ````
 
 **Rule:** state the expected pre-fix failure message. Without it, a test failing for an unrelated
@@ -197,11 +193,13 @@ reason reads as confirmation.
 ## 6. Verification
 
 ```bash
-dart format .
-flutter analyze          # must report "No issues found."
-flutter test test/features/order/widget/order_card_test.dart
-flutter test             # full suite must stay green
+<Check command>                        # must finish clean
+<Test command> src/order/order_card.test.ts
+<Test command>                         # full suite must stay green
 ```
+
+Each `<…>` is the component's command from the Components table in `docs/agents/project.md`,
+written out in full in the real doc.
 
 Then re-run both commands in §4.
 ```

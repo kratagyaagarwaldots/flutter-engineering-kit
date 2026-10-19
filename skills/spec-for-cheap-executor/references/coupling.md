@@ -20,15 +20,15 @@ Overlap is not just "same feature" — these are the real coupling surfaces:
 
 | Coupling surface | Example break |
 |------------------|---------------|
-| Shared state fields | Doc 02 added `OrderState.filter`; doc 03's `copyWith` snippet omits it |
+| Shared state fields | Doc 02 added `OrderState.filter`; doc 03's state-copy snippet omits it |
 | Enum values / ordering | Doc 02 appended `OrderStatus.pending`; doc 03's exhaustive table has 3 rows, needs 4 |
-| Shared widgets | Doc 02 extracted `OrderStatusChip`; doc 03 still says "add an inline badge" |
+| Shared UI pieces | Doc 02 extracted `OrderStatusChip`; doc 03 still says "add an inline badge" |
 | File line numbers | Doc 02 inserted 40 lines; every `file:472` in doc 03 is now `file:512` |
 | Deletion targets | Doc 02 already deleted `formatBadgeLabel`; doc 03's D2 will no-op and confuse |
 | UI states | Doc 02 added a state; doc 03's §5 has a mockup per state and is now missing one |
 | Test names | Doc 02 renamed a group; doc 03's "must fail before" test now fails for the wrong reason |
 | Build-order prerequisites | Doc 03 step 1 assumes doc 02 step 4 shipped — say so in the header |
-| Constants | Doc 02 added `AppColors.warningBg`; doc 03 says "(add: 0xFFFFF4E0)" and will duplicate it |
+| Constants | Doc 02 added `colors.warningBg`; doc 03 says "(add: #FFF4E0)" and will duplicate it |
 
 ### 2. Correct
 
@@ -58,7 +58,7 @@ the doc that forced it:
 | 2026-08-01 | §4 table regenerated: 3 rows → 4 | Doc 02 shipped `OrderStatus.pending` |
 | 2026-08-01 | §5.3 mockup added (pending state) | Downstream of the §4 change |
 | 2026-08-01 | §6 D2 removed | Doc 02 already deleted `formatBadgeLabel`; the row would no-op |
-| 2026-08-01 | All `order_card.dart` line refs re-measured | Doc 02 inserted 40 lines above them |
+| 2026-08-01 | All `order_card.ext` line refs re-measured | Doc 02 inserted 40 lines above them |
 ```
 
 The changelog is for the human reviewing the doc. The executor does not act on it — which is
@@ -69,7 +69,7 @@ exactly why the body must already be correct without it.
 If the corrected doc now *requires* the other to have shipped, say so in the header:
 
 ```markdown
-| **Prerequisites** | Doc 02 shipped and merged. Verify: `rg -q 'OrderStatus.pending' lib/features/order/model/order.dart` returns 0. |
+| **Prerequisites** | Doc 02 shipped and merged. Verify: `rg -q 'OrderStatus.pending' src/orders/model/order.ext` returns 0. |
 ```
 
 Give a runnable check, not a trust statement. If it fails, the executor stops — the alternative

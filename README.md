@@ -209,11 +209,16 @@ needs, so the only thing to remember is where you are.
 | 5 | Prove the release is safe and ship it | `/fk-release` |
 | 6 | Make the next round shorter | `/retro` |
 
-`/fk-plan` runs `grill`, `flutter-design` (once per app), `to-spec` and `plan-change`.
-`/fk-build` picks its path from what it is given (a change to existing code, a new feature from a
-design and an endpoint, or a screen before its API exists) and drives `tdd`, the analyzer,
-`code-review` and `verify` to a commit. `/fk-release` runs `release-readiness`,
-`setup-ci` where no CI exists, and `store-compliance`.
+`/fk-plan` runs `grill`, the stack's design slot (once per app), `to-spec` and `plan-change`.
+`/fk-build` builds each slice through the stack kit's build slot, or `tdd` where none is installed,
+then drives every component's checks, `code-review`, `security-audit` and `verify` to a commit.
+`/fk-release` runs `release-readiness`, `setup-ci` where no CI exists, and each component's
+release slot, which produces the store pack for a mobile app.
+
+**Two kits.** The commands and method skills are **product-engineer**: they work on any stack and
+read each component's commands from `docs/agents/project.md`. **flutter-supabase** is a stack kit:
+installed beside it, it answers for the Flutter app and the Supabase backend through
+`project-stack`'s slots; installed alone, its skills still fire on Flutter and Supabase work.
 
 ### Project delivery
 
@@ -312,8 +317,9 @@ command may call background skills, but never another command.
 
 The work starts here. Every other skill is reached through one of these.
 
-- **[fk-setup](./skills/fk-setup/SKILL.md)**: Configure a Flutter repo for the engineering kit. Run
-  once per project before using the other skills.
+- **[fk-setup](./skills/fk-setup/SKILL.md)**: Configure a repo for the engineering kit: its
+  components and the stack kit serving each, the project config, the memory vault and the tracker.
+  Run once per project before using the other skills.
 - **[fk-plan](./skills/fk-plan/SKILL.md)**: Turn an idea, a brief or a client's request into an
   agreed proposal, a prioritised feature list and a pointed backlog, or a single requirement into a
   spec and a sketch, settling it before any code exists.
@@ -330,9 +336,9 @@ The work starts here. Every other skill is reached through one of these.
   cover, such as a detour mid-sprint, a new data store or a rework of the design language, map
   which plans and tickets it changes, and update each through its owner in order so the backlog and
   the sprint still describe the app being built.
-- **[fk-release](./skills/fk-release/SKILL.md)**: Get a build ready to ship: find what it could
-  break and prove the fact its safety rests on, confirm CI gates it, and produce or refresh the
-  store submission pack.
+- **[fk-release](./skills/fk-release/SKILL.md)**: Get a release ready to ship: find what it could
+  break and prove the fact its safety rests on, confirm CI gates every component, and produce what
+  each component ships, store pack included, through its stack's release steps.
 - **[retro](./skills/retro/SKILL.md)**: After a round of work, propose improvements to the kit and
   the project's agent environment so the next round is shorter.
 - **[ask-kit](./skills/ask-kit/SKILL.md)**: Ask where the project stands and which kit command or
@@ -378,19 +384,20 @@ Working out what the code does, and what it should do, before changing it.
   in-house into a questionnaire for the client to fill in.
 - **[to-spec](./skills/to-spec/SKILL.md)**: Turn the current conversation into a written spec, with
   an explicit out-of-scope section.
-- **[explain](./skills/explain/SKILL.md)**: Explain how a Flutter feature, subsystem
-  or codebase actually works, and why it was built that way.
+- **[explain](./skills/explain/SKILL.md)**: Explain how a feature, subsystem or codebase actually
+  works, and why it was built that way.
 - **[grill](./skills/grill/SKILL.md)**: Interview the user until a feature's requirements are
   settled.
 - **[domain-glossary](./skills/domain-glossary/SKILL.md)**: Build and sharpen the project's shared
   vocabulary in GLOSSARY.md, and record hard-to-reverse decisions as ADRs.
-- **[flutter-supabase-conventions](./skills/flutter-supabase-conventions/SKILL.md)**: Resolve which state management,
-  serialization, navigation, sizing and test tooling this project actually uses, before generating
-  code.
+- **[flutter-supabase-conventions](./skills/flutter-supabase-conventions/SKILL.md)**: The
+  conventions slot for a Flutter + Supabase component: which state management, serialization,
+  navigation, sizing and test tooling this project actually uses, plus its test layout, review
+  baseline, generated files and lockfiles, and debugging tools, each shown by a file.
 - **[flutter-core-architecture](./skills/flutter-core-architecture/SKILL.md)**: The kit's lib/core
   conventions: project structure, barrel imports, constants families, shared components, services,
   network, failures, router, and fixture markers.
-- **[takeover-audit](./skills/takeover-audit/SKILL.md)**: Audit an inherited Flutter codebase before
+- **[takeover-audit](./skills/takeover-audit/SKILL.md)**: Audit an inherited codebase before
   committing to work on it, covering whether it builds, what its tests prove, how far it has
   drifted, where the risk sits, and what must be stabilised first.
 
@@ -413,8 +420,9 @@ feature folder to `flutter-scaffold-feature`.
   feature folder (model, repository, state layer, view, widgets, tests) from acceptance criteria, in
   one of three modes: real (a model and endpoint exist), fixture (build the screen first, the API
   comes later) or upgrade (move a fixture-mode feature onto its real API).
-- **[tdd](./skills/tdd/SKILL.md)**: Build a change test-first: a failing test at a
-  named seam, then the smallest code that passes it.
+- **[tdd](./skills/tdd/SKILL.md)**: Build a change test-first in thin vertical slices: a failing
+  test at a named seam, seen to fail for the intended reason, then the smallest code that passes it.
+  The test tool and layout come from the component's conventions.
 - **[flutter-create-state-layer](./skills/flutter-create-state-layer/SKILL.md)**: Generate a
   feature's state layer in whichever state management the project uses: the seam holding its
   behaviour, its actions, and the state the UI reads back.
@@ -448,18 +456,24 @@ Separating *does it work* from *is it written well*, and answering both out loud
   merge.
 - **[flutter-write-tests](./skills/flutter-write-tests/SKILL.md)**: Write the tests for a feature:
   logic tests at the state seam, widget tests for what the user sees, and goldens for the pixels.
-- **[verify](./skills/verify/SKILL.md)**: Prove a Flutter change actually works
-  before calling it done.
-- **[code-review](./skills/code-review/SKILL.md)**: Review changes on two
-  independent axes: does the code follow the project's conventions, and does it do what the spec
-  asked.
-- **[diagnose-bug](./skills/diagnose-bug/SKILL.md)**: Disciplined diagnosis loop for
-  hard Flutter bugs, jank, and regressions.
+- **[verify](./skills/verify/SKILL.md)**: Prove a change actually works before calling it done, by
+  climbing a ladder of verification rungs in each component it touches and naming the rung reached.
+- **[code-review](./skills/code-review/SKILL.md)**: Review changes on two independent axes: does the
+  code follow the project's conventions and its stack's review baseline, and does it do what the
+  spec asked.
+- **[diagnose-bug](./skills/diagnose-bug/SKILL.md)**: Disciplined diagnosis loop for hard bugs,
+  jank, and regressions.
 - **[flutter-performance](./skills/flutter-performance/SKILL.md)**: Measure and improve Flutter
   performance against a budget: jank, dropped frames, slow startup, memory growth, and app size.
-- **[flutter-security-review](./skills/flutter-security-review/SKILL.md)**: Security and quality
-  audit for the codebase covering secrets, storage, network, state, webview, and code quality.
+- **[flutter-security-review](./skills/flutter-security-review/SKILL.md)**: The Flutter and Supabase
+  depth behind a security review, covering secrets, device storage, the network layer, state,
+  WebView, the Supabase backend's access rules, and code quality, with the patterns and fixes in
+  Dart.
 
+- **[security-audit](./skills/security-audit/SKILL.md)**: Audit a change or a codebase for security
+  across secrets, authentication and authorisation, input handling, data at rest and in transit,
+  dependencies, and logging of personal data, adding each component's platform checks from its stack
+  kit.
 ### Keep it working
 
 The work that stops a codebase decaying between features.
@@ -468,9 +482,8 @@ The work that stops a codebase decaying between features.
   dependencies one at a time, with the breaking changes read first and the suite green between each.
 - **[flutter-build-failure](./skills/flutter-build-failure/SKILL.md)**: Diagnose a native build
   failure: Gradle, AGP, Kotlin, JDK, CocoaPods, Xcode or signing.
-- **[merge-conflicts](./skills/merge-conflicts/SKILL.md)**: Resolve conflicts in a
-  Flutter repo by intent, including the generated files and lockfiles that must be regenerated
-  rather than merged.
+- **[merge-conflicts](./skills/merge-conflicts/SKILL.md)**: Resolve merge and rebase conflicts by
+  intent, including the generated files and lockfiles that must be regenerated rather than merged.
 - **[flutter-accessibility](./skills/flutter-accessibility/SKILL.md)**: Make a Flutter screen usable
   with a screen reader, large text and low vision, and add the tests that keep it that way.
 - **[flutter-localization](./skills/flutter-localization/SKILL.md)**: Add or extend localization:
@@ -481,8 +494,8 @@ The work that stops a codebase decaying between features.
 
 Everything between "it works on my machine" and "it is live".
 
-- **[setup-ci](./skills/setup-ci/SKILL.md)**: Generate a CI pipeline that runs the verification
-  ladder on every push, and builds per flavor.
+- **[setup-ci](./skills/setup-ci/SKILL.md)**: Generate a CI pipeline that runs every component's
+  install, check and test commands on every push, then its build.
 - **[release-readiness](./skills/release-readiness/SKILL.md)**: Before shipping to a live app, find
   what a change could break elsewhere and prove the one fact its safety depends on by running code.
 - **[store-compliance](./skills/store-compliance/SKILL.md)**: Generate the App Store / Google Play
@@ -502,6 +515,29 @@ Handing work to another session, a cheaper model, or a teammate.
 - **[configure-models](./skills/configure-models/SKILL.md)**: Choose which model each kind of kit
   agent work runs on, in every harness the user has, from what they can actually reach, today's
   prices and benchmarks, and their budget, then save it with kit models set.
+
+### Flutter + Supabase slots
+
+How the flutter-supabase kit answers `project-stack`: one skill per slot of the contract, each
+routing to the Flutter skills above. Without product-engineer installed, they also fire on their own.
+
+- **[flutter-supabase-setup](./skills/flutter-supabase-setup/SKILL.md)**: Configure a Flutter app or
+  Supabase backend component: its Architecture table from the code, its commands in the Components
+  table, its sections of docs/agents/project.md, CLAUDE.md and AGENTS.md, its path-scoped rules, and
+  the lib/core scaffold on a greenfield app.
+- **[flutter-supabase-design](./skills/flutter-supabase-design/SKILL.md)**: The design slot for a
+  Flutter client component: settle or recover the app's design language and write or confirm
+  docs/agents/design.md.
+- **[flutter-supabase-build](./skills/flutter-supabase-build/SKILL.md)**: Build one ticket's slice
+  in a Flutter app and its Supabase backend, test-first, with the backend change landing first, a
+  new feature folder going through the scaffold, a change to existing code through the layer skills,
+  and mechanical slices handed to the layer agents.
+- **[flutter-supabase-verify](./skills/flutter-supabase-verify/SKILL.md)**: The verification rungs
+  and exact commands for a Flutter app or Supabase backend component, and a claim driven up them to
+  the highest rung it needs, with the rung reached named.
+- **[flutter-supabase-release](./skills/flutter-supabase-release/SKILL.md)**: Produce what a Flutter
+  app or Supabase backend component ships: signed release builds per flavor and platform, the store
+  submission pack, and the steps only a person can take.
 
 ### Meta
 

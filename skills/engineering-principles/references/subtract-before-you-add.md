@@ -1,8 +1,8 @@
 # Subtract before you add
 
 Before adding a thing, look for the thing it replaces. Adding is safe and removing feels risky, so
-codebases accumulate: two ways to show a dialog, three button widgets, a helper nobody calls. Each
-one was a reasonable addition, and together they are the reason a small change now takes a day.
+codebases accumulate: two ways to show a dialog, three button components, a helper nobody calls.
+Each one was a reasonable addition, and together they are the reason a small change now takes a day.
 
 ## Ask this first
 
@@ -14,12 +14,12 @@ something, and the honest change is to extend one of the three.
 
 | Adding | Look for |
 |---|---|
-| A widget | Whatever is in `lib/core/components/` doing nearly this |
-| A constant | An `App*` family entry with the same value under another name |
+| A UI component | Whatever the shared component library already has doing nearly this |
+| A constant | A design token or shared constant with the same value under another name |
 | A helper | The util that does 80% of it, which could take one parameter |
-| A `Failure` case | An existing case the UI already distinguishes |
+| A failure case | An existing case the UI already distinguishes |
 | A state field | A field derivable from the ones present, which should be a getter |
-| A package | The dependency already in `pubspec.yaml` that covers it |
+| A package | The dependency already in the manifest that covers it |
 
 The last one matters most, because a package is the hardest thing to remove later.
 
@@ -37,13 +37,13 @@ condition for removal does not get removed.
 Dead code is not free. It shows up in searches, it gets read during reviews, it gets updated by
 refactors that did not need to touch it, and it makes the next reader wonder what they are missing.
 
-- An unused private widget, helper or constant goes.
+- An unused private component, helper or constant goes.
 - A commented-out block goes. Version control already has it.
 - A feature flag whose rollout finished goes, along with the branch it guarded.
 - A test asserting behaviour that was deliberately removed goes.
 
-`// FIXTURE_START`, `// FIXTURE_END` and `/// FIXTURE:` markers are not dead code. They are sanctioned
-conventions and they stay until the API they stand in for arrives.
+Markers the project's conventions sanction, such as those fencing fixture data, are not dead code.
+They stay until the API they stand in for arrives.
 
 ## Where this fights another principle
 

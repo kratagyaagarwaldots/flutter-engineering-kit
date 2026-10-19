@@ -50,7 +50,7 @@ user-invoked skill, phrase it as an instruction for the human ("tell the user to
 
 Express a dependency as an explicit instruction to **call the Skill tool** with the named skill:
 
-> Call the Skill tool with `flutter-core-architecture`.
+> Call the Skill tool with `project-stack`.
 
 Not a `../other-skill/SKILL.md` link, and not a bare `/skill` mention left for the model to
 interpret. Naming the tool is what actually fires it; a slash-name dropped into prose is a hint the
@@ -70,10 +70,10 @@ Keep each meaning in exactly one place, so changing the behaviour is a one-place
 restated in ten skills is not emphasis: it is ten places to forget, and it inflates that rule's
 apparent importance past its real rank.
 
-The **environment is a source of truth too**. A directory listing, a `pubspec.yaml`, a script's
-`--help`. A document that restates one is a cache, and it earns its cost only when the lookup is
+The **environment is a source of truth too**. A directory listing, a dependency manifest, a
+script's `--help`. A document that restates one is a cache, and it earns its cost only when the lookup is
 genuinely expensive. Cache what the agent cannot find by looking: the unwritten convention, the
-reason behind a choice, the gotcha no config confesses. Leave `lib/features/` to be read, not listed.
+reason behind a choice, the gotcha no config confesses. Leave the source tree to be read, not listed.
 
 ## Steps and completion criteria
 
@@ -95,8 +95,8 @@ stopped on" is one; so is `code-review`'s "quote the criterion for every finding
 ## Prompt the positive
 
 Steering by prohibition drags the forbidden thing into context and makes it *more* available, not
-less. Say what to do, so the banned behaviour is never spoken: "break the build into private
-`StatelessWidget` classes" rather than "never write widget-helper methods". Where a hard guardrail
+less. Say what to do, so the banned behaviour is never spoken: "put every query in the repository
+layer" rather than "never query the database from a view". Where a hard guardrail
 genuinely cannot be phrased positively, pair it with the positive target so attention lands on the
 action.
 
@@ -116,8 +116,8 @@ action.
 - Does the `description` match the invocation choice — model-facing with triggers, or human-facing
   one-liner?
 - Does every dependency read as a Skill tool call, and is every target model-invoked?
-- Is any rule here already stated in `CLAUDE.md`, `flutter-core-architecture`, or the project config?
+- Is any rule here already stated in `CLAUDE.md`, the skill that owns it, or the project config?
   Delete the copy and point instead.
 - Does every step end on something checkable?
-- Is anything here a project fact rather than a Flutter fact? Project facts belong in
-  `docs/agents/project.md`, or the kit stops being portable.
+- Is anything here a project fact rather than a fact of every project on its stack? Project facts
+  belong in `docs/agents/project.md`, or the kit stops being portable.

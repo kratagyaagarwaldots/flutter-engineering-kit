@@ -29,16 +29,17 @@ You are improving the **environment the agent works in**, not the code it wrote.
      assumptions section? This is the highest-value category on client work, and the one most often
      skipped in favour of code cleanup.
    - **Automated checks.** Could a lint, a test, a hook, or an analyzer rule have caught the mistake?
-     Read what the repo already runs first: `analysis_options.yaml`, the CI workflow, any pre-commit
-     hook, and the command table in `docs/agents/project.md`. A check that exists but is unwired,
+     Read what the repo already runs first: the linter config, the CI workflow, any pre-commit hook,
+     and the Components table in `docs/agents/project.md`. A check that exists but is unwired,
      disabled or silently failing is the finding, not a reason to add a second one. A repo where
-     nothing runs `flutter analyze` and `flutter test` on every change, neither a pre-commit hook nor
-     a CI job, is itself a finding: propose a pipeline built with `setup-ci`.
+     nothing runs each component's Check and Test commands on every change, neither a pre-commit
+     hook nor a CI job, is itself a finding: propose a pipeline built with `setup-ci`.
    - **Review rules.** Did the reviewer miss something it should have caught, or keep flagging noise?
      Conventions belong to the reviewer, not the implementer: the implementing agent is under the
      most context pressure and the reviewing agent is under the least. A judgement call true of every
-     Flutter app goes into `code-review`'s baseline; one true of this project goes into its
-     `docs/agents/coding-standards.md`, which only the reviewer reads. Neither goes into `CLAUDE.md`.
+     app goes into `code-review`'s baseline; one true of every app in one stack goes into that stack
+     kit's conventions; one true of this project goes into its `docs/agents/coding-standards.md`,
+     which only the reviewer reads. None goes into `CLAUDE.md`.
    - **Information access.** Was something the agent needed simply unavailable: the running app's
      logs, a device screenshot, the backend's response, a third-party dashboard? Giving the agent
      read access, such as a teed log file or an MCP server, often beats any amount of instruction.
@@ -53,9 +54,10 @@ You are improving the **environment the agent works in**, not the code it wrote.
      entry, and possibly an ADR.
    - **No-ops.** Instructions in the steering files that do not change behaviour. Deleting these is
      as valuable as adding a good one, and safer than it feels.
-   - **Kit versus project.** Decide where each edit belongs. A lesson true for every Flutter client
-     app goes to the kit's skill; a lesson true only here goes to this project's `CLAUDE.md` or
-     `project.md`. Putting a project fact in the kit is how a portable kit stops being portable.
+   - **Kit versus project.** Decide where each edit belongs. A lesson true for every client app goes
+     to this kit's skill; one true of every app in one stack goes to the stack kit the Components
+     table names; a lesson true only here goes to this project's `CLAUDE.md` or `project.md`.
+     Putting a project fact in a kit is how a portable kit stops being portable.
 
 4. Present the candidates in severity order, each as a concrete edit: the file, what changes, and the
    evidence from this round that motivates it. No general advice.
@@ -85,10 +87,9 @@ above it does not:
    misleading an agent.
 2. **Make it unwritable.** A sealed class, an exhaustive `switch`, a non-nullable field, a
    library-private name.
-3. **Fail the build with a message that names the fix.** An `analysis_options.yaml` rule, a custom
-   lint, a hook or a CI step, whichever the repo's existing guardrail makes cheapest. Its error
-   names the file, type or function to use instead. Where the pattern is already common, fail only
-   on new occurrences.
+3. **Fail the build with a message that names the fix.** A linter rule, a custom lint, a hook or a
+   CI step, whichever the repo's existing guardrail makes cheapest. Its error names the file, type
+   or function to use instead. Where the pattern is already common, fail only on new occurrences.
 4. **A test**, where the mistake is a behaviour rather than a shape.
 
 Prove each new check on this round's own mistake: put the mistake back, run the check, and show it

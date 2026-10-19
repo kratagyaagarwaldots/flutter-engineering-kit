@@ -66,7 +66,8 @@ class _FeatureView extends StatelessWidget {
 - Never inline colors, strings, asset paths – use `AppColors`, `AppStrings`, `AppAssets`
 - No `.withOpacity()` – encode alpha in the hex constant (e.g. `0x80FFFFFF`)
 
-For shared widgets, theming, dialogs/mixins, snackbars, services, and `lib/core` layout, follow `.claude/skills/flutter-core-architecture/SKILL.md`.
+For shared widgets, theming, dialogs/mixins, snackbars, services, and `lib/core` layout, call the
+Skill tool with `flutter-core-architecture`.
 
 ## Imports
 

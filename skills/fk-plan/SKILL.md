@@ -55,8 +55,8 @@ every state the happy path skips (loading, empty, failure, first run, offline) h
 that turn out to mean different things to different people go to `GLOSSARY.md` as they settle.
 
 Where the change has a screen and the app has no `docs/agents/design.md` yet, call the Skill tool
-with `flutter-design` before moving on, so the screen is planned against a design language rather
-than invented during the build.
+with `project-stack`, asking for the client component's `design` slot, before moving on, so the
+screen is planned against a design language rather than invented during the build.
 
 ## 4. Write it down
 
@@ -84,7 +84,8 @@ audit.
 the client: stop here, and tell the user to run `/fk-plan` again once it is agreed.
 
 **P3. Design.** Where the app has no `docs/agents/design.md`, call the Skill tool with
-`flutter-design` to settle the design language against the proposal's modules. Where screen designs
+`project-stack`, asking for the client component's `design` slot, to settle the design language
+against the proposal's modules. Where screen designs
 exist, record their frame links on the proposal's modules; where they do not yet, the tickets say
 so, and `/fk-build` designs from the language instead.
 

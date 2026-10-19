@@ -1,15 +1,15 @@
 ---
 name: diagnose-bug
-description: Disciplined diagnosis loop for hard Flutter bugs, jank, and regressions. Use when the user says diagnose or debug this, or reports something broken, throwing, failing, or slow.
+description: Disciplined diagnosis loop for hard bugs, jank, and regressions. Use when the user says diagnose or debug this, or reports something broken, throwing, failing, or slow.
 ---
 
-# Flutter diagnose bug
+# Diagnose bug
 
 A discipline for bugs that resist a first look. Skip a phase only with a stated reason.
 
 **Redact first.** This skill has you paste commands and output. A gitignored `.env`, generated
 secret files, tokens in a request log, and a real customer's details in a payload all show up in
-Flutter logs. Write `<REDACTED>` in place of any of it. If the redacted output is not enough to
+app logs. Write `<REDACTED>` in place of any of it. If the redacted output is not enough to
 diagnose, say so and ask.
 
 ## Phase 1: Build a loop that goes red
@@ -21,20 +21,24 @@ Spend disproportionate effort here. Be aggressive, be creative, refuse to give u
 
 ### Ways to build one, cheapest first
 
-1. **A bloc test** driving the events that produce the wrong state. Fastest and most deterministic;
-   reach here first for anything about status, data, or a computed value.
-2. **A widget test** pumping the screen and asserting the symptom the user described. Right for
+1. **A state-layer test** driving the actions that produce the wrong state. Fastest and most
+   deterministic; reach here first for anything about status, data, or a computed value.
+2. **A UI test** rendering the screen and asserting the symptom the user described. Right for
    wrong copy, a missing empty state, a control that does nothing.
-3. **A golden test** when the complaint is visual and words cannot express it.
-4. **A repository test with a mocked client** replaying the exact response that breaks it. Save the
+3. **A screenshot comparison test** when the complaint is visual and words cannot express it.
+4. **A data-access test with a mocked client** replaying the exact response that breaks it. Save the
    real payload to a fixture file first.
-5. **A model test** feeding the literal JSON from the failing request into `fromJson`. Catches most
-   "field is blank in the UI" bugs in seconds.
-6. **`flutter test integration_test/`** on a simulator when the bug needs the app to actually boot.
-7. **`flutter run` plus DevTools** for jank, leaks, and rebuild storms. The timeline and the widget
-   rebuild counter are the instruments; `debugPrintRebuildDirtyWidgets` narrows it fast.
+5. **A model test** feeding the literal payload from the failing request into its parser. Catches
+   most "field is blank in the UI" bugs in seconds.
+6. **An integration test** on a simulator or emulator when the bug needs the app to actually boot.
+7. **The running app plus the stack's profiler** for jank, leaks, and re-render storms. The timeline
+   and a rebuild counter are the instruments, not logs.
 8. **A physical device** when the bug involves permissions, push delivery, background state, or the
    camera. A simulator does not reproduce these, and pretending otherwise burns a phase.
+
+For the command that runs each rung in this project, call the Skill tool with `project-stack`,
+asking for the component's `conventions`, aspect "debugging tools". It returns the test tools, the
+profiler, and the stack's common causes for Phase 3.
 
 ### Tighten it
 
@@ -93,18 +97,19 @@ disappear." If you cannot state the prediction, it is a vibe — sharpen it or d
 Show the ranked list to the user before testing. They often re-rank it instantly ("we changed that
 last week"). Cheap checkpoint; do not block on it if they are away.
 
-Common Flutter causes worth having on the list: a `fromJson` default masking a missing field; a
-stale bloc state after a route pop; a widget rebuilding on an unrelated state change; a
-`copyWith` that cannot express null; an async gap where `context` is no longer mounted; a listener
-firing on a state that only partly changed.
+Common causes worth having on the list: a parser default masking a missing field; stale state
+surviving a navigation back; a component re-rendering on an unrelated state change; an update
+helper that cannot set a field back to empty; an async gap after which the screen is already gone;
+a listener firing on a state that only partly changed. The stack's own list comes with its
+debugging tools.
 
 ## Phase 4: Instrument
 
 Every probe maps to a specific prediction. **Change one variable at a time.**
 
-Prefer a breakpoint or a `BlocObserver` over scattered prints — one observer logging every
-transition beats ten `debugPrint` calls. For rebuild and jank questions, the DevTools timeline is
-the instrument, not logs.
+Prefer a breakpoint or one observer on the state layer over scattered prints — one observer
+logging every transition beats ten print calls. For re-render and jank questions, the profiler's
+timeline is the instrument, not logs.
 
 **Tag every debug log** with a unique prefix, `[DBG-a4f2]`. Cleanup becomes one grep, and untagged
 logs are the ones that ship.
@@ -134,6 +139,7 @@ Before declaring done:
 - The original repro no longer reproduces (re-run the Phase 1 command and paste both runs).
 - The regression test passes, or the absence of a seam is written down.
 - Every `[DBG-...]` line is gone. Grep the prefix.
-- `flutter analyze` clean, and the suite matches the baseline in `docs/agents/project.md`.
+- The component's Check command is clean, and its suite matches the baseline in
+  `docs/agents/project.md`.
 - The hypothesis that turned out correct is stated in the commit message, so the next person to
   meet this code learns something.

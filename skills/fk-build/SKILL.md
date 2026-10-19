@@ -22,59 +22,63 @@ Read what you were given, then take the first row that fits.
 |---|---|
 | A ticket number, such as `#12` | Call the Skill tool with `project-tracker` to read the ticket and start it. Its body is the spec; take the next row that fits it. |
 | No spec, sketch or numbered acceptance criteria, or criteria naming only the happy path | Stop. Tell the user to run `/fk-plan` first, or call the Skill tool with `grill` when only a criterion or two is missing. |
-| A **new feature folder**, with or without its API yet, or a **fixture-mode feature** whose API now exists | Call the Skill tool with `flutter-scaffold-feature`. It picks real, fixture or upgrade mode from what exists, runs its own phases and gates, and returns here only for step 6. |
-| A change to **code that already exists** | Steps 1 to 6 below. |
+| A **new feature**, with or without its API yet; a feature built **before its API**, now that the API exists; or a change to **code that already exists** | Steps 1 to 6 below. Name which of the three it is: the build slot in step 2 takes its shape from that. |
 
-Where the user wants a cheaper model to do the build, take the path above anyway and hand its
-mechanical slices to the build-role agents (step 2). Call the Skill tool with `configure-models`
-to choose that role's model. A sprint of tickets built unattended is `kit loop run`. Suggest
-`/spec-for-cheap-executor` only for work leaving the session with nobody reviewing it before it
-lands, such as another team: it spends hours of the strongest model to stand in for that review.
+Where the user wants a cheaper model to do the build, take the path above anyway: the stack kit's
+build slot hands mechanical slices to its build-role agents, with the brief from step 2. Call the
+Skill tool with `configure-models` to choose that role's model. A sprint of tickets built unattended
+is `kit loop run`. Suggest `/spec-for-cheap-executor` only for work leaving the session with nobody
+reviewing it before it lands, such as another team: it spends hours of the strongest model to stand
+in for that review.
 
 The step is done when you have named the path and why, in one line, before writing any code.
 
 ## 1. Orient
 
-Call the Skill tool with `flutter-supabase-conventions` for the stack, and read `docs/agents/project.md` for
-the commands and the known-failing-test baseline. Record the baseline **now**, before writing
-anything, so a pre-existing failure is never reported later as your own breakage.
+Call the Skill tool with `project-stack` for the components the work touches, and for each one its
+`conventions` and its Check and Test commands. Read `docs/agents/project.md` for the
+known-failing-test baseline. Record the baseline **now**, before writing anything, so a pre-existing
+failure is never reported later as your own breakage.
 
 Where the work has no sketch and touches more than a couple of files, call the Skill tool with
 `plan-change` before writing code.
 
+The step is done when every component the work touches is named with its Check command, its Test
+command and its baseline.
+
 ## 2. Build, test-first
 
-For each slice in the sequence, call the Skill tool with `tdd`. One vertical slice at a
-time, each ending green.
+One vertical slice at a time, each ending green. For each slice in the sequence, write its brief,
+then build it:
 
-Between slices, run the analyzer and the tests for the files you touched. Not the full suite: it is
-slow enough that running it per slice is how people stop running it.
+- Call the Skill tool with `project-stack`, asking for the `build` slot of the components the slice
+  touches and passing the slice's acceptance criteria and its brief.
+- Where `project-stack` answers that no stack kit builds that component, call the Skill tool with
+  `tdd` for the slice instead, against the component's Test command.
 
-Where a slice turns out to need a shape the sketch did not have, say so and call the Skill tool with
-`plan-change` again rather than working around it.
+The brief carries four things, because they are what a builder gets wrong when it has to infer them,
+and a cheaper model most of all. The build slot passes it on unchanged to any agent it delegates to:
 
-Where a slice is mechanical once its shape is settled, hand it to the build-role agent that owns
-its layer: `flutter-state-engineer`, `flutter-repo-engineer` or `flutter-test-engineer`. Its brief
-carries four things, because they are what a cheaper model gets wrong when it has to infer them:
-
-| The brief carries | Because the agent otherwise |
+| The brief carries | Because the builder otherwise |
 |---|---|
 | The files to create and modify, and the near-duplicates to leave alone | Tidies code it was not asked to touch |
 | Each thing the slice makes obsolete, and an `rg` command that must print nothing once it is gone | Adds the new code and leaves the old in place |
 | The test that fails now and passes after the slice, with its current failure message | Reports a no-op as done |
 | Which outcomes are normal and which mean failure, such as an empty list or zero rows written | Treats a silent early return as success |
 
-Read the agent's diff and run the slice's tests yourself before starting the next slice. Your
-check catches what the brief did not, which is why the brief can stay this short.
+Between slices, run the component's Check and the tests for the files you touched. Not the full
+suite: it is slow enough that running it per slice is how people stop running it.
+
+Read the slice's diff, and run its `rg` proof and its tests yourself, before the next slice starts.
+Your check catches what the brief did not, which is why the brief can stay this short.
+
+Where a slice turns out to need a shape the sketch did not have, say so and call the Skill tool with
+`plan-change` again rather than working around it.
 
 ## 3. Gate
 
-Now the full suite, and the analyzer clean:
-
-```bash
-flutter analyze
-flutter test
-```
+Now, for every component the work touched, its Check clean and its full Test suite, with the
+commands from step 1.
 
 Compare against the baseline from step 1. Anything worse is yours. A suite reported as green when
 the baseline was never zero is the failure this step exists to prevent.
@@ -93,8 +97,9 @@ that cost time and bought nothing.
 Call the Skill tool with `verify`. Name the rung reached for each acceptance criterion, and
 name what is not proven and what rung it would need.
 
-Where the work touched security-sensitive surfaces, meaning secrets, storage, network or a webview,
-call the Skill tool with `flutter-security-review`.
+Where the work touched security-sensitive surfaces, meaning secrets, authentication, stored data,
+the network, user input or web content loaded into the app, call the Skill tool with
+`security-audit` over the change.
 
 ## 6. Commit
 
@@ -114,9 +119,9 @@ holds for you.
 
 ## Completion criteria
 
-Every acceptance criterion has code, a test naming it, and a verification rung reported. The
-analyzer is clean, the suite matches or beats the baseline, and the review findings are resolved
-rather than acknowledged.
+Every acceptance criterion has code, a test naming it, and a verification rung reported. Every
+touched component's Check is clean, its suite matches or beats the baseline, and the review findings
+are resolved rather than acknowledged.
 
 Report what is **not** done in the same breath as what is: criteria dropped, rungs not reached,
 findings deliberately left. A completion report listing only successes is not a report, and the next

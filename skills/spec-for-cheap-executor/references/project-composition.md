@@ -1,75 +1,65 @@
-# Composing with this project's skills, agents, rules and hooks
+# Composing with this project's skills, rules and hooks
 
 The generated doc must **name** the project's existing machinery so the cheap executor inherits
 the project's conventions instead of re-deriving them. Naming a skill is a one-line instruction
 that replaces two pages of restated convention — and it stays correct when the convention changes.
 
-Skills and agents reach only an executor running with the kit installed. Where it has no kit,
-cite only what lives in the repo it works on, meaning `CLAUDE.md` and the rule files, and let §11
-carry the rest.
+Skills reach only an executor running with the kit installed. Where it has no kit, cite only what
+lives in the repo it works on, meaning `CLAUDE.md`, the rule files and the commands in
+`docs/agents/project.md`, and let §11 carry the rest.
 
 Three ways to cite, in order of preference:
 
-1. **Invoke** — "Call the Skill tool with `flutter-write-tests` before step 6."
-2. **Delegate** — "Delegate step 3 to the `flutter-repo-engineer` agent."
-3. **Defer** — "`.claude/rules/flutter-bloc.md` governs the state shape here; follow it."
+1. **Invoke** — "Call the Skill tool with `security-audit` at step 7."
+2. **Delegate** — "Step 3: call the Skill tool with `project-stack`, asking for the `app`
+   component's `build` slot, and pass §1, §3 and §11 verbatim as the brief."
+3. **Defer** — "`.claude/rules/{rule}.md` governs the state shape here; follow it."
 
 Cite the path. Pasting a skill's or a rule's contents into the doc forks it: the copy stops tracking
 the original the moment either changes.
+
+## Stack knowledge goes through `project-stack`
+
+The doc never names a stack kit's own skills or agents. It names `project-stack` and the slot it
+needs, and `project-stack` calls whichever stack kit the executor has installed, or answers from the
+component's row in the Components table where it has none. The same doc line is then right for any
+executor with the kit, whatever stack kit sits beside it.
+
+Name the component in every line: `app`, `backend`, whatever the Components table calls it. A slot
+asked without a component makes the executor guess which one.
 
 ## Skills — instruct the executor to call the Skill tool
 
 Write the instruction as a Skill tool call with the skill named, one call per line. A bare `/name`
 dropped into prose reads as a label, and the executor will treat it as one.
 
-| Skill | Cite it when the task involves | Typical doc line |
+| Cite | When the task involves | Typical doc line |
 |-------|-------------------------------|------------------|
-| `flutter-core-architecture` | Shared widgets, theming, dialogs, network, barrel, fixtures | "Call the Skill tool with `flutter-core-architecture` before inventing constants or dialogs." |
-| `flutter-create-state-layer` | Creating or extending a bloc triad | "Call the Skill tool with `flutter-create-state-layer` for the triad, then apply §3 to the filter handler." |
-| `flutter-create-model` | New DTOs / JSON shapes | "Call the Skill tool with `flutter-create-model` and build the response DTO from the field map in §4." |
-| `flutter-create-repository` | Wrapping endpoints | "Call the Skill tool with `flutter-create-repository`. §3 fixes the signatures; keep them." |
-| `flutter-create-screen` | A screen from Figma / CSS / spec | "Call the Skill tool with `flutter-create-screen`, using the mockups in §5 as the spec (no Figma node for this task)." |
-| `flutter-scaffold-feature` | Whole feature folder | Rarely in a task doc — prefer naming the layer skills per build step. |
-| `flutter-modernize-screen` | Legacy screen → BLoC + screenutil | "Step 2: call the Skill tool with `flutter-modernize-screen` on the page named in §1; §11 overrides its defaults where they differ." |
-| `flutter-write-tests` | Any bloc test work | "Call the Skill tool with `flutter-write-tests`, then replace its generated assertions with the exact ones in §10.2." |
-| `flutter-security-review` | Storage / network / secrets / WebView touched | "Step 7: call the Skill tool with `flutter-security-review` — this task adds a token to storage." |
+| `project-stack`, `conventions` slot | Writing code in a component: its layers, imports, shared constants, dialogs, generated files, test tools | "Before step 3, call the Skill tool with `project-stack`, asking for the `app` component's `conventions` on its state layer and its test tools." |
+| `project-stack`, `build` slot | A step that is a whole slice a stack kit generates: a model, a repository, a state layer, a screen | "Step 4: call the Skill tool with `project-stack`, asking for the `app` component's `build` slot for the repository. §3 fixes the signatures; keep them." |
+| `project-stack`, `verify` slot | Proof above the component's Test command: rendered output, a device run | "Step 9: call the Skill tool with `project-stack`, asking for the `app` component's `verify` slot on §10.1, then add the exact assertions in §10.2." |
+| `security-audit` | Storage, network, secrets or an embedded web view touched | "Step 7: call the Skill tool with `security-audit` — this task adds a token to storage." |
 
-`flutter-scaffold-feature` and `store-compliance` are whole workflows, not steps inside a task
+Hand a step to the `build` slot only when its inputs are **fully specified in the doc**. A stack
+kit handed a vague slice reintroduces exactly the judgment this skill removes, so say what to pass:
+*"pass §1, §5 and §11 verbatim as its brief."*
+
+A whole workflow, such as a new feature end to end or a store release, is not a step inside a task
 doc. When the task's scope is one of those, say so in §1 and name the command a human runs instead:
-`/fk-build` for a new feature or fixture-mode screen, `/fk-release` for the store pack.
+`/fk-build` for a new feature, `/fk-release` for a release.
 
 **Precedence must be stated.** A skill generates its own defaults; your doc's §3 / §5 / §10 are
-authoritative. Say which wins, explicitly: *"Where `flutter-write-tests` output differs from §10.2,
-§10.2 wins."* Without that line the executor keeps the generated version.
-
-## Agents — delegate via the Agent tool
-
-| Agent | Owns | Delegate when |
-|-------|------|---------------|
-| `flutter-state-engineer` | `lib/features/{f}/bloc/` | Events table + repo signatures are already fixed in the doc |
-| `flutter-repo-engineer` | `lib/features/{f}/model/`, `repo/` | Field map + endpoint table are fixed |
-| `flutter-ui-engineer` | `lib/features/{f}/view/`, `widget/` | §5 mockups are complete for every state |
-| `flutter-test-engineer` | `test/features/{f}/` | §10 assertions are exact |
-
-Only tell the executor to delegate when the delegated inputs are **fully specified in the doc** —
-a subagent given a vague slice reintroduces exactly the judgment this skill removes. When a doc
-step is delegable, say so and say what to hand over: *"Delegate step 5 to `flutter-ui-engineer`;
-pass §1, §5 and §11 verbatim as its brief."*
+authoritative. Say which wins, explicitly: *"Where the `build` slot's tests differ from §10.2, §10.2
+wins."* Without that line the executor keeps the generated version.
 
 ## Rules — auto-load by path glob
 
-| Rule file | Auto-loads for |
-|-----------|----------------|
-| `.claude/rules/flutter-bloc.md` | `**/bloc/**/*.dart` |
-| `.claude/rules/flutter-models.md` | `**/model/**/*.dart` |
-| `.claude/rules/flutter-ui.md` | `lib/**/*.dart` |
-
-The architecture source of truth is the `flutter-core-architecture` skill. The Cursor mirror under
-`.cursor/` is generated from the same sources, so cite the skill rather than a mirrored path.
-Always-on layer: [CLAUDE.md](CLAUDE.md).
-
-Read the project's `.claude/rules/` directory for the rules it actually has before citing one. The
-table above lists what the kit ships; a project may carry more.
+Read the project's `.claude/rules/` directory for the rules it actually has, and the glob each one
+loads for, before citing one. Which rule files exist is a project fact: a stack kit's setup writes
+them, and a project may carry more. Where the rules mirror the stack kit's architecture, the
+architecture source of truth is that kit, reached through `project-stack`'s `conventions` slot. A
+mirror under `.cursor/` is generated from the same sources, so cite the original rather than the
+mirrored path. Always-on layer: [CLAUDE.md](CLAUDE.md).
 
 These load automatically for the executor — but a rule that loads is not a rule that gets
 followed. §11 of the doc still spells out the handful the task will actually brush against,
@@ -77,8 +67,10 @@ with the rule file cited beside each.
 
 ## Hooks — tell the executor these fire
 
-Installed with the kit for every harness that runs hooks (`hooks/kit-hook.py`). The executor will see their output and may mistake it
-for its own error. Warn it in the doc when relevant:
+Installed with the kits for every harness that runs hooks (`hooks/kit-hook.py`). Which ones fire
+depends on the kits installed: `secrets` comes with this kit, `format` and `fixtures` with a stack
+kit that ships them. The executor will see their output and may mistake it for its own error. Warn
+it in the doc when relevant:
 
 | Hook | Trigger | What the executor sees |
 |------|---------|------------------------|
@@ -91,23 +83,27 @@ string in the doc. Use `{{API_KEY}}` placeholders and a §7 note on where the re
 
 ## Always-include for this project
 
-Regardless of task, a task doc's §11 includes the single-barrel import rule (S1) and
-the `exports.dart` registration rule (S2) whenever any `lib/` file is created — they are the
-project's most-violated conventions and the executor will not guess them.
+Regardless of task, whenever the task creates a source file, a task doc's §11 includes the
+component's most-violated conventions for a new file, such as an import rule or a registration
+line every new file needs. While writing the doc, call the Skill tool with `project-stack`, asking
+for the component's `conventions` on new files: the executor will not guess them.
 
-If the task touches a feature in **fixture mode** (`lib/features/{f}/README.md` mentions it),
-§1 must state whether fixture markers stay or go, and §6 must list any marker being removed.
-Fixture markers are sanctioned conventions, not `TODO`s — an executor left to judge will
+If the task touches a feature in **fixture mode** (the component's conventions say how it is
+marked), §1 must state whether fixture markers stay or go, and §6 must list any marker being
+removed. Fixture markers are sanctioned conventions, not `TODO`s — an executor left to judge will
 delete them.
 
 ## Verification commands for this project
 
-```bash
-flutter pub get
-dart run build_runner build --delete-conflicting-outputs   # only if mocks/codegen changed
-dart format .
-flutter analyze                                            # must report "No issues found."
-flutter test
-flutter test test/features/{feature}/widget/{name}_test.dart   # single file
-flutter test --name '<test name>'                              # single test
-```
+Take them from the component's row in the Components table of `docs/agents/project.md`, and paste
+them into §10.4 literally:
+
+| Column | In the doc |
+|---|---|
+| Install | Run first, once |
+| Check | Must finish clean; quote the output that means clean |
+| Test | The whole suite |
+
+Add how to run one test file and one named test, which the component's `conventions` answer. Where
+the row is missing a command, `project-stack` says so: settle it before the doc ships, because an
+executor told to "run the tests" runs whatever it guesses.

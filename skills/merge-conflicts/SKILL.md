@@ -1,9 +1,9 @@
 ---
 name: merge-conflicts
-description: Resolve conflicts in a Flutter repo by intent, including the generated files and lockfiles that must be regenerated rather than merged. Use when a merge or rebase conflicts, or when resolving conflicts in .g.dart, pubspec.lock, Podfile.lock, a barrel file or a golden image.
+description: Resolve merge and rebase conflicts by intent, including the generated files and lockfiles that must be regenerated rather than merged. Use when a merge or rebase conflicts, or when resolving conflicts in a generated file, a lockfile, a barrel or registry file, or a snapshot image.
 ---
 
-# Flutter merge conflicts
+# Merge conflicts
 
 Resolve by **intent**: what was each side trying to do. A conflict resolved by picking whichever
 hunk looks tidier produces code that compiles and does neither thing.
@@ -13,15 +13,19 @@ and aborting loses the resolution decisions already made.
 
 ## 1. Sort the conflicts by kind first
 
-Flutter repos conflict in four distinct ways, and three of them are not merges at all:
+Learn which files in this repo are generated, which are lockfiles, and what rewrites each: call the
+Skill tool with `project-stack`, asking for the `conventions` of each component with a conflict,
+aspect "generated files and lockfiles". It returns the file patterns and the commands.
+
+Repos conflict in five distinct ways, and four of them are not merges at all:
 
 | Conflicted file | How to resolve |
 |---|---|
-| `*.g.dart`, `*.freezed.dart`, `*.gr.dart`, `*.mocks.dart` | **Regenerate**, never merge |
-| `pubspec.lock`, `Podfile.lock` | **Regenerate** from the resolved manifest |
-| `ios/Runner.xcodeproj/project.pbxproj` | Take one side, then re-add the other's changes through Xcode |
-| A golden `.png` | Take one side, then re-run the golden test and review the diff |
-| Ordinary Dart | Merge by intent, below |
+| Generated output: codegen, mocks, compiled assets | **Regenerate**, never merge |
+| A lockfile | **Regenerate** from the resolved manifest |
+| A file a tool owns: an IDE project file, a platform build registry | Take one side, then re-add the other's changes through that tool |
+| A snapshot or golden image | Take one side, then re-run the test that writes it and review the diff |
+| Ordinary source | Merge by intent, below |
 
 Doing the mechanical ones first shrinks the real work, and often removes conflicts that only looked
 like conflicts.
@@ -29,44 +33,34 @@ like conflicts.
 ### Generated files
 
 ```bash
-git checkout --ours <conflicted .g.dart>     # either side; it is about to be overwritten
-dart run build_runner build --delete-conflicting-outputs
+git checkout --ours <conflicted generated file>   # either side; it is about to be overwritten
+<the component's codegen command>
 ```
 
-Resolve the **source** file first, then regenerate. A hand-merged `.g.dart` is wrong the moment
+Resolve the **source** file first, then regenerate. A hand-merged generated file is wrong the moment
 anyone runs codegen, and reviewing one is wasted effort.
 
 ### Lockfiles
 
-```bash
-git checkout --theirs pubspec.yaml   # resolve the MANIFEST by intent first
-flutter pub get                      # then regenerate the lock
-cd ios && pod install                # same for Podfile.lock
-```
+Resolve the **manifest** by intent first, taking both sides' dependency additions unless they
+genuinely conflict on a version. Then run the component's Install command and let the package
+manager write the lock.
 
-Resolve `pubspec.yaml` properly, taking both sides' dependency additions unless they genuinely
-conflict on a version. Then let the tool write the lock.
+## 2. The file every branch appends to
 
-## 2. The barrel file
+A file that every new piece of code adds a line to (a single export barrel, a route table, a
+dependency registry) conflicts on **every** parallel feature branch. It has a fixed recipe:
 
-`lib/core/router/exports.dart` conflicts on **every** parallel feature branch, because the
-single-barrel convention means every new file adds a line to one file. This is the kit's own
-recurring tax, and it has a fixed recipe:
+**Take both sides.** Those lines are additive; two branches adding different entries are not in
+conflict, they only touched adjacent lines. Keep every line from both, then restore the file's own
+ordering within each section.
 
-**Take both sides.** Export lines are additive; two branches adding different files are not in
-conflict, they only touched adjacent lines. Keep every line from both, then restore alphabetical
-order within each section.
+Then run the component's Check command: an entry lost in the merge shows up as an unresolved symbol.
 
-Then check nothing was lost:
+The failure to avoid is resolving with `--ours` and silently dropping the other branch's entries.
+The Check command catches it, which is why it runs immediately after.
 
-```bash
-flutter analyze     # an unexported new file shows up as an unresolved symbol
-```
-
-The failure to avoid is resolving with `--ours` and silently dropping the other branch's exports.
-The analyzer catches it, which is why it runs immediately after.
-
-## 3. Ordinary Dart, resolved by intent
+## 3. Ordinary source, resolved by intent
 
 For each hunk, establish what each side wanted before writing anything:
 
@@ -93,20 +87,18 @@ Then, in order of how often it applies:
 A resolved merge compiles far more easily than it is correct, because both sides individually
 compiled.
 
-```bash
-flutter analyze
-flutter test
-```
+Run the Check and Test commands of every component the merge touched, from the Components table in
+`docs/agents/project.md`.
 
 Then, specifically: run the tests **from both sides** of the merge. A conflict resolved by dropping
 one side's logic leaves that side's tests failing, and that is the fastest signal that intent was
-lost. Where either side changed a screen, call the Skill tool with `verify` and reach a
-widget or golden rung rather than trusting the analyzer.
+lost. Where either side changed a screen, call the Skill tool with `verify` and reach a UI or
+screenshot rung rather than trusting static analysis.
 
 ## Completion criteria
 
 Every conflicted file is resolved, generated files and lockfiles are regenerated rather than merged,
-the analyzer is clean, and the suites from **both** sides pass.
+every touched component's Check is clean, and the suites from **both** sides pass.
 
 Name every hunk where you chose one side's behaviour over the other, and why. That list is what the
 other author needs to see, and it is the part a silent resolution loses.

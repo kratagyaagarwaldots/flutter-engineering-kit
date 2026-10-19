@@ -12,8 +12,8 @@ constants, or folder layout.
 ## Two sources, and which is which
 
 This skill owns the **conventions**: the layout, the naming families, the contracts, the rules. They
-are fixed, they apply to every project the kit is installed in, and `fk-setup` scaffolds
-them on a greenfield repo.
+are fixed, they apply to every project the kit is installed in, and `flutter-supabase-setup`
+scaffolds them on a greenfield repo.
 
 The **repo owns the inventory**: which shared components, services, utils and constants actually
 exist right now, and what their exact APIs are. That changes per project and per week.
@@ -298,7 +298,7 @@ Call the Skill tool with one of these, one call per need:
 | A screen from a design | `flutter-create-screen` |
 | Legacy migration | `flutter-modernize-screen` |
 | Tests | `flutter-write-tests` |
-| Review a branch | `code-review` |
+| What a review checks | `flutter-supabase-conventions`, its Review baseline |
 | Security pass | `flutter-security-review` |
-| Prove it works | `verify` |
+| Prove it works | `flutter-supabase-verify` |
 

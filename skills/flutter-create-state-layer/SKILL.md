@@ -29,9 +29,11 @@ there. A template is a starting shape, not a licence to reshape a codebase that 
 - **The actions** the feature responds to, as a settled list: user gestures and system triggers
 - **Repository method signatures**, so the calls wire correctly
 
-Where the actions are still a guess, call the Skill tool with `grill` before generating. A state
-layer built on an invented action list gets rewritten when the real one arrives, and rewriting it
-costs more than the interview would have.
+Where the actions are still a guess, stop before generating. Name the action list as the unsettled
+decision, and the question that settles it: which user gestures and system events change this
+feature, and what each one must do on success and on failure. A state layer built on an invented
+action list gets rewritten when the real one arrives, and rewriting it costs more than the answer
+would have.
 
 ## Rules that hold in every stack
 

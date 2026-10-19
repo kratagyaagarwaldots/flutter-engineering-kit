@@ -1,9 +1,9 @@
 ---
 name: code-review
-description: Review changes on two independent axes: does the code follow the project's conventions, and does it do what the spec asked. Use when the user wants a branch, PR, or work-in-progress reviewed, or asks to review since a commit or branch.
+description: Review changes on two independent axes: does the code follow the project's conventions and its stack's review baseline, and does it do what the spec asked. Use when the user wants a branch, PR, or work-in-progress reviewed, or asks to review since a commit or branch.
 ---
 
-# Flutter code review
+# Code review
 
 Two axes over the same diff, run as **parallel sub-agents** so neither contaminates the other, then
 reported side by side:
@@ -38,52 +38,53 @@ worth surfacing on client work.
 
 ## 3. Gather the convention sources
 
-Read what the project documents: `CLAUDE.md`, the path-scoped rules under `.claude/rules/`,
-`docs/agents/coding-standards.md` (the judgement calls this project asks its reviewer to enforce),
-and `GLOSSARY.md` for vocabulary. Those always win.
+Read what the project documents: `CLAUDE.md` or `AGENTS.md`, the path-scoped rules under
+`.claude/rules/`, `docs/agents/coding-standards.md` (the judgement calls this project asks its
+reviewer to enforce), and `GLOSSARY.md` for vocabulary. Those always win.
 
-On top of whatever the project documents, the conventions axis always carries two baselines: the
-**Flutter baseline** and the **general smells** below. Two rules bind both: a documented project rule **overrides** a baseline
-wherever they disagree, and every baseline item is a **judgement call**, flagged as "possible", never
-as a violation. Skip anything `flutter analyze` already enforces — a linter finding is not a review
-finding.
+Then call the Skill tool with `project-stack` for the `conventions` slot of each component the diff
+touches, asking for what a review checks. What comes back is the **stack baseline**: the stack's own
+review items, each with a file that shows the convention. Where no stack kit answered, the stack
+baseline is the shape `project-stack` reports from an existing module and its tests.
 
-### The Flutter baseline
+On top of whatever the project documents, the conventions axis always carries three baselines: the
+**stack baseline**, the **general baseline** and the **general smells** below. Two rules bind all
+three: a documented project rule **overrides** a baseline wherever they disagree, and every baseline
+item is a **judgement call**, flagged as "possible", never as a violation. Skip anything the
+component's Check command already enforces: a linter finding is not a review finding.
+
+This step is done when you hold the documented rule files and a stack baseline for every component
+the diff touches.
+
+### The general baseline
 
 Each reads *what it is* → *why it matters here*.
 
-- **Widget-helper methods.** A private method returning a `Widget` instead of a `StatelessWidget`
-  class. → Breaks `const` construction and rebuild scoping; the whole parent rebuilds.
-- **Business logic in the widget tree.** Computation, formatting, or branching inside `build` that
-  belongs in the state layer or a model. → Untestable without pumping a widget.
-- **`BuildContext`, navigation, or snackbars in the state layer.** → Couples state to presentation
-  and breaks its tests.
+- **Business logic in the view layer.** Computation, formatting, or branching in rendering code that
+  belongs in the state layer or a model. → Untestable without rendering the screen.
+- **Presentation in the state layer.** Navigation, dialogs, or a handle on the UI tree held by state
+  code. → Couples state to presentation and breaks its tests.
 - **Inline literals.** A hex colour, a user-facing string, an asset path, or a magic number written
   at the point of use. → The reason a rebrand or a copy change becomes a hunt.
-- **A sizing strategy other than the one `docs/agents/project.md` names.** → Two competing scale
-  systems in one tree.
-- **A font size scaled at the callsite.** → Overrides the OS text-scale setting a user chose for
-  legibility, so the app ignores an accessibility preference.
-- **`dynamic`, or an unchecked cast off JSON.** → Moves a parse failure from the boundary to a
-  random later frame.
-- **A repository that swallows an error into a bare `null`** where the project's convention returns
-  a typed failure. → The UI cannot tell "empty" from "broken".
-- **Missing state coverage.** A status enum whose `loading`, `failure`, or empty case has no branch
-  in the UI. → The single most common source of a feedback round.
-- **`setState` in a screen whose state the project's state layer already owns.** → Two sources of
-  truth for one screen.
-- **An unbounded `ListView` or a rebuild over an unkeyed list.** → Jank and lost scroll position.
-- **A `dispose` that does not cancel** a subscription, controller, or timer it created. → Leaks.
+- **An untyped value, or an unchecked cast off a parsed payload.** → Moves a parse failure from the
+  boundary to a random later moment.
+- **A data-access method that swallows an error into a bare `null`** where the project's convention
+  returns a typed failure. → The UI cannot tell "empty" from "broken".
+- **Missing state coverage.** A status whose loading, failure, or empty case has no branch in the
+  UI. → The single most common source of a feedback round.
+- **A second source of truth for one screen's state**, held locally where the project's state layer
+  already owns it. → The two disagree, and the screen shows whichever wrote last.
+- **A teardown that does not release** a subscription, controller, or timer it created. → Leaks.
 - **A new file outside the project's import convention**, or one not exported where the project's
-  barrel requires it. → Compiles locally, breaks the next importer.
+  module index requires it. → Compiles locally, breaks the next importer.
 - **A fixture or placeholder marker left in code the change presents as finished**, where the
   project treats those markers as a temporary state. → Ships a stub as a feature.
 - **A second writer, a second way, or a second list.** The change writes state another place already
   writes, adds a way to do a task the code already does, or adds a list that must be kept in step
   with an existing one by hand. → The next agent copies whichever it finds first, and they drift.
-- **A test that cannot fail.** It would still pass if every function it calls returned `null`:
-  only `findsWidgets`, `isNotNull` or `verify(...).called(1)`, an expected value computed by the code
-  under test, or a restated constant. → Costs CI time and catches nothing.
+- **A test that cannot fail.** It would still pass if every function it calls returned `null`: only
+  an existence or call-count check, an expected value computed by the code under test, or a restated
+  constant. → Costs CI time and catches nothing.
 
 ### General smells
 
@@ -112,11 +113,11 @@ Fowler's (*Refactoring*, ch. 3), for the shape of any code. Each reads *what it 
 ## 4. Spawn both axes in parallel
 
 **Conventions sub-agent.** Give it the diff command, the commit list, the project's documented rule
-files, and **both baselines above pasted in full** — it has no other access to them. Brief: report, per
-file or hunk, every place the diff breaks a documented rule, citing the rule and where it is written;
-then every baseline item you spot, named and quoted. Distinguish documented-rule breaches from
-baseline judgement calls, and note that a documented rule overrides the baseline. Skip anything the
-analyzer catches. Under 400 words.
+files, and **all three baselines pasted in full** — it has no other access to them. Brief: report,
+per file or hunk, every place the diff breaks a documented rule, citing the rule and where it is
+written; then every baseline item you spot, named and quoted. Distinguish documented-rule breaches
+from baseline judgement calls, and note that a documented rule overrides the baseline. Skip anything
+the component's Check command catches. Under 400 words.
 
 **Spec sub-agent.** Give it the diff command, the commit list, and the spec's contents. Brief:
 report (a) criteria that are missing or only partly built; (b) behaviour in the diff nobody asked

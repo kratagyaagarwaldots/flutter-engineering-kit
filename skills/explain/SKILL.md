@@ -1,9 +1,9 @@
 ---
 name: explain
-description: Explain how a Flutter feature, subsystem or codebase actually works, and why it was built that way. Use when asked how something works, where something lives, why a decision was made, or when onboarding onto unfamiliar code.
+description: Explain how a feature, subsystem or codebase actually works, and why it was built that way. Use when asked how something works, where something lives, why a decision was made, or when onboarding onto unfamiliar code.
 ---
 
-# Flutter explain
+# Explain
 
 Answer "how does this work" from the code, at whichever zoom level the question is asked. Most of
 the reading should happen in a subagent: dispatch `codebase-explorer` for the sweeps and keep the
@@ -50,9 +50,9 @@ hit next:
 
 - Features far larger than their neighbours, and what they have absorbed
 - A state layer with more actions than the screen has affordances
-- Cross-feature imports, which the conventions forbid and which mark a boundary in the wrong place
-- Near-duplicate repository methods
-- `build` methods long enough that nobody reads to the bottom
+- Cross-feature imports, which mark a boundary in the wrong place
+- Near-duplicate data-access methods
+- Screen code long enough that nobody reads to the bottom
 
 Report these as observations with locations, not as a plan. Where the user wants one addressed, call
 the Skill tool with `plan-change`, which owns designing the fix. A survey that turns itself

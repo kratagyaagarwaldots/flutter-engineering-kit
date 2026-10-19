@@ -91,8 +91,8 @@ Built screen-first, before its model and API existed. It runs on a fixture repos
 
 ## Upgrading
 
-When the model spec and the endpoint exist, run `/fk-build` on this feature with both. It reads
-this file, diffs the inferred schema against the real one, swaps every fixture body, and keeps the
+When the model spec and the endpoint exist, ask for this feature to be upgraded onto its real API,
+giving both. The scaffold's upgrade mode reads this file, diffs the inferred schema against the real one, swaps every fixture body, and keeps the
 acceptance criteria, the design and the state layer's actions unchanged.
 ```
 

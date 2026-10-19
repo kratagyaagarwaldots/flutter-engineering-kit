@@ -20,10 +20,9 @@ Read before proposing. Dispatch the `codebase-explorer` agent for the reading, s
 written in a clean window, and answer:
 
 - Which features and which files does this touch?
-- What already exists that this should use instead of duplicating? Call the Skill tool with
-  `flutter-core-architecture` for the shared conventions, then read `lib/core/` for what is actually
-  there.
-- What does the project's stack decide for me? Call the Skill tool with `flutter-supabase-conventions`.
+- What already exists that this should use instead of duplicating, and what does the stack decide
+  for me? Call the Skill tool with `project-stack`, asking for the `conventions` of each component
+  this touches, then read the shared code it points to for what is actually there.
 - What did previous decisions already fix? Read `docs/adr/`.
 
 Ground first because a design proposed without it re-invents something the repo has, and that is the
@@ -35,8 +34,8 @@ Write the shape, with no bodies. Signatures, types, and the boundaries between t
 
 - **Types.** The data this introduces or changes, and where illegal states are made unrepresentable.
 - **The seam.** Which actions the state layer gains, and which states it can be in.
-- **Repository signatures.** What each method takes and returns, including its failure shape.
-- **Widget boundaries.** Which parts of the tree are their own widgets, and what each takes.
+- **Data-access signatures.** What each method takes and returns, including its failure shape.
+- **UI boundaries.** Which parts of a screen are their own components, and what each takes.
 - **What is deleted.** A change that only adds is usually a change that missed something.
 - **Owners.** For each piece of state the change writes, the one place that writes it; for each task
   it introduces, whether the code already has a way to do it. A second writer, a second way or a

@@ -23,7 +23,7 @@ Each row is owned elsewhere and stated once. Route rather than answering from a 
 | Frame budget, jank, dropped frames, `Opacity` over a subtree, shader warm-up | Call the Skill tool with `flutter-performance` |
 | Constants families, the sizing strategy, the shared component set, `lib/core` layout | Call the Skill tool with `flutter-core-architecture` |
 | Which state seam, sizing strategy and test tooling this project actually uses | Call the Skill tool with `flutter-supabase-conventions` |
-| Which acceptance criteria a screen has to satisfy at all | Call the Skill tool with `grill` |
+| Which acceptance criteria a screen has to satisfy at all | The spec or ticket. Where neither says, stop and name the missing criterion and the question that settles it |
 
 These route a *different question* elsewhere. Where this skill was called by one of them, answer the
 design question and return: sending the work back re-enters a task already in flight.
@@ -39,8 +39,9 @@ trust by being predictable, and every element, every colour and every animation 
 the user's attention that has to pay for itself.
 
 This matters more when an agent is holding the keyboard, because generating another animation is
-cheaper than deciding not to. Call the Skill tool with `engineering-principles` when the choice is
-between two shapes rather than two appearances.
+cheaper than deciding not to. The same holds when the choice is between two shapes rather than two
+appearances: remove or reuse before adding, and where the smaller change and the clearer one differ,
+pick one and say why.
 
 So the default answers are: fewer weights, fewer colours, one dominant element, and no animation
 until a gate below admits one.
@@ -93,7 +94,7 @@ question differently.
 
 Where it does not exist, or the decision in front of you is one it leaves open, settle it — read
 [references/design-language.md](references/design-language.md) and write the file. Create it lazily,
-when there is something real to settle, the way `domain-glossary` creates `GLOSSARY.md`. The moment
+when there is something real to settle, not as an empty scaffold. The moment
 worth taking it is when acceptance criteria or a spec have just been settled: the product is locked
 and the visual language is the remaining unstated half.
 
@@ -136,5 +137,5 @@ Where a judgment cannot be made from code — whether a curve feels right, wheth
 is too much — say so and name what to look at on a device, rather than asserting it. Motion that is
 mechanically correct can still feel wrong, and the fix for that is running it.
 
-For proof that the pixels match an approved baseline, goldens are rung 4: call the Skill tool with
-`verify`.
+For proof that the pixels match an approved baseline, a golden test is the evidence: call the Skill
+tool with `flutter-write-tests` for it.

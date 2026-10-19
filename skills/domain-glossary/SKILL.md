@@ -16,8 +16,8 @@ for vocabulary is not this skill; any skill can do that in one line.
 
 The glossary is the one artifact that makes the code, the tests, the specs, the client emails, and
 the store copy use the same word for the same thing. Skip it and each surface invents its own:
-the API says one thing, the UI label says another, the bloc's status enum a third, and a feedback
-round spent arguing about a word looks exactly like a feedback round about a feature.
+the API says one thing, the UI label says another, the state layer's status enum a third, and a
+feedback round spent arguing about a word looks exactly like a feedback round about a feature.
 
 Terms that carry a rule are the expensive ones. A domain word that implies a price, a duration, a
 window, or a state transition is a business rule wearing a noun, and it has to be written down with

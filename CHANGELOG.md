@@ -3,6 +3,38 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.12.0
+
+The kit is now two kits in one repo, ready to split: **product-engineer**, which runs a product and
+its engineering on any stack, and **flutter-supabase**, the Flutter + Supabase stack kit. Neither
+calls the other, and product-engineer names no stack. `kits.json` says which kit owns every skill,
+agent and hook check, and check 23 fails on any call across the line.
+
+- **`project-stack`** is the one route from product-engineer to a stack. It reads a new
+  **Components** table in `docs/agents/project.md` (component, kind, stack, kit, path, and its
+  install, check, test, run and build commands) and calls the stack kit's slot skills when they
+  are installed: `<kit>-setup`, `-conventions`, `-design`, `-build`, `-verify`, `-release`.
+  Without a kit, each slot falls back to the component's commands.
+- **flutter-supabase fills the six slots**: `flutter-supabase-setup`, `-conventions`, `-design`,
+  `-build`, `-verify` and `-release`. Its build lands a backend change before the app (migration,
+  RLS, generated types, then the Flutter layers). Dedicated Supabase skills come next.
+- **Renamed, now stack-free:** `flutter-plan-change` → `plan-change`, `flutter-tdd` → `tdd`,
+  `flutter-verify` → `verify`, `flutter-code-review` → `code-review`, `flutter-diagnose-bug` →
+  `diagnose-bug`, `flutter-explain` → `explain`, `flutter-merge-conflicts` → `merge-conflicts`.
+  Their Flutter specifics moved into `flutter-supabase-verify` and `flutter-supabase-conventions`.
+  `project-conventions` is now `flutter-supabase-conventions`. Agents: `flutter-architect` →
+  `solution-architect`, `flutter-explore` → `codebase-explorer`.
+- **New `security-audit`**: a stack-free security audit that adds each component's platform checks;
+  `flutter-security-review` is its Flutter and Supabase depth, now with a Supabase backend pillar.
+- `/fk-setup` writes a stack-free `project.md`, `CLAUDE.md` and `AGENTS.md`, then calls each
+  component's `setup` slot, which adds the stack's own sections and rules. `/fk-build`,
+  `/fk-release`, `setup-ci`, `takeover-audit` and the rest work through the Components table.
+- `ask-kit` routes stack work through `project-stack` rather than naming stack skills.
+
+**Migration:** a project set up before 0.12.0 has no Components table. Run `/fk-setup` again; it
+keeps what the project added, writes the table, and moves the Flutter facts into the app
+component's section. Anything calling a renamed skill by its old name must use the new one.
+
 ## 0.11.0
 
 A command for requests the planned process does not cover.

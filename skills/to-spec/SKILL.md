@@ -22,9 +22,9 @@ Read the project's glossary (`GLOSSARY.md`) if it exists and use its terms exact
 renames a domain concept teaches the codebase a second word for the same thing. Respect anything in
 `docs/adr/` covering the area, and do not re-litigate a recorded decision inside a spec.
 
-Then name the **seams under test** and confirm them with the user before writing. For a Flutter
-feature that is usually the bloc's event surface and the page's widget tree; sometimes the
-repository. Prefer seams that already exist. The fewer, the better.
+Then name the **seams under test** and confirm them with the user before writing. For an app
+feature that is usually the state layer's actions and the screen's rendered UI; sometimes the
+data-access layer. Prefer seams that already exist. The fewer, the better.
 
 ## The document
 
@@ -81,8 +81,9 @@ Show the user the **Acceptance criteria**, **Assumptions** and **Out of scope** 
 those three confirmed. The rest is ours to get right; those three are the contract.
 
 With the contract confirmed the product is locked, which is the moment the app's visual language stops
-being free to invent per screen. Where `docs/agents/design.md` does not exist yet, call the Skill tool
-with `flutter-design` to settle it before any screen is built.
+being free to invent per screen. Where `docs/agents/design.md` does not exist yet, call the Skill
+tool with `project-stack`, asking for the client component's `design`, to settle it before any
+screen is built.
 
 Then return the spec path. Inside `/fk-plan` the next step is the sketch; on its own, tell the
 user to run `/fk-build` with the spec, which picks the full-feature path when a model and endpoint

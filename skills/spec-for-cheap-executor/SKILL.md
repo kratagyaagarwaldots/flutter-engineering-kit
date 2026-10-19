@@ -64,8 +64,8 @@ Establish, asking only for what you genuinely cannot determine from the repo:
 - [ ] Files/areas that must **not** be touched
 - [ ] Existing docs in `docs/tasks/` that this one overlaps or contradicts → Phase 4 becomes mandatory
 - [ ] Which model executes it (affects verbosity, not rigour — assume a small, fast model if unstated)
-- [ ] Whether the executor has the kit installed, which decides what the doc can cite (see
-      [references/project-composition.md](references/project-composition.md))
+- [ ] Whether the executor has the kit installed, and a stack kit beside it, which decides what the
+      doc can cite (see [references/project-composition.md](references/project-composition.md))
 
 Produce the Scope Box (template §1) now. Everything later is checked against it.
 
@@ -76,7 +76,7 @@ and it is what earns the executor's trust: a doc it can spot-check is a doc it f
 
 Rules:
 
-- **No claim without `file.ext:line`.** Use markdown links (`[order_form_page.dart:212](lib/features/order/view/order_form_page.dart#L212)`).
+- **No claim without `file.ext:line`.** Use markdown links (`[order_form.ext:212](src/orders/ui/order_form.ext#L212)`).
 - **Run the logic by hand and record real numbers.** Not "the multiplier grows too fast" but
   "at score 3.0 the formula prescribes 17 pull-ups × 5 sets". Not "the list rebuilds often"
   but "`OrderListPage` rebuilds all 40 cards on every keystroke".
@@ -160,8 +160,8 @@ next spec prevents them.
   input for computed ones.
 - **The doc is self-contained.** No "see the conversation", no ticket links as the only source
   of a requirement, no unexplained project jargon.
-- **Name the project's skills, agents and rules explicitly** (`/flutter-write-tests`, the
-  `flutter-state-engineer` agent, `.claude/rules/flutter-bloc.md`) rather than restating them,
-  citing skills and agents only where the executor has the kit.
+- **Name the project's skills and rules explicitly** (`project-stack` with a component and a slot,
+  `security-audit`, a file under `.claude/rules/`) rather than restating them, citing skills only
+  where the executor has the kit.
 - **Verification is executable** — real commands, exact assertions, and at least one test that
   must **fail before** a named step and **pass after** it.

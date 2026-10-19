@@ -188,20 +188,14 @@ def main() -> int:
     # 10. Stack purity. A skill that names a state-management library generates code in that
     #     library's shape, which is wrong on a project using another one. The kit resolves the
     #     stack through `flutter-supabase-conventions` instead, and per-stack code lives in a skill's
-    #     templates/ directory where naming a library is the whole point.
-    #
-    #     STACK_OPINIONATED is the set that predates that rule. It is a ratchet: remove a name
-    #     when that skill is restructured, never add one. A new skill needing per-stack code gets
-    #     a templates/ directory.
+    #     templates/ directory where naming a library is the whole point. No skill is exempt: a
+    #     new skill needing per-stack code gets a templates/ directory.
     STACK_TOKENS = re.compile(
         r"flutter_bloc|BlocProvider|BlocBuilder|BlocListener|BlocConsumer|blocTest|bloc_test"
     )
-    STACK_OPINIONATED = {
-        "fk-setup",
-    }
     # A detector has to name what it detects, which is the opposite of generating in its shape.
     STACK_DETECTORS = {"flutter-supabase-conventions"}
-    exempt = STACK_OPINIONATED | STACK_DETECTORS
+    exempt = STACK_DETECTORS
     for stale in sorted(exempt - set(skills)):
         FAIL.append(f"stack exemption names missing skill '{stale}' — drop it from the list")
     for p in sorted((ROOT / "skills").rglob("*.md")):
@@ -220,8 +214,7 @@ def main() -> int:
                     f"{p.relative_to(ROOT)}:{lineno} names a state library — resolve it "
                     f"through `flutter-supabase-conventions`, or move the code into {owner}/templates/"
                 )
-    check("10.", f"stack-neutral skills name no state library "
-                 f"({len(STACK_OPINIONATED)} legacy skills exempt)")
+    check("10.", "skills name no state library outside a templates/ directory")
 
     # 11. The setup skill's AGENTS.md template twins its CLAUDE.md: every harness other than
     #     Claude Code reads AGENTS.md, so it must carry the same sections.
@@ -560,47 +553,6 @@ def main() -> int:
     #     flutter-supabase (one stack) along kits.json. Neither calls the other's skills, and
     #     nothing in product-engineer names a stack: it reaches one only through
     #     project-stack, which calls a stack kit's slot skills by pattern when they are installed.
-    #     The two ratchets list what is not yet independent. Remove an entry when its skill is
-    #     restructured; never add one.
-    EDGE_RATCHET: set[tuple[str, str]] = {
-        ("fk-build", "flutter-scaffold-feature"),
-        ("fk-build", "flutter-security-review"),
-        ("fk-build", "flutter-supabase-conventions"),
-        ("fk-change", "flutter-design"),
-        ("fk-release", "store-compliance"),
-        ("fk-setup", "flutter-design"),
-        ("flutter-build-failure", "setup-wizard"),
-        ("flutter-create-state-layer", "grill"),
-        ("flutter-design", "engineering-principles"),
-        ("flutter-design", "grill"),
-        ("flutter-scaffold-feature", "verify"),
-        ("flutter-upgrade-deps", "verify"),
-        ("flutter-write-tests", "tdd"),
-        ("grill", "flutter-design"),
-        ("plan-change", "flutter-supabase-conventions"),
-        ("setup-ci", "flutter-build-failure"),
-        ("spec-for-cheap-executor", "flutter-core-architecture"),
-        ("spec-for-cheap-executor", "flutter-create-model"),
-        ("spec-for-cheap-executor", "flutter-create-repository"),
-        ("spec-for-cheap-executor", "flutter-create-screen"),
-        ("spec-for-cheap-executor", "flutter-create-state-layer"),
-        ("spec-for-cheap-executor", "flutter-modernize-screen"),
-        ("spec-for-cheap-executor", "flutter-security-review"),
-        ("spec-for-cheap-executor", "flutter-write-tests"),
-        ("takeover-audit", "flutter-build-failure"),
-        ("takeover-audit", "flutter-security-review"),
-        ("tdd", "flutter-supabase-conventions"),
-        ("tdd", "flutter-write-tests"),
-        ("triage-executor-bugs", "flutter-security-review"),
-        ("writing-for-agents", "flutter-core-architecture"),
-    }
-    STACK_RATCHET: set[str] = {
-        "ask-kit", "code-review", "codebase-explorer", "diagnose-bug", "domain-glossary",
-        "engineering-principles", "explain", "fk-build", "fk-change", "fk-plan", "fk-release",
-        "fk-setup", "grill", "merge-conflicts", "plan-change", "pr", "retro", "setup-ci",
-        "setup-wizard", "solution-architect", "spec-for-cheap-executor", "takeover-audit", "tdd",
-        "to-spec", "triage-executor-bugs", "verify", "writing-for-agents",
-    }
     kits = json.loads((ROOT / "kits.json").read_text())["kits"]
     owner: dict[str, str] = {}
     for kit, parts in kits.items():
@@ -626,21 +578,18 @@ def main() -> int:
                  else [agent_files[n]] if n in agent_files else [])
         for f in files:
             text = f.read_text()
-            for target in re.findall(r"Skill tool with `([a-z0-9-]+)`", text):
+            for target in re.findall(r"Skill\s+tool\s+with\s+`([a-z0-9-]+)`", text):
                 if target != n and owner.get(target, kit) != kit:
                     edges.add((n, target))
             if kit == "product-engineer" and STACK.search(text):
                 stacky.add(n)
-    for caller, target in sorted(edges - EDGE_RATCHET):
+    for caller, target in sorted(edges):
         FAIL.append(f"{caller} ({owner[caller]}) calls {target} ({owner[target]}) across kits")
-    for n in sorted(stacky - STACK_RATCHET):
+    for n in sorted(stacky):
         FAIL.append(f"{n} is in product-engineer but names a stack; reach it through project-stack")
-    for caller, target in sorted(EDGE_RATCHET - edges):
-        FAIL.append(f"ratchet: {caller} → {target} no longer crosses kits; remove it from EDGE_RATCHET")
-    for n in sorted(STACK_RATCHET - stacky):
-        FAIL.append(f"ratchet: {n} is stack-free now; remove it from STACK_RATCHET")
-    check("23.", f"{len(kits)} kits own every skill, agent and hook; "
-                 f"{len(EDGE_RATCHET)} cross-kit calls and {len(STACK_RATCHET)} stack-naming skills left")
+    pe = sum(1 for k in owner.values() if k == "product-engineer")
+    check("23.", f"{len(kits)} kits own every skill, agent and hook; no call crosses them, and "
+                 f"product-engineer's {pe} skills and agents name no stack")
 
     print()
     if FAIL:

@@ -28,8 +28,8 @@ wizard, that stops being tribal knowledge and becomes a script the next project 
 ### 1. Scope the procedure
 
 Read the repo before asking anything. A gitignored `.env` and any `.env.example`, the generated
-secret files, the flavor script, `android/app/build.gradle.kts`, the iOS config, the integrations
-table in `docs/agents/project.md`, and any CI workflow — every secret reference in CI is a value the
+secret files, the build-flavour script, each platform's native build config, the integrations table
+in `docs/agents/project.md`, and any CI workflow — every secret reference in CI is a value the
 wizard must produce.
 
 Then show the user the ordered stages and the values each produces, and confirm. They may add, drop,

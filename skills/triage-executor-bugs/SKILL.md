@@ -81,9 +81,9 @@ Collapse symptoms into root causes. Five bug reports are frequently one cause.
 ```markdown
 | Cluster | Root cause | Symptoms | Sites | Origin |
 |---------|-----------|----------|-------|--------|
-| C1 | `OrderStatusChip` never wired into 3 of 4 states | B1, B2, B5 | 3 | spec-defect (§5.2–5.4 said "and similarly") |
-| C2 | `orElse` omitted from `firstWhere` | B3 | 1 | executor-slip (§7 gave the guard verbatim) |
-| C3 | Chip clips at 320dp width | B4 | 1 | unknowable (not in §5 mockups) |
+| C1 | `statusChip` never wired into 3 of 4 states | B1, B2, B5 | 3 | spec-defect (§5.2–5.4 said "and similarly") |
+| C2 | List lookup with no not-found guard | B3 | 1 | executor-slip (§7 gave the guard verbatim) |
+| C3 | Chip clips on a 320-wide screen | B4 | 1 | unknowable (not in §5 mockups) |
 ```
 
 Cluster **before** routing. A per-bug routing decision will send three symptoms of one cause
@@ -110,7 +110,8 @@ judgment beats yours: they know whether more bugs are coming.
 ### 4a — Inline fixes (Route A)
 
 Fix directly. For each, add a regression test that **fails before** the fix and passes after,
-following §10.1 of the spec template. Run `flutter analyze` and `flutter test`.
+following §10.1 of the spec template. Call the Skill tool with `project-stack` for the component's
+Check and Test commands, and run both.
 
 ### 4b — Fix doc (Route B)
 
@@ -155,7 +156,7 @@ Close with:
 
 - Cluster table: root cause → symptoms → route → status
 - Files changed inline; fix docs written; spec sections amended
-- Test results (`flutter analyze`, `flutter test`) — state failures plainly, with output
+- Test results (the Check and Test commands) — state failures plainly, with output
 - Any bug you could **not** reproduce, and what you need to proceed
 - Whether anything was promoted into the audit checklist
 
