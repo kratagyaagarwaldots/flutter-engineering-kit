@@ -291,8 +291,9 @@ def main() -> int:
             FAIL.append(f"README never names harness '{h['name']}'")
     check("14.", "README documents the user-level install for every harness")
 
-    # 15. The remote installer downloads and delegates: it fetches a pinned tarball and runs
-    #     that tree's scripts/kit.py, so it never names a skill and cannot drift from the kit.
+    # 15. The remote installer downloads and delegates: it fetches the latest release's tarball
+    #     and runs that tree's scripts/kit.py, so it never names a skill and cannot drift from
+    #     the kit. Its fallback, used when the lookup fails, is held to the current version.
     installer = ROOT / "install.sh"
     if not installer.exists():
         FAIL.append("install.sh missing")
@@ -300,9 +301,13 @@ def main() -> int:
         FAIL.append("install.sh is not executable")
     else:
         installer_text = installer.read_text()
-        for marker in ("scripts/kit.py", "codeload", "DEFAULT_VERSION", "mktemp", "current"):
+        for marker in ("scripts/kit.py", "codeload", "latest_tag", "mktemp", "current"):
             if marker not in installer_text:
                 FAIL.append(f"install.sh never mentions '{marker}'")
+        plugin_version = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["version"]
+        fallback = re.search(r'^FALLBACK_VERSION="v([\d.]+)"', installer_text, re.M)
+        if not fallback or fallback.group(1) != plugin_version:
+            FAIL.append(f"install.sh FALLBACK_VERSION is not v{plugin_version} (plugin.json's version)")
         for name in skills:
             if re.search(rf"\b{re.escape(name)}\b", installer_text):
                 FAIL.append(f"install.sh names skill '{name}' — it must delegate, not duplicate")
@@ -319,7 +324,10 @@ def main() -> int:
         user_hook = {"matcher": "Bash", "hooks": [{"type": "command", "command": "mine.sh"}]}
         (home / ".config/opencode/opencode.json").write_text(json.dumps(user_oc))
         (home / ".codex/hooks.json").write_text(json.dumps({"hooks": {"PreToolUse": [user_hook]}}))
-        env = {**os.environ, "HOME": str(home), "FLUTTER_KIT_SKIP_CLI": "1"}
+        version = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["version"]
+        # KIT_LATEST stands in for the GitHub tag lookup, so nothing here touches the network.
+        env = {**os.environ, "HOME": str(home), "FLUTTER_KIT_SKIP_CLI": "1",
+               "KIT_LATEST": f"v{version}"}
         env.pop("FLUTTER_KIT_HOME", None)
         kit = [sys.executable, str(ROOT / "scripts/kit.py")]
         everyone = "codex,opencode,antigravity,cursor"
@@ -387,6 +395,23 @@ def main() -> int:
             FAIL.append(f"install.sh bootstrap failed: {(r.stderr or r.stdout).strip()[:300]}")
         elif not (kithome / "current/scripts/kit.py").exists() or not (kithome / "bin/kit").exists():
             FAIL.append("install.sh did not lay out ~/.flutter-kit/{current,bin/kit}")
+        else:
+            # `kit update` reinstalls the newer release for the harnesses already installed,
+            # and does nothing when the installed version is the latest.
+            launcher = [str(kithome / "bin/kit"), "update"]
+            r = subprocess.run(launcher, capture_output=True, text=True,
+                               env={**boot_env, "KIT_LATEST": "v99.0.0"})
+            record = json.loads((kithome / "installed.json").read_text())
+            if r.returncode != 0:
+                FAIL.append(f"kit update failed: {(r.stderr or r.stdout).strip()[:300]}")
+            elif (kithome / "current").resolve() != (kithome / "versions/v99.0.0").resolve():
+                FAIL.append("kit update did not point ~/.flutter-kit/current at the new release")
+            elif list(record["harnesses"]) != ["cursor"]:
+                FAIL.append(f"kit update changed the installed harnesses: {list(record['harnesses'])}")
+            r = subprocess.run(launcher, capture_output=True, text=True,
+                               env={**boot_env, "KIT_LATEST": "v0.0.1"})
+            if r.returncode != 0 or "is the latest release" not in r.stdout:
+                FAIL.append("kit update did not report an up-to-date install as current")
 
     # The shared hook answers each harness in its own shape and fails open.
     hook = [sys.executable, str(ROOT / "hooks/kit-hook.py")]
@@ -400,7 +425,7 @@ def main() -> int:
     r = subprocess.run([*hook, "claude", "secrets"], input="not json", capture_output=True, text=True)
     if r.returncode != 0 or r.stdout.strip():
         FAIL.append("kit-hook.py does not fail open on a garbage payload")
-    check("16.", "kit install/doctor/uninstall, install.sh and kit-hook.py pass a functional test")
+    check("16.", "kit install/update/doctor/uninstall, install.sh and kit-hook.py pass a functional test")
 
     # 17. Functional plugin test. Check 13 only greps for the right tool ids, which
     #     cannot tell whether the hooks fire. The ids are the whole trap: the shell

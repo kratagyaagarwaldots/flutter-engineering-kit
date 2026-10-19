@@ -63,6 +63,18 @@ user chose to skip it.
 - If a project still has a `.opencode/`, `.cursor/` or `.claude/` copy of the kit from an older
   version, `~/.flutter-kit/bin/kit clean-project <path>` removes the kit's files from it and keeps
   the project's own.
+- To update later, run `~/.flutter-kit/bin/kit update`. It installs the latest release for the
+  same harnesses and lists what changed.
+
+## Updating
+
+```bash
+~/.flutter-kit/bin/kit update
+```
+
+It installs the newest release for every harness already installed, prints the changelog entries
+since the installed version, and reminds the user to restart. A **Migration** line in that output
+names a step for projects set up before that release.
 
 ## Removing it
 

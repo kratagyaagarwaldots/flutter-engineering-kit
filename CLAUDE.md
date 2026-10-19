@@ -126,4 +126,10 @@ registry. `.github/workflows/pages.yml` runs it on every push to `main`. Edit
 ## Versioning
 
 Bump `version` in `.claude-plugin/plugin.json` when skill behaviour changes, so a project can tell
-which kit it is running.
+which kit it is running, and set `FALLBACK_VERSION` in `install.sh` to match in the same commit
+(check 15 holds this). Add the CHANGELOG entry, with a **Migration** line for anything a project
+set up earlier must do.
+
+A release is a `vX.Y.Z` tag. `install.sh` and `kit update` install the highest tag, so pushing a tag
+releases to every non-Claude harness. Claude Code users get the plugin from `main` directly, so
+`main` takes only release-ready merges; work lands on a branch first.

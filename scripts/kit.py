@@ -3,6 +3,7 @@
 
     kit install --for codex,opencode      install for these harnesses
     kit install --detect                  install for every harness found on this machine
+    kit update                            install the latest release for the same harnesses
     kit doctor                            show what each harness will see
     kit uninstall [--for codex]           remove exactly what was installed (default: all)
     kit clean-project /path/to/app        remove an old per-project mirror (.opencode/.cursor/.claude)
@@ -20,7 +21,8 @@ skill picks models the user can actually reach and saves them with `kit models s
 writes ~/.flutter-kit/models.json and re-pins every installed harness.
 
 Environment: FLUTTER_KIT_HOME (default ~/.flutter-kit), HOME (tests point it elsewhere),
-FLUTTER_KIT_SKIP_CLI=1 (never shell out to `claude`; tests set it).
+FLUTTER_KIT_SKIP_CLI=1 (never shell out to `claude`; tests set it), KIT_LATEST (the tag to treat
+as the latest release, skipping the GitHub lookup; tests set it).
 """
 
 from __future__ import annotations
@@ -33,6 +35,7 @@ import re
 import shutil
 import subprocess
 import sys
+import urllib.request
 
 KIT = pathlib.Path(__file__).resolve().parent.parent
 REGISTRY = json.loads((KIT / "install/harnesses.json").read_text())
@@ -61,6 +64,29 @@ def kit_ref() -> pathlib.Path:
     if current.is_symlink() and current.resolve() == KIT:
         return current
     return KIT
+
+
+def kit_version() -> str:
+    return json.loads((KIT / ".claude-plugin/plugin.json").read_text())["version"]
+
+
+def semver(v: str) -> tuple[int, ...]:
+    return tuple(int(x) for x in v.lstrip("v").split("."))
+
+
+def latest_tag() -> str | None:
+    """The highest vX.Y.Z tag on GitHub, or None when it cannot be reached. install.sh
+    resolves the same way, so a fresh install and `kit update` land on the same release."""
+    if os.environ.get("KIT_LATEST"):
+        return os.environ["KIT_LATEST"]
+    url = f"https://api.github.com/repos/{REGISTRY['repo']}/tags?per_page=100"
+    try:
+        with urllib.request.urlopen(url, timeout=10) as r:
+            tags = [t["name"] for t in json.load(r)]
+    except Exception:
+        return None
+    vs = [t for t in tags if re.fullmatch(r"v\d+\.\d+\.\d+", t)]
+    return max(vs, key=semver) if vs else None
 
 
 def frontmatter(text: str) -> tuple[str, str]:
@@ -547,8 +573,11 @@ def install_one(hid: str, built: pathlib.Path) -> dict:
             notes.append(f"{len(written)} agent(s) pinned to your configured models in ~/.claude/agents")
         cli = shutil.which("claude")
         if cli and not os.environ.get("FLUTTER_KIT_SKIP_CLI"):
+            marketplace = REGISTRY["plugin"].split("@", 1)[1]
             for args in (["plugin", "marketplace", "add", REGISTRY["repo"]],
-                         ["plugin", "install", REGISTRY["plugin"]]):
+                         ["plugin", "install", REGISTRY["plugin"]],
+                         ["plugin", "marketplace", "update", marketplace],
+                         ["plugin", "update", REGISTRY["plugin"]]):
                 r = subprocess.run([cli, *args], capture_output=True, text=True)
                 if r.returncode != 0 and "already" not in (r.stdout + r.stderr).lower():
                     notes.append(f"`claude {' '.join(args)}` failed: {(r.stderr or r.stdout).strip()[:200]}")
@@ -654,7 +683,7 @@ def install(ids: list[str]) -> None:
         raise SystemExit(f"unknown harness: {', '.join(unknown)} (choose from {', '.join(HARNESSES)})")
     if not ids:
         raise SystemExit("nothing to install: pass --for <harness,...> or --detect")
-    version = json.loads((KIT / ".claude-plugin/plugin.json").read_text())["version"]
+    version = kit_version()
     built = build_skills()
     record = load_record()
     record.update({"version": version, "kit": str(kit_ref())})
@@ -670,12 +699,50 @@ def install(ids: list[str]) -> None:
     print("Check the result any time with: kit doctor")
 
 
+def update() -> int:
+    """Install the latest release for every harness already installed, through that
+    release's own install.sh, then show what changed since the installed version."""
+    record = load_record()
+    ids = [h for h in HARNESSES if h in record["harnesses"]]
+    if not ids:
+        raise SystemExit("nothing installed yet: run the install line from the README first")
+    old = record.get("version") or kit_version()
+    tag = latest_tag()
+    if not tag:
+        raise SystemExit("could not reach GitHub to find the latest release; try again, or run "
+                         "install.sh --version vX.Y.Z")
+    if semver(tag) <= semver(old):
+        print(f"flutter-engineering-kit {old} is the latest release")
+        return 0
+    print(f"updating flutter-engineering-kit {old} → {tag.lstrip('v')}", flush=True)
+    r = subprocess.run(["bash", str(KIT / "install.sh"), "--version", tag,
+                        "install", "--for", ",".join(ids)])
+    if r.returncode != 0:
+        return r.returncode
+    changelog = STATE / "current/CHANGELOG.md"
+    if changelog.exists():
+        skipped = [s for s in re.split(r"(?m)^(?=## \d)", changelog.read_text())
+                   if re.match(r"## \d", s) and semver(s.split()[1]) > semver(old)]
+        if skipped:
+            print("\nWhat changed since " + old + ":\n")
+            print("".join(skipped).rstrip())
+    names = ", ".join(HARNESSES[i]["name"] for i in ids)
+    print(f"\nRestart {names} so it loads the new skills. A **Migration** line above means a "
+          "project set up before it needs that step.")
+    return 0
+
+
 # ---------------------------------------------------------------- doctor / clean-project
 
 def doctor() -> int:
     record, names, problems = load_record(), {d.name for d in skills()}, 0
     print(f"kit:      {KIT}")
     print(f"recorded: {RECORD if RECORD.exists() else 'nothing installed yet'}")
+    installed = record.get("version") or kit_version()
+    tag = latest_tag()
+    behind = bool(tag) and semver(tag) > semver(installed)
+    print(f"version:  {installed}" + (f"  (latest is {tag.lstrip('v')}: run `kit update`)" if behind
+                                      else "" if tag else "  (could not check for a newer release)"))
     m = load_models()
     print(f"models:   {'configured ' + m.get('configured', '') if m else 'not configured: sub-agents inherit the session model (ask your agent to configure models)'}")
     for hid, h in HARNESSES.items():
@@ -772,6 +839,7 @@ def main() -> int:
     u = sub.add_parser("uninstall")
     u.add_argument("--for", dest="harnesses", default="")
     sub.add_parser("doctor")
+    sub.add_parser("update")
     sub.add_parser("list")
     c = sub.add_parser("clean-project")
     c.add_argument("path")
@@ -793,6 +861,8 @@ def main() -> int:
         uninstall(ids)
     elif a.cmd == "doctor":
         return doctor()
+    elif a.cmd == "update":
+        return update()
     elif a.cmd == "list":
         found = set(detect())
         for hid, h in HARNESSES.items():

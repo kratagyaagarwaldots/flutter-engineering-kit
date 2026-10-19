@@ -18,8 +18,15 @@ A command for requests the planned process does not cover.
 - `ask-kit` routes plan-changing requests to `/fk-change`, and names it first when a change is open.
   `fk-sprint close` links the changes that ran during the sprint.
 
+- **`kit update`** installs the latest release for every harness already installed, prints the
+  changelog since the installed version, and asks for a restart. In Claude Code it also updates the
+  plugin. `kit doctor` shows the installed version and says when a newer one exists.
+- The install line now installs the **latest release** instead of a version written into the
+  script, so it no longer falls behind. `--version vX.Y.Z` still pins one.
+
 **Migration:** projects set up before 0.11.0 have no **Changes** heading in `docs/vault/index.md`;
-`/fk-change` adds it with its first note.
+`/fk-change` adds it with its first note. An install from before 0.11.0 has no `kit update`: run
+the install line once more.
 
 ## 0.10.0
 

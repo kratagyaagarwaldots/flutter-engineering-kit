@@ -84,6 +84,13 @@ Codex, opencode and Cursor read one shared folder, so installing for all three c
 shows up twice. `kit uninstall` removes exactly what was installed and keeps your own settings.
 `install/harnesses.json` is the registry of these paths.
 
+**Updating.** `kit update` installs the latest release for every harness you already have, then
+prints what changed since your version, including any **Migration** step a project needs. Restart
+the harness afterwards. In Claude Code, `/plugin` updates the plugin; `kit update` runs that too
+when `claude` is on your PATH. The install line always fetches the latest release; add
+`--version vX.Y.Z` to stay on one. Installed before `kit update` existed? Run the install line
+once more and it is there from then on.
+
 Upgrading from a kit version that copied itself into a project? `kit clean-project <path>` removes
 the old `.opencode/`, `.cursor/` or `.claude/` copy and keeps the project's own files.
 

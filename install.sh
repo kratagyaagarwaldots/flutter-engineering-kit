@@ -7,8 +7,10 @@ set -euo pipefail
 #   curl -fsSL .../install.sh | bash -s -- --detect        # every harness found on this machine
 #   curl -fsSL .../install.sh | bash -s -- uninstall       # remove it again
 #
+# Once installed, `kit update` fetches the latest release and reinstalls for the same harnesses.
+#
 # Flags it handles itself:
-#   --version vX.Y.Z   install that tag instead of the default pin (main tracks trunk)
+#   --version vX.Y.Z   install that tag instead of the latest release (main tracks trunk)
 # Everything else is passed to `kit` (scripts/kit.py): install --for/--detect, uninstall,
 # doctor, clean-project. With no command, `install` is assumed.
 #
@@ -17,13 +19,15 @@ set -euo pipefail
 # that version's own scripts/kit.py. This file carries no kit content, so it cannot drift
 # from what it installs. Pipe it through `less` instead of `bash` to read it first.
 #
-# Env: KIT_VERSION (same as --version), KIT_TARBALL_URL (full tarball URL, for mirrors and
-# tests), FLUTTER_KIT_HOME (default ~/.flutter-kit).
+# Env: KIT_VERSION (same as --version), KIT_LATEST (the tag to treat as the latest release,
+# skipping the lookup; tests and offline mirrors set it), KIT_TARBALL_URL (full tarball URL,
+# for mirrors and tests), FLUTTER_KIT_HOME (default ~/.flutter-kit).
 
 REPO="kratagyaagarwaldots/flutter-engineering-kit"
-DEFAULT_VERSION="v0.9.0"
+# Only used when the latest release cannot be looked up. Keep it on the newest tag.
+FALLBACK_VERSION="v0.11.0"
 
-VERSION="${KIT_VERSION:-$DEFAULT_VERSION}"
+VERSION="${KIT_VERSION:-}"
 STATE="${FLUTTER_KIT_HOME:-$HOME/.flutter-kit}"
 ARGS=()
 
@@ -36,13 +40,36 @@ while [ $# -gt 0 ]; do
 done
 
 case "${ARGS[0]:-}" in
-  install|uninstall|doctor|list|clean-project|models|loop) ;;
+  install|uninstall|doctor|list|clean-project|models|loop|update) ;;
   *) ARGS=(install "${ARGS[@]+"${ARGS[@]}"}") ;;
 esac
 
 for cmd in curl tar python3; do
   command -v "$cmd" >/dev/null 2>&1 || { echo "error: $cmd is required but not on PATH" >&2; exit 1; }
 done
+
+# The highest vX.Y.Z tag on GitHub, or nothing when it cannot be reached.
+latest_tag() {
+  if [ -n "${KIT_LATEST:-}" ]; then echo "$KIT_LATEST"; return; fi
+  curl -fsSL --max-time 10 "https://api.github.com/repos/$REPO/tags?per_page=100" 2>/dev/null \
+    | python3 -c '
+import json, re, sys
+try:
+    tags = [t["name"] for t in json.load(sys.stdin)]
+except Exception:
+    sys.exit(0)
+vs = [t for t in tags if re.fullmatch(r"v\d+\.\d+\.\d+", t)]
+print(max(vs, key=lambda t: tuple(map(int, t[1:].split(".")))) if vs else "")
+' || true
+}
+
+if [ -z "$VERSION" ]; then
+  VERSION="$(latest_tag)"
+  if [ -z "$VERSION" ]; then
+    VERSION="$FALLBACK_VERSION"
+    echo "warning: could not look up the latest release; installing $VERSION" >&2
+  fi
+fi
 
 tarball_url_for() {
   case "$1" in
