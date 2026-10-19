@@ -25,8 +25,11 @@ Read what you were given, then take the first row that fits.
 | A **new feature folder**, with or without its API yet, or a **fixture-mode feature** whose API now exists | Call the Skill tool with `flutter-scaffold-feature`. It picks real, fixture or upgrade mode from what exists, runs its own phases and gates, and returns here only for step 6. |
 | A change to **code that already exists** | Steps 1 to 6 below. |
 
-Where the user wants a cheaper model to do the build, tell them to run `/spec-for-cheap-executor`,
-which writes the task doc that model works from.
+Where the user wants a cheaper model to do the build, take the path above anyway and hand its
+mechanical slices to the build-role agents (step 2). Call the Skill tool with `configure-models`
+to choose that role's model. A sprint of tickets built unattended is `kit loop run`. Suggest
+`/spec-for-cheap-executor` only for work leaving the session with nobody reviewing it before it
+lands, such as another team: it spends hours of the strongest model to stand in for that review.
 
 The step is done when you have named the path and why, in one line, before writing any code.
 
@@ -49,6 +52,20 @@ slow enough that running it per slice is how people stop running it.
 
 Where a slice turns out to need a shape the sketch did not have, say so and call the Skill tool with
 `flutter-plan-change` again rather than working around it.
+
+Where a slice is mechanical once its shape is settled, hand it to the build-role agent that owns
+its layer: `flutter-state-engineer`, `flutter-repo-engineer` or `flutter-test-engineer`. Its brief
+carries four things, because they are what a cheaper model gets wrong when it has to infer them:
+
+| The brief carries | Because the agent otherwise |
+|---|---|
+| The files to create and modify, and the near-duplicates to leave alone | Tidies code it was not asked to touch |
+| Each thing the slice makes obsolete, and an `rg` command that must print nothing once it is gone | Adds the new code and leaves the old in place |
+| The test that fails now and passes after the slice, with its current failure message | Reports a no-op as done |
+| Which outcomes are normal and which mean failure, such as an empty list or zero rows written | Treats a silent early return as success |
+
+Read the agent's diff and run the slice's tests yourself before starting the next slice. Your
+check catches what the brief did not, which is why the brief can stay this short.
 
 ## 3. Gate
 

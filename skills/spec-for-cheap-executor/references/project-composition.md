@@ -4,6 +4,10 @@ The generated doc must **name** the project's existing machinery so the cheap ex
 the project's conventions instead of re-deriving them. Naming a skill is a one-line instruction
 that replaces two pages of restated convention — and it stays correct when the convention changes.
 
+Skills and agents reach only an executor running with the kit installed. Where it has no kit,
+cite only what lives in the repo it works on, meaning `CLAUDE.md` and the rule files, and let §11
+carry the rest.
+
 Three ways to cite, in order of preference:
 
 1. **Invoke** — "Call the Skill tool with `flutter-write-tests` before step 6."

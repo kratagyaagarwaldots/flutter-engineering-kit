@@ -3,6 +3,20 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.9.2
+
+`spec-for-cheap-executor` is now only for work that leaves the session with nobody reviewing it
+before it lands. Inside the kit, a cheaper model builds through the agents and the loop, where a
+check after the work is far cheaper than a spec that removes every guess up front.
+
+- `spec-for-cheap-executor` opens with a gate: a kit agent routes to `/fk-build`, a sprint to
+  `kit loop run`, and a change the doc would mostly write out to building it directly. It cites
+  kit skills and agents only where the executor has the kit.
+- `fk-build` stops sending "use a cheaper model" to the spec. It hands mechanical slices to the
+  build-role agents with a four-part brief (scope, obsolete code with an `rg` proof, a test that
+  fails first, normal and failing outcomes) and checks each diff itself.
+- `ask-kit` routes cheaper builds to `configure-models`, and the spec only to outside handoffs.
+
 ## 0.9.1
 
 Sync with [pstack](https://github.com/cursor/plugins/tree/main/pstack) (Lauren Tan, MIT) from

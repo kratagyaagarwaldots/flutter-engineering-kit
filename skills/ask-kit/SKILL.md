@@ -33,7 +33,7 @@ only has to know where they are.
 | Situation | Command |
 |---|---|
 | Long branch, context about to reset | `/handoff` |
-| Handing a task to a cheaper model | `/spec-for-cheap-executor` |
+| Handing a task to another team, or a tool someone else runs, with no review before it lands | `/spec-for-cheap-executor` |
 | Prose a client will read | `/unslop` |
 
 ## Reached through the commands
@@ -48,7 +48,7 @@ Route to one directly when the person wants that single step and nothing around 
 | Cut modules into pointed tickets | `project-backlog` | `/fk-plan`, `/fk-feedback` |
 | File, move or report on tickets and sprints | `project-tracker` | every command |
 | What the project remembers, and where a fact goes | `project-memory` | every command |
-| Which model each kind of agent work runs on, and what it costs | `configure-models` | installing, `/fk-sprint close` |
+| Which model each kind of agent work runs on, what it costs, or putting builds on a cheaper model | `configure-models` | installing, `/fk-sprint close` |
 | A decision only the client can make | `client-questionnaire` | `/fk-plan` |
 | Settle requirements by interview | `grill` | `/fk-plan` |
 | Terms mean different things to you and the client | `domain-glossary` | `/fk-plan` |

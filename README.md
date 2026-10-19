@@ -319,8 +319,9 @@ Commands for moving work between sessions and models, and for prose others will 
 
 - **[handoff](./skills/handoff/SKILL.md)**: Compact the current conversation into a handoff document
   another session can pick up.
-- **[spec-for-cheap-executor](./skills/spec-for-cheap-executor/SKILL.md)**: Turn a feature request
-  into one self-contained task doc a cheaper model can execute end to end.
+- **[spec-for-cheap-executor](./skills/spec-for-cheap-executor/SKILL.md)**: Write one
+  self-contained task doc for work that leaves this session with nobody reviewing it before it
+  lands, such as another team or a model in a tool someone else runs.
 - **[unslop](./skills/unslop/SKILL.md)**: Cut AI tells from any writing. Must always apply.
 
 ### Deliver

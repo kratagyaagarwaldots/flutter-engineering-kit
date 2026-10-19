@@ -1,20 +1,38 @@
 ---
 name: spec-for-cheap-executor
-description: Turn a feature request into one self-contained task doc a cheaper model can execute end to end.
+description: Write one self-contained task doc for work that leaves this session with nobody reviewing it before it lands, such as another team or a model in a tool someone else runs.
 disable-model-invocation: true
 ---
 
 # Spec for a Cheap Executor
 
 You are the expensive model. You do **all** of the thinking, once. The doc you produce is
-executed by a **cheaper, less capable model** that has no context on this project, no access
-to the user, and no ability to make a design call.
+executed by a **cheaper, less capable model** (or a person) that has no context on this project,
+no access to the user, and no ability to make a design call.
 
 > **The bar:** a competent-but-literal executor applies this doc end to end and gets the
 > intended result. **Anywhere it would have to guess, the doc is not finished.**
 
 The doc is the only artifact the executor sees. It never sees this conversation, the
 requirements discussion, or your reasoning. Write nothing that depends on them.
+
+## Gate — is this the right tool?
+
+The doc front-loads every decision because nobody will be there to catch a wrong guess
+afterwards. That costs hours of the strongest model, and it pays only when the executor really is
+on its own. Where someone checks the work after it is done, checking is far cheaper than this.
+
+Take the first row that fits:
+
+| The executor | Route |
+|---|---|
+| A kit agent in this session | Tell the user to run `/fk-build`. It hands mechanical slices to the build-role agents and checks each one; `configure-models` sets how cheap that role's model is. |
+| A sprint of tickets, built unattended | Tell the user to run `kit loop run`. Its reviewer and CI catch what a builder gets wrong, and the builder starts on the cheapest model in its ladder. |
+| Anyone, for a change small enough that the doc would hold most of its final code | Tell the user that specifying it costs more than writing it, and offer to build it here. |
+| A team, a teammate, or a model in a tool someone else runs, with no review before it lands | This skill. Continue to Phase 0. |
+
+The gate is done when you have named the row and why, in one line. On any row but the last, stop
+there.
 
 ## The executor you are writing for
 
@@ -46,6 +64,8 @@ Establish, asking only for what you genuinely cannot determine from the repo:
 - [ ] Files/areas that must **not** be touched
 - [ ] Existing docs in `docs/tasks/` that this one overlaps or contradicts → Phase 4 becomes mandatory
 - [ ] Which model executes it (affects verbosity, not rigour — assume a small, fast model if unstated)
+- [ ] Whether the executor has the kit installed, which decides what the doc can cite (see
+      [references/project-composition.md](references/project-composition.md))
 
 Produce the Scope Box (template §1) now. Everything later is checked against it.
 
@@ -141,6 +161,7 @@ next spec prevents them.
 - **The doc is self-contained.** No "see the conversation", no ticket links as the only source
   of a requirement, no unexplained project jargon.
 - **Name the project's skills, agents and rules explicitly** (`/flutter-write-tests`, the
-  `flutter-state-engineer` agent, `.claude/rules/flutter-bloc.md`) rather than restating them.
+  `flutter-state-engineer` agent, `.claude/rules/flutter-bloc.md`) rather than restating them,
+  citing skills and agents only where the executor has the kit.
 - **Verification is executable** — real commands, exact assertions, and at least one test that
   must **fail before** a named step and **pass after** it.
