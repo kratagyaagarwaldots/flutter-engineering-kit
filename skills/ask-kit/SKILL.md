@@ -36,6 +36,10 @@ Say the stage in one line, with the file that decided it. Then:
 - **The request jumps the order on purpose:** route it directly. Feedback from a client or tester
   is `/fk-feedback` at any stage, shipping is `/fk-release`, and a project not run as a delivery
   project (no `proposal.md`) skips stages 2 to 4: one change goes to `/fk-plan` or `/fk-build`.
+- **The request changes the plan itself:** a detour mid-sprint, a new data store, a rework of the
+  design language or of how the app is built. That is `/fk-change`, which maps what the request
+  alters and updates each plan and ticket in order. Where `docs/vault/changes/` holds an open
+  note, the project is mid-change: name `/fk-change` to resume it before anything else.
 
 ## 2. The commands
 
@@ -48,6 +52,7 @@ Each calls the right skills in the right order, so the person only has to know w
 | A backlog to schedule, a sprint to check on, a build to gate, a sprint to close, or UAT | `/fk-sprint` |
 | A spec, sketch or ticket (`#N`) ready to build, including a new feature from a design | `/fk-build` |
 | Feedback has come back from a client or tester | `/fk-feedback` |
+| A detour, or a change to how the app is built, that the plan did not foresee | `/fk-change` |
 | About to ship: store submission, tester build, or a backend cutover | `/fk-release` |
 | A round of work finished, and the next one should be shorter | `/retro` |
 

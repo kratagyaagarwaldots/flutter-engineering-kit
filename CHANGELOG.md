@@ -3,6 +3,24 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.11.0
+
+A command for requests the planned process does not cover.
+
+- **`/fk-change`**, the seventh `fk-` command. It states what will be true when the change is done,
+  maps which plans it alters (architecture, design language, glossary, scope, open tickets, the
+  sprint, code already built), gives each open ticket it touches a verdict (keep, rewrite, block on
+  the change's tracer, supersede), and sizes it as a detour or a re-plan. After the user confirms
+  the map, it changes each document through its owner in order: decision, then record, then
+  tickets. It then makes room in the sprint or offers the re-plan.
+- Each change gets a note at `docs/vault/changes/NN-<slug>.md`, which the vault index's **Now**
+  line points at while it is open, so a change that spans sessions resumes where it stopped.
+- `ask-kit` routes plan-changing requests to `/fk-change`, and names it first when a change is open.
+  `fk-sprint close` links the changes that ran during the sprint.
+
+**Migration:** projects set up before 0.11.0 have no **Changes** heading in `docs/vault/index.md`;
+`/fk-change` adds it with its first note.
+
 ## 0.10.0
 
 Planning now has an order you can see, and a feature list to plan sprints from.

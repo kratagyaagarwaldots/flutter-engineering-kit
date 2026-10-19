@@ -42,12 +42,14 @@ lib/
 
 ## Skills
 
-Six commands carry the work, and every other skill is reached through them:
+Seven commands carry the work, and every other skill is reached through them:
 
 - `/fk-plan`: write the proposal and backlog, or settle one requirement into a spec, before any code.
 - `/fk-sprint`: plan a sprint, report on it, gate its build through QA, close it, or run UAT.
 - `/fk-build`: build a ticket or spec to a reviewed, proven commit.
 - `/fk-feedback`: sort client or tester feedback into bugs, change requests and questions.
+- `/fk-change`: a detour or a change to how the app is built, mid-plan: update the plans and tickets
+  it affects, in order.
 - `/fk-release`: prove the release is safe, confirm CI, produce the store pack.
 - `/fk-setup`: re-run only to reconfigure this project.
 

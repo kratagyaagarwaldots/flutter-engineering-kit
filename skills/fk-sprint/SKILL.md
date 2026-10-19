@@ -107,8 +107,8 @@ the user to run `/fk-release` with a tester group as the target. A fail goes bac
 2. For each unfinished ticket, ask whether it carries into the next sprint or goes back to the
    backlog. Recommend carrying it when it serves the next goal.
 3. Write the Review section of the sprint note: the features finished, by ID, as outcomes a user
-   would notice; what did not finish, and why; the feedback rounds that came in, linked;
-   the velocity.
+   would notice; what did not finish, and why; the feedback rounds and changes that came in,
+   linked; the velocity.
 4. Call the Skill tool with `project-tracker` to move the unfinished tickets, close the milestone and
    record the velocity.
 5. Call the Skill tool with `project-memory` to consolidate the vault.

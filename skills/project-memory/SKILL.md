@@ -34,6 +34,7 @@ line that bears on the task in front of you.
 | One module: purpose, design frames, decisions local to it | `modules/<slug>.md` | `project-backlog`, then any session working in it |
 | One sprint: goal, dates, committed tickets, QA, review | `sprints/sprint-NN.md` | `/fk-sprint` |
 | One round of client or tester feedback, verbatim, and its triage | `feedback/round-NN.md` | `/fk-feedback` |
+| One change to the plan: what it alters, ticket verdicts, its steps | `changes/NN-<slug>.md` | `/fk-change` |
 | An inherited codebase's audit | `audit.md` | `takeover-audit` |
 | What one session did, decided and left | `log/YYYY-MM-DD-<slug>.md` | the session itself |
 

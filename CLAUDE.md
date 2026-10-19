@@ -55,7 +55,7 @@ that skill is restructured, never add one. A new skill needing stack-specific co
   user-invoked and therefore cannot be called at all. That is the one sanctioned cross-link, and it
   is why `triage-executor-bugs` links into `spec-for-cheap-executor/references/`. Anywhere the owner
   is model-invoked, call it instead.
-- The command surface is fixed: `ask-kit`, the six `fk-` commands, `retro`, and the tools
+- The command surface is fixed: `ask-kit`, the seven `fk-` commands, `retro`, and the tools
   `handoff`, `unslop` and `spec-for-cheap-executor`. Every other skill is model-invoked and reached
   through a command. Check 19 holds the list.
 - Nothing calls a user-invoked skill. A user-invoked skill is reachable only by a human typing it,

@@ -457,7 +457,7 @@ def main() -> int:
     #     know about, and the kit's promise is that there are few of them. A new workflow becomes
     #     a step one of these calls; adding a command means changing this list on purpose.
     COMMANDS = {"ask-kit", "fk-setup", "fk-plan", "fk-sprint", "fk-build", "fk-feedback",
-                "fk-release", "retro"}
+                "fk-change", "fk-release", "retro"}
     TOOLS = {"handoff", "unslop", "spec-for-cheap-executor"}
     user_skills = {n for n, u in skills.items() if u}
     for extra in sorted(user_skills - COMMANDS - TOOLS):

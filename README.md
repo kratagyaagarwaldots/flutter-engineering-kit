@@ -224,6 +224,7 @@ your own product alike; a one-off change needs only the loop above.
 | 5 | Test the merged build before it leaves the team | `/fk-sprint qa` |
 | 6 | Send the build to the client or testers | `/fk-release` |
 | 7 | Sort what comes back into bugs, change requests and questions | `/fk-feedback` |
+| ‒ | Off the plan at any point: a detour, a new data store, a design rework | `/fk-change` |
 | 8 | Close the sprint, record its velocity, improve the kit | `/fk-sprint close`, `/retro` |
 | 9 | Acceptance testing, then the store | `/fk-sprint uat`, `/fk-release` |
 
@@ -318,6 +319,10 @@ The work starts here. Every other skill is reached through one of these.
 - **[fk-feedback](./skills/fk-feedback/SKILL.md)**: Sort a round of client or tester feedback into
   bugs, change requests and questions against the agreed proposal, file each one, and draft the
   reply.
+- **[fk-change](./skills/fk-change/SKILL.md)**: Take a request the planned process does not
+  cover, such as a detour mid-sprint, a new data store or a rework of the design language, map
+  which plans and tickets it changes, and update each through its owner in order so the backlog and
+  the sprint still describe the app being built.
 - **[fk-release](./skills/fk-release/SKILL.md)**: Get a build ready to ship: find what it could
   break and prove the fact its safety rests on, confirm CI gates it, and produce or refresh the
   store submission pack.

@@ -21,6 +21,8 @@ this folder is linked from here.
 
 ## Feedback rounds
 
+## Changes
+
 ## Log
 
 One file per session in [log/](log/), never edited after it is written.
