@@ -3,7 +3,7 @@
   "roles": {
     "explore": {
       "needs": "Reliable tool calls and a large context window; almost no judgement. Runs constantly, so the cheapest model that searches well.",
-      "agents": ["flutter-explore"]
+      "agents": ["codebase-explorer"]
     },
     "build": {
       "needs": "Strong at code and at multi-step tool use: edits, runs the analyzer and tests, reads the failures, fixes. The loop's builder and fixer, so it carries most of the volume.",
@@ -11,7 +11,7 @@
     },
     "judge": {
       "needs": "The best judgement available: design decisions, a screen built from an underspecified design, root causes, and the escalated review of a one-way door. Rare, so quality first.",
-      "agents": ["flutter-architect", "flutter-ui-engineer"]
+      "agents": ["solution-architect", "flutter-ui-engineer"]
     },
     "review": {
       "needs": "Reads a diff against acceptance criteria and standards and finds what is wrong. A different model family from build, so the two do not share blind spots.",

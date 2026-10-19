@@ -78,7 +78,7 @@ Extract every recurring color/size to `AppColors` / `AppDimensions`.
 
 ## Screen wiring
 
-Call the Skill tool with `project-conventions` for the Logic seam row, then read the matching
+Call the Skill tool with `flutter-supabase-conventions` for the Logic seam row, then read the matching
 template for how the page provides state and how the view reads it.
 
 | Logic seam | Template |

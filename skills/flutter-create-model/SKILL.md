@@ -10,7 +10,7 @@ frames later in a widget.
 
 ## Resolve the mechanism first
 
-Call the Skill tool with `project-conventions` for the Serialization row, then read the matching
+Call the Skill tool with `flutter-supabase-conventions` for the Serialization row, then read the matching
 template. The field mapping and the rules below hold either way; only the mechanism differs.
 
 | Serialization | Template |

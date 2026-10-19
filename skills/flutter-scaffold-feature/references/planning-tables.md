@@ -59,7 +59,7 @@ Head the table **inferred — confirm on API integration**.
 
 Map named design variables first, then every remaining raw value. Each row either reuses an existing
 `App*` constant or names the one Phase 2 adds. Sizes are written in the project's sizing strategy
-(`project-conventions`); in the kit's default that is a named `AppDimensions` token in logical
+(`flutter-supabase-conventions`); in the kit's default that is a named `AppDimensions` token in logical
 pixels, and font sizes stay unscaled so the OS text-scale setting still applies.
 
 | Design property | Value | Flutter | Constant |

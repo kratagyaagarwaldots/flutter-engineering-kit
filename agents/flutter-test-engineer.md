@@ -21,7 +21,7 @@ Read freely from `lib/features/{feature_name}/` and `lib/core/`.
 
 ## Method
 
-1. Call the Skill tool with `project-conventions` for the test tooling: the logic-test tool, the
+1. Call the Skill tool with `flutter-supabase-conventions` for the test tooling: the logic-test tool, the
    mocking library and the widget-test wrapper.
 2. Call the Skill tool with `flutter-core-architecture` for the shared test helpers and the barrel
    import.
@@ -40,7 +40,7 @@ Apply the conventions in the project's root `CLAUDE.md` or `AGENTS.md`.
 
 ```
 test/features/{feature_name}/
-├── <state-layer folder>/   # named by project-conventions
+├── <state-layer folder>/   # named by flutter-supabase-conventions
 ├── repo/{feature_name}_repository_test.dart
 └── widget/{feature_name}_page_test.dart
 ```
@@ -48,7 +48,7 @@ test/features/{feature_name}/
 ## Hard constraints
 
 - **Minimum 3 cases per handler**: happy / null / exception
-- Use the logic-test tool and mocking library `project-conventions` names
+- Use the logic-test tool and mocking library `flutter-supabase-conventions` names
 - Group tests by action: one `group` per action
 - Use `const` test data where possible
 - Variable prefixes: `mock`, `input`, `expected`, `actual`

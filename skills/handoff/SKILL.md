@@ -17,7 +17,7 @@ Include:
   the part a fresh session is most likely to relitigate.
 - **What was tried and abandoned**, and why. Without it the next session repeats it.
 - **Suggested skills.** Name which skills the next session should call, and for what.
-- **The verification state.** Which rung the work has been proven to, per `flutter-verify`, and what
+- **The verification state.** Which rung the work has been proven to, per `verify`, and what
   remains unproven.
 
 Do not restate what already lives somewhere durable — the spec, the acceptance criteria, an ADR, the

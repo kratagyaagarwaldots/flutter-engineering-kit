@@ -33,7 +33,7 @@ Every other skill cites that skill rather than restating them.
 
 **A skill never names a state-management library.** The project's stack is a project fact, so it
 lives in the Architecture table of `docs/agents/project.md`, and a skill reaches it by calling
-`project-conventions`. `flutter_bloc` is the kit's *default* for a greenfield repo, not its
+`flutter-supabase-conventions`. `flutter_bloc` is the kit's *default* for a greenfield repo, not its
 assumption.
 
 Where a skill genuinely needs per-stack code, it goes in `skills/<name>/templates/<stack>.md` and

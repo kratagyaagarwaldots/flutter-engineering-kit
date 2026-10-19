@@ -1,0 +1,34 @@
+{
+  "$comment": "Which future kit owns every skill, agent and hook check. This repo splits into two along this file: product-engineer (stack-free) and flutter-supabase (one stack). validate-kit.py check 23 holds the two independent: neither calls the other's skills, and product-engineer names no stack. product-engineer reaches a stack only through project-stack, which calls the stack kit's slot skills when they are installed.",
+  "kits": {
+    "product-engineer": {
+      "skills": [
+        "ask-kit", "client-questionnaire", "code-review", "configure-models", "diagnose-bug",
+        "domain-glossary", "engineering-principles", "explain", "fk-build", "fk-change",
+        "fk-feedback", "fk-plan", "fk-release", "fk-setup", "fk-sprint", "grill", "handoff",
+        "merge-conflicts", "plan-change", "pr", "project-backlog", "project-memory",
+        "project-proposal", "project-tracker", "release-readiness", "retro", "setup-ci",
+        "setup-wizard", "spec-for-cheap-executor", "takeover-audit", "tdd", "to-spec",
+        "triage-executor-bugs", "unslop", "verify", "writing-for-agents"
+      ],
+      "agents": ["codebase-explorer", "qa-engineer", "solution-architect"],
+      "hooks": ["secrets"]
+    },
+    "flutter-supabase": {
+      "skills": [
+        "flutter-accessibility", "flutter-build-failure", "flutter-core-architecture",
+        "flutter-create-model", "flutter-create-repository", "flutter-create-screen",
+        "flutter-create-state-layer", "flutter-design", "flutter-localization",
+        "flutter-modernize-screen", "flutter-navigation", "flutter-performance",
+        "flutter-scaffold-feature", "flutter-security-review", "flutter-supabase-conventions",
+        "flutter-upgrade-deps", "flutter-write-tests", "setup-integration-harness",
+        "store-compliance"
+      ],
+      "agents": [
+        "flutter-repo-engineer", "flutter-state-engineer", "flutter-test-engineer",
+        "flutter-ui-engineer", "store-doc-writer"
+      ],
+      "hooks": ["format", "fixtures"]
+    }
+  }
+}

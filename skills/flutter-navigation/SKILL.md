@@ -9,7 +9,7 @@ Route registration currently lives buried in a scaffolding phase, and the entry 
 a tap, meaning deep links and notification taps, have no owner at all. Those are the ones that break
 in production, because nobody exercises them by hand.
 
-Call the Skill tool with `project-conventions` for the Navigation row first. The three routers differ
+Call the Skill tool with `flutter-supabase-conventions` for the Navigation row first. The three routers differ
 enough that the wrong assumption produces code that compiles and never navigates.
 
 ## 1. Register the route

@@ -14,7 +14,7 @@ translate **actions + handlers + repository calls** into the project's logic sea
 
 ## Method
 
-1. Call the Skill tool with `project-conventions` for the Logic seam row. It names the stack and
+1. Call the Skill tool with `flutter-supabase-conventions` for the Logic seam row. It names the stack and
    the folder the state layer lives in.
 2. Call the Skill tool with `flutter-create-state-layer`. It owns the per-stack templates and the
    rules every stack shares.
@@ -23,7 +23,7 @@ translate **actions + handlers + repository calls** into the project's logic sea
 
 ## Scope
 
-Edit only the feature's state-layer folder, as `project-conventions` names it. Read freely from the
+Edit only the feature's state-layer folder, as `flutter-supabase-conventions` names it. Read freely from the
 feature's `repo/` and `model/` folders.
 
 ## Inputs expected from parent

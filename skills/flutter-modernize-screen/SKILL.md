@@ -29,7 +29,7 @@ Text(AppStrings.submit, style: TextStyle(color: AppColors.primary))
 
 ### 2. Move sizes into tokens
 
-Call the Skill tool with `project-conventions` for the Sizing strategy row, and follow it. On a
+Call the Skill tool with `flutter-supabase-conventions` for the Sizing strategy row, and follow it. On a
 project already using a scaling library, match the existing screens; the migration below is for the
 default strategy.
 
@@ -77,7 +77,7 @@ const SizedBox(height: 16)
 
 ### 5. setState to the project's state layer
 
-Call the Skill tool with `project-conventions` for the Logic seam row, then move the work behind it.
+Call the Skill tool with `flutter-supabase-conventions` for the Logic seam row, then move the work behind it.
 The move is the same in every stack: the widget stops owning the data and stops awaiting, and
 dispatches a named action instead.
 
@@ -241,7 +241,7 @@ Leave `// FIXTURE_START`, `// FIXTURE_END` and `/// FIXTURE:` markers exactly as
 A refactor is done when the screen renders identically and the migration is total. Prove both:
 
 - **Identical output.** A golden test captured before the change and passing after it, per
-  `flutter-verify` rung 4. Where no golden exists, say the visual match is unverified rather than
+  `verify` rung 4. Where no golden exists, say the visual match is unverified rather than
   implying you checked.
 - **No half-migration.** Every item 1 to 13 either applied or explicitly not applicable. A screen
   left between two patterns is worse than the one you started with, because the next reader cannot

@@ -1,5 +1,5 @@
 ---
-name: flutter-diagnose-bug
+name: diagnose-bug
 description: Disciplined diagnosis loop for hard Flutter bugs, jank, and regressions. Use when the user says diagnose or debug this, or reports something broken, throwing, failing, or slow.
 ---
 

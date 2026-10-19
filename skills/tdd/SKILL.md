@@ -1,5 +1,5 @@
 ---
-name: flutter-tdd
+name: tdd
 description: Build a change test-first: a failing test at a named seam, then the smallest code that passes it. Use when the user asks for test-driven development, red-green-refactor, a failing test first, or a regression test before a fix.
 ---
 
@@ -10,14 +10,14 @@ what the code happens to do. A test written afterwards passes because it was wri
 implementation in front of you, which is why it so rarely catches the bug you feared.
 
 This skill owns the loop and the seam choice. It owns no templates and no evidence rules: call the
-Skill tool with `flutter-write-tests` for the test shape, and with `flutter-verify` to report what
+Skill tool with `flutter-write-tests` for the test shape, and with `verify` to report what
 was proven. Where the target is an existing bug rather than new behaviour, call the Skill tool with
-`flutter-diagnose-bug` instead. Its Phase 1 is this same red loop, built for a symptom nobody can
+`diagnose-bug` instead. Its Phase 1 is this same red loop, built for a symptom nobody can
 yet explain.
 
 ## 1. Pick the seam
 
-Call the Skill tool with `project-conventions` for the Logic seam and Widget-test wrapper rows, then
+Call the Skill tool with `flutter-supabase-conventions` for the Logic seam and Widget-test wrapper rows, then
 choose the cheapest seam that can actually express the requirement:
 
 | The requirement is about | Test at |

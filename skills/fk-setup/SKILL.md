@@ -29,7 +29,7 @@ Answer these from the repo. Only ask the user what you genuinely cannot observe.
 - **The stack.** Fill every row of the Architecture table from the repo, not from the kit's
   defaults. `pubspec.yaml` says what is available; an existing feature under `lib/features/` and its
   tests say what is actually used, and they win. On an existing project this is the most consequential
-  part of setup: every code-generating skill reads these rows through `project-conventions`, so a
+  part of setup: every code-generating skill reads these rows through `flutter-supabase-conventions`, so a
   row guessed here produces code in the wrong style for the life of the project.
 - **Identity.** `pubspec.yaml` `name:`, `android/app/build.gradle.kts` `applicationId`,
   `ios/Runner.xcodeproj` bundle id, `git remote -v`.
@@ -152,7 +152,7 @@ Tell the user what was written, then name the next step based on what the projec
 - **Greenfield** → tell them to run `/fk-plan`. It writes the proposal, the design language and the
   backlog, starting with a questionnaire for the client where there is no brief yet.
 - **The user's own existing app** → the skills now read `docs/agents/project.md`. Mention that
-  `flutter-verify` will report the test baseline recorded in step 1, so a pre-existing failure is
+  `verify` will report the test baseline recorded in step 1, so a pre-existing failure is
   never mistaken for new breakage. Where the repo already has screens, its design language exists in
   practice but nowhere in writing; call the Skill tool with `flutter-design` to recover it into
   `docs/agents/design.md` before the next screen adds to the drift. Then tell them to run `/fk-plan`

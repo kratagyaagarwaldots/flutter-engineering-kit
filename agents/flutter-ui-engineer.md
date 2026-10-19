@@ -25,7 +25,7 @@ Read freely from the state-layer and model folders.
 
 1. Call the Skill tool with `flutter-core-architecture` first, for theming, the text widget,
    dialogs, buttons, snackbars and loading. Build from the core helpers it lists.
-2. Call the Skill tool with `project-conventions` for the logic seam the page binds to.
+2. Call the Skill tool with `flutter-supabase-conventions` for the logic seam the page binds to.
 3. Call the Skill tool with `flutter-create-screen`. It owns the page and widget shapes per stack.
 
 Apply the conventions in the project's root `CLAUDE.md` or `AGENTS.md`.

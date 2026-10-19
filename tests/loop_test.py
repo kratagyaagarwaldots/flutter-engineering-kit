@@ -191,16 +191,16 @@ def pinning() -> None:
         (tmp / "m.json").write_text(json.dumps(good))
         expect("pin: set accepted", sh(kit + ["models", "set", str(tmp / "m.json")], tmp, env,
                                        check=False).returncode, 0)
-        toml = (tmp / ".codex/agents/flutter-explore.toml").read_text()
+        toml = (tmp / ".codex/agents/codebase-explorer.toml").read_text()
         expect("pin: codex model", 'model = "cheap-1"' in toml and 'model_reasoning_effort = "low"' in toml, True)
         expect("pin: codex leaves other roles unpinned",
-               "\nmodel =" in (tmp / ".codex/agents/flutter-architect.toml").read_text(), False)
+               "\nmodel =" in (tmp / ".codex/agents/solution-architect.toml").read_text(), False)
         expect("pin: opencode model", "model: prov/cheap-1" in
-               (tmp / ".config/opencode/agents/flutter-explore.md").read_text(), True)
-        expect("pin: cursor model", "model: cheap-c" in (tmp / ".cursor/agents/flutter-explore.md").read_text(), True)
+               (tmp / ".config/opencode/agents/codebase-explorer.md").read_text(), True)
+        expect("pin: cursor model", "model: cheap-c" in (tmp / ".cursor/agents/codebase-explorer.md").read_text(), True)
         expect("pin: antigravity model", "model: flash" in
-               (tmp / ".gemini/config/agents/flutter-explore.md").read_text(), True)
-        claude = tmp / ".claude/agents/flutter-explore.md"
+               (tmp / ".gemini/config/agents/codebase-explorer.md").read_text(), True)
+        claude = tmp / ".claude/agents/codebase-explorer.md"
         text = claude.read_text() if claude.exists() else ""
         expect("pin: claude override", ("model: haiku" in text and "effort: low" in text
                                         and text.count("model:") == 1), True)

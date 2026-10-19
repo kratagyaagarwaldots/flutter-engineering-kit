@@ -454,7 +454,7 @@ class Project:
         elif kind == "conflict":
             reason = (f"## The branch conflicts with `{self.base}`\n\nRun `git fetch origin` and "
                       f"`git merge origin/{self.base}`, then call the Skill tool with "
-                      f"`flutter-merge-conflicts` to resolve every conflict. Commit the merge.")
+                      f"`merge-conflicts` to resolve every conflict. Commit the merge.")
             st["conflict_fixes"] = st.get("conflict_fixes", 0) + 1
         else:
             reason = "## Review findings to fix\n\n```json\n" + json.dumps(

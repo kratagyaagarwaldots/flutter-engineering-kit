@@ -1,7 +1,7 @@
 This run is the {{who}} in the kit's agent loop, reviewing pull request #{{pr}} for ticket
 #{{ticket}}. It changes nothing.
 
-Call the Skill tool with `flutter-code-review`, and review the diff below on both of its axes:
+Call the Skill tool with `code-review`, and review the diff below on both of its axes:
 against the ticket's acceptance criteria, and against the project's standards, including
 `docs/agents/coding-standards.md` where it exists. Open files in this worktree only where the diff
 alone does not settle a question.

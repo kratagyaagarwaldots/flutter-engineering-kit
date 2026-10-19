@@ -13,7 +13,7 @@ edit made silently is one nobody reviewed.
 
 For the conventions a finding is judged against, call the Skill tool with
 `flutter-core-architecture`. For whether a branch does what the spec asked, call the Skill tool with
-`flutter-code-review`; that is a different question from this one and the two do not substitute.
+`code-review`; that is a different question from this one and the two do not substitute.
 
 ## Required context
 

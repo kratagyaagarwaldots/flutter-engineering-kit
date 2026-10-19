@@ -108,7 +108,7 @@ the ones that exist; the naming convention is what this skill fixes, not the lis
 
 ### Sizing
 
-Call the Skill tool with `project-conventions` for the Sizing strategy row before writing sizes; the
+Call the Skill tool with `flutter-supabase-conventions` for the Sizing strategy row before writing sizes; the
 two strategies read very differently and mixing them in one tree is worse than either.
 
 **Tokens and breakpoints**, the default on a new project. Spacing and radii are `AppDimensions`
@@ -298,7 +298,7 @@ Call the Skill tool with one of these, one call per need:
 | A screen from a design | `flutter-create-screen` |
 | Legacy migration | `flutter-modernize-screen` |
 | Tests | `flutter-write-tests` |
-| Review a branch | `flutter-code-review` |
+| Review a branch | `code-review` |
 | Security pass | `flutter-security-review` |
-| Prove it works | `flutter-verify` |
+| Prove it works | `verify` |
 

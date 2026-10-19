@@ -65,7 +65,7 @@ explicit out-of-scope section.
 
 ## 5. Sketch the change
 
-Where the work touches more than a couple of files, call the Skill tool with `flutter-plan-change`
+Where the work touches more than a couple of files, call the Skill tool with `plan-change`
 for the types, signatures, boundaries and the order the slices land in. A single-file change needs
 no sketch.
 

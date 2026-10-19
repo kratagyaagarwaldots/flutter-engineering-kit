@@ -18,7 +18,7 @@ other.
 
 ## Method
 
-1. Call the Skill tool with `flutter-verify` for the ladder, the baseline and the evidence format.
+1. Call the Skill tool with `verify` for the ladder, the baseline and the evidence format.
 2. Call the Skill tool with `project-tracker` to read each ticket's criteria and to file bugs.
 
 ## Inputs expected from parent

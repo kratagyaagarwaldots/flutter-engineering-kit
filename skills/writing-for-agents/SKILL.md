@@ -89,8 +89,8 @@ thorough work where "verify the feature" does not. Demand is what produces the d
 inside a step, and it is not step-bound: "every rule applied" binds a body of flat reference just as
 well.
 
-The strongest criteria are both checkable and exhaustive. `flutter-verify`'s "name the rung you
-stopped on" is one; so is `flutter-code-review`'s "quote the criterion for every finding".
+The strongest criteria are both checkable and exhaustive. `verify`'s "name the rung you
+stopped on" is one; so is `code-review`'s "quote the criterion for every finding".
 
 ## Prompt the positive
 

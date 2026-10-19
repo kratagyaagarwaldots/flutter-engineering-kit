@@ -1,5 +1,5 @@
 ---
-name: project-conventions
+name: flutter-supabase-conventions
 description: Resolve which state management, serialization, navigation, sizing and test tooling this project actually uses, before generating code. Use before writing Dart that has to match the code already there, or when a skill needs the logic seam, test tool, or widget-test wrapper.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: flutter-code-review
+name: code-review
 description: Review changes on two independent axes: does the code follow the project's conventions, and does it do what the spec asked. Use when the user wants a branch, PR, or work-in-progress reviewed, or asks to review since a commit or branch.
 ---
 

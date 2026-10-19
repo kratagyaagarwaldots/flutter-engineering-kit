@@ -63,6 +63,6 @@ kit's `project-memory` skill decides what goes where. Ticket status lives in the
 
 ## Verification
 
-Never claim a feature works without naming the rung it was proven at. `flutter-verify` owns the
+Never claim a feature works without naming the rung it was proven at. `verify` owns the
 ladder and the baseline. A pre-existing failing test is recorded in `docs/agents/project.md`; check
 it before reporting a failure as new.

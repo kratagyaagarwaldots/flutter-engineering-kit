@@ -5,10 +5,10 @@ description: Write the tests for a feature: logic tests at the state seam, widge
 
 # Write tests
 
-Write the tests that map back to acceptance criteria. `flutter-verify` owns which rung a claim
+Write the tests that map back to acceptance criteria. `verify` owns which rung a claim
 needs; this skill writes rungs 2, 3 and 4.
 
-Where the code does not exist yet, call the Skill tool with `flutter-tdd` instead: it owns the order,
+Where the code does not exist yet, call the Skill tool with `tdd` instead: it owns the order,
 and a test written after the code tests the code rather than the requirement.
 
 ## Which test for which criterion
@@ -24,7 +24,7 @@ device, and catches the regressions users actually report.
 
 ## 1. Logic tests
 
-Call the Skill tool with `project-conventions` for the Logic test tool row, then read the template:
+Call the Skill tool with `flutter-supabase-conventions` for the Logic test tool row, then read the template:
 
 | Logic test tool | Template |
 |---|---|
@@ -46,7 +46,7 @@ spinner.
 ## 2. Widget tests
 
 Pump the widget, assert what is on screen, tap, assert what changed. The wrapper is the only
-stack-specific part, and `project-conventions` gives it as the Widget-test wrapper row.
+stack-specific part, and `flutter-supabase-conventions` gives it as the Widget-test wrapper row.
 
 ```dart
 testWidgets('shows the empty state when there are no items', (tester) async {
@@ -148,5 +148,5 @@ Every acceptance criterion appears in the `AC coverage` group against a named te
 the three logic cases above, and `flutter test` passes against the baseline in
 `docs/agents/project.md`.
 
-Name any criterion no test here can reach and which `flutter-verify` rung it needs instead. A
+Name any criterion no test here can reach and which `verify` rung it needs instead. A
 criterion silently left uncovered reads as covered, which is worse than an admitted gap.

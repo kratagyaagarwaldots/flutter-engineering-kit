@@ -22,7 +22,7 @@ Each row is owned elsewhere and stated once. Route rather than answering from a 
 | Contrast ratios, tap-target size, text scaling, screen-reader labels | Call the Skill tool with `flutter-accessibility` |
 | Frame budget, jank, dropped frames, `Opacity` over a subtree, shader warm-up | Call the Skill tool with `flutter-performance` |
 | Constants families, the sizing strategy, the shared component set, `lib/core` layout | Call the Skill tool with `flutter-core-architecture` |
-| Which state seam, sizing strategy and test tooling this project actually uses | Call the Skill tool with `project-conventions` |
+| Which state seam, sizing strategy and test tooling this project actually uses | Call the Skill tool with `flutter-supabase-conventions` |
 | Which acceptance criteria a screen has to satisfy at all | Call the Skill tool with `grill` |
 
 These route a *different question* elsewhere. Where this skill was called by one of them, answer the
@@ -98,7 +98,7 @@ worth taking it is when acceptance criteria or a spec have just been settled: th
 and the visual language is the remaining unstated half.
 
 `docs/agents/project.md` still owns the architecture facts a design decision leans on — where the
-theme lives, and the sizing strategy resolved by calling the Skill tool with `project-conventions`.
+theme lives, and the sizing strategy resolved by calling the Skill tool with `flutter-supabase-conventions`.
 
 Where neither file answers and you had to assume, name the assumption in the answer, so it is
 corrected once rather than re-litigated per screen.
@@ -137,4 +137,4 @@ is too much — say so and name what to look at on a device, rather than asserti
 mechanically correct can still feel wrong, and the fix for that is running it.
 
 For proof that the pixels match an approved baseline, goldens are rung 4: call the Skill tool with
-`flutter-verify`.
+`verify`.

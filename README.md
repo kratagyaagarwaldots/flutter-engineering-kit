@@ -138,10 +138,10 @@ seams land where the first draft happened to put them, and the design is whateve
 into. Every later change fights it.
 
 **The fix** is to decide the shape while it is still text.
-[`flutter-plan-change`](./skills/flutter-plan-change/SKILL.md) sketches the types, signatures and
+[`plan-change`](./skills/plan-change/SKILL.md) sketches the types, signatures and
 boundaries with no bodies, and records hard-to-reverse decisions as ADRs.
 [`engineering-principles`](./skills/engineering-principles/SKILL.md) is the vocabulary for choosing
-between two shapes. [`flutter-explain`](./skills/flutter-explain/SKILL.md) comes first when the code
+between two shapes. [`explain`](./skills/explain/SKILL.md) comes first when the code
 is not yours.
 
 ### #3. We said done without proving it
@@ -150,9 +150,9 @@ is not yours.
 Nobody ran the error state. Nobody checked it against the spec, only against taste.
 
 **The fix** is to build test-first and to name your evidence.
-[`flutter-tdd`](./skills/flutter-tdd/SKILL.md) writes the failing test before the code,
+[`tdd`](./skills/tdd/SKILL.md) writes the failing test before the code,
 [`flutter-write-tests`](./skills/flutter-write-tests/SKILL.md) covers logic, widget and golden
-levels, and [`flutter-verify`](./skills/flutter-verify/SKILL.md) makes you **name the rung** you
+levels, and [`verify`](./skills/verify/SKILL.md) makes you **name the rung** you
 actually reached. [`setup-integration-harness`](./skills/setup-integration-harness/SKILL.md) builds
 the top rung when the project has none.
 
@@ -175,7 +175,7 @@ anyone's job.
 **The fix** is to make each of those a named, small task rather than an eventual crisis:
 [`flutter-upgrade-deps`](./skills/flutter-upgrade-deps/SKILL.md),
 [`flutter-build-failure`](./skills/flutter-build-failure/SKILL.md),
-[`flutter-merge-conflicts`](./skills/flutter-merge-conflicts/SKILL.md),
+[`merge-conflicts`](./skills/merge-conflicts/SKILL.md),
 [`flutter-accessibility`](./skills/flutter-accessibility/SKILL.md) and
 [`flutter-localization`](./skills/flutter-localization/SKILL.md).
 
@@ -203,16 +203,16 @@ needs, so the only thing to remember is where you are.
 | # | Step | Command |
 |---|---|---|
 | 1 | Configure the repo, once | `/fk-setup` |
-| 2 | Understand what is there | `flutter-explain` |
+| 2 | Understand what is there | `explain` |
 | 3 | Settle the requirement, write the spec, sketch the shape | `/fk-plan` |
 | 4 | Build it test-first, review it, prove it, commit | `/fk-build` |
 | 5 | Prove the release is safe and ship it | `/fk-release` |
 | 6 | Make the next round shorter | `/retro` |
 
-`/fk-plan` runs `grill`, `flutter-design` (once per app), `to-spec` and `flutter-plan-change`.
+`/fk-plan` runs `grill`, `flutter-design` (once per app), `to-spec` and `plan-change`.
 `/fk-build` picks its path from what it is given (a change to existing code, a new feature from a
-design and an endpoint, or a screen before its API exists) and drives `flutter-tdd`, the analyzer,
-`flutter-code-review` and `flutter-verify` to a commit. `/fk-release` runs `release-readiness`,
+design and an endpoint, or a screen before its API exists) and drives `tdd`, the analyzer,
+`code-review` and `verify` to a commit. `/fk-release` runs `release-readiness`,
 `setup-ci` where no CI exists, and `store-compliance`.
 
 ### Project delivery
@@ -375,13 +375,13 @@ Working out what the code does, and what it should do, before changing it.
   in-house into a questionnaire for the client to fill in.
 - **[to-spec](./skills/to-spec/SKILL.md)**: Turn the current conversation into a written spec, with
   an explicit out-of-scope section.
-- **[flutter-explain](./skills/flutter-explain/SKILL.md)**: Explain how a Flutter feature, subsystem
+- **[explain](./skills/explain/SKILL.md)**: Explain how a Flutter feature, subsystem
   or codebase actually works, and why it was built that way.
 - **[grill](./skills/grill/SKILL.md)**: Interview the user until a feature's requirements are
   settled.
 - **[domain-glossary](./skills/domain-glossary/SKILL.md)**: Build and sharpen the project's shared
   vocabulary in GLOSSARY.md, and record hard-to-reverse decisions as ADRs.
-- **[project-conventions](./skills/project-conventions/SKILL.md)**: Resolve which state management,
+- **[flutter-supabase-conventions](./skills/flutter-supabase-conventions/SKILL.md)**: Resolve which state management,
   serialization, navigation, sizing and test tooling this project actually uses, before generating
   code.
 - **[flutter-core-architecture](./skills/flutter-core-architecture/SKILL.md)**: The kit's lib/core
@@ -395,7 +395,7 @@ Working out what the code does, and what it should do, before changing it.
 
 Deciding the shape of a change while it is still cheap to change.
 
-- **[flutter-plan-change](./skills/flutter-plan-change/SKILL.md)**: Design a change before writing
+- **[plan-change](./skills/plan-change/SKILL.md)**: Design a change before writing
   it: the types, signatures and module boundaries it needs, and the order the work lands in.
 - **[engineering-principles](./skills/engineering-principles/SKILL.md)**: Five principles that
   change how a change is shaped rather than what it does: root causes, subtraction, reader load,
@@ -410,7 +410,7 @@ feature folder to `flutter-scaffold-feature`.
   feature folder (model, repository, state layer, view, widgets, tests) from acceptance criteria, in
   one of three modes: real (a model and endpoint exist), fixture (build the screen first, the API
   comes later) or upgrade (move a fixture-mode feature onto its real API).
-- **[flutter-tdd](./skills/flutter-tdd/SKILL.md)**: Build a change test-first: a failing test at a
+- **[tdd](./skills/tdd/SKILL.md)**: Build a change test-first: a failing test at a
   named seam, then the smallest code that passes it.
 - **[flutter-create-state-layer](./skills/flutter-create-state-layer/SKILL.md)**: Generate a
   feature's state layer in whichever state management the project uses: the seam holding its
@@ -445,12 +445,12 @@ Separating *does it work* from *is it written well*, and answering both out loud
   merge.
 - **[flutter-write-tests](./skills/flutter-write-tests/SKILL.md)**: Write the tests for a feature:
   logic tests at the state seam, widget tests for what the user sees, and goldens for the pixels.
-- **[flutter-verify](./skills/flutter-verify/SKILL.md)**: Prove a Flutter change actually works
+- **[verify](./skills/verify/SKILL.md)**: Prove a Flutter change actually works
   before calling it done.
-- **[flutter-code-review](./skills/flutter-code-review/SKILL.md)**: Review changes on two
+- **[code-review](./skills/code-review/SKILL.md)**: Review changes on two
   independent axes: does the code follow the project's conventions, and does it do what the spec
   asked.
-- **[flutter-diagnose-bug](./skills/flutter-diagnose-bug/SKILL.md)**: Disciplined diagnosis loop for
+- **[diagnose-bug](./skills/diagnose-bug/SKILL.md)**: Disciplined diagnosis loop for
   hard Flutter bugs, jank, and regressions.
 - **[flutter-performance](./skills/flutter-performance/SKILL.md)**: Measure and improve Flutter
   performance against a budget: jank, dropped frames, slow startup, memory growth, and app size.
@@ -465,7 +465,7 @@ The work that stops a codebase decaying between features.
   dependencies one at a time, with the breaking changes read first and the suite green between each.
 - **[flutter-build-failure](./skills/flutter-build-failure/SKILL.md)**: Diagnose a native build
   failure: Gradle, AGP, Kotlin, JDK, CocoaPods, Xcode or signing.
-- **[flutter-merge-conflicts](./skills/flutter-merge-conflicts/SKILL.md)**: Resolve conflicts in a
+- **[merge-conflicts](./skills/merge-conflicts/SKILL.md)**: Resolve conflicts in a
   Flutter repo by intent, including the generated files and lockfiles that must be regenerated
   rather than merged.
 - **[flutter-accessibility](./skills/flutter-accessibility/SKILL.md)**: Make a Flutter screen usable
@@ -509,7 +509,7 @@ Configuring the kit and editing it.
 
 ## Agents
 
-Layer specialists the scaffolding skills delegate to: `flutter-explore`, `flutter-architect`,
+Layer specialists the scaffolding skills delegate to: `codebase-explorer`, `solution-architect`,
 `flutter-state-engineer`, `flutter-repo-engineer`, `flutter-ui-engineer`, `flutter-test-engineer`,
 plus the store-pack writer and the `qa-engineer` that `/fk-sprint` sends to test a sprint's build.
 See [agents/README.md](./agents/README.md).
@@ -517,7 +517,7 @@ See [agents/README.md](./agents/README.md).
 ## What the kit assumes
 
 Less than it used to. The **Architecture table** in `docs/agents/project.md` records what this
-project actually uses, and `project-conventions` resolves it for every skill that generates code. A
+project actually uses, and `flutter-supabase-conventions` resolves it for every skill that generates code. A
 Riverpod project gets Riverpod, a Provider project gets Provider.
 
 What the kit still imposes, and `flutter-core-architecture` owns:

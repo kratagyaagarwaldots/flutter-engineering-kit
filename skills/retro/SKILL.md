@@ -37,7 +37,7 @@ You are improving the **environment the agent works in**, not the code it wrote.
    - **Review rules.** Did the reviewer miss something it should have caught, or keep flagging noise?
      Conventions belong to the reviewer, not the implementer: the implementing agent is under the
      most context pressure and the reviewing agent is under the least. A judgement call true of every
-     Flutter app goes into `flutter-code-review`'s baseline; one true of this project goes into its
+     Flutter app goes into `code-review`'s baseline; one true of this project goes into its
      `docs/agents/coding-standards.md`, which only the reviewer reads. Neither goes into `CLAUDE.md`.
    - **Information access.** Was something the agent needed simply unavailable: the running app's
      logs, a device screenshot, the backend's response, a third-party dashboard? Giving the agent

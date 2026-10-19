@@ -6,7 +6,7 @@ description: Diagnose a native build failure: Gradle, AGP, Kotlin, JDK, CocoaPod
 # Flutter build failure
 
 The build breaking before your Dart code compiles is a different problem from a bug, and
-`flutter-diagnose-bug` cannot help: its method starts with a failing *test*, and there is no test
+`diagnose-bug` cannot help: its method starts with a failing *test*, and there is no test
 for a Gradle version conflict.
 
 These failures are almost always **a version mismatch between toolchain layers**, and the error

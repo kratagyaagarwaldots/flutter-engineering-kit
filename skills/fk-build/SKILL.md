@@ -35,23 +35,23 @@ The step is done when you have named the path and why, in one line, before writi
 
 ## 1. Orient
 
-Call the Skill tool with `project-conventions` for the stack, and read `docs/agents/project.md` for
+Call the Skill tool with `flutter-supabase-conventions` for the stack, and read `docs/agents/project.md` for
 the commands and the known-failing-test baseline. Record the baseline **now**, before writing
 anything, so a pre-existing failure is never reported later as your own breakage.
 
 Where the work has no sketch and touches more than a couple of files, call the Skill tool with
-`flutter-plan-change` before writing code.
+`plan-change` before writing code.
 
 ## 2. Build, test-first
 
-For each slice in the sequence, call the Skill tool with `flutter-tdd`. One vertical slice at a
+For each slice in the sequence, call the Skill tool with `tdd`. One vertical slice at a
 time, each ending green.
 
 Between slices, run the analyzer and the tests for the files you touched. Not the full suite: it is
 slow enough that running it per slice is how people stop running it.
 
 Where a slice turns out to need a shape the sketch did not have, say so and call the Skill tool with
-`flutter-plan-change` again rather than working around it.
+`plan-change` again rather than working around it.
 
 Where a slice is mechanical once its shape is settled, hand it to the build-role agent that owns
 its layer: `flutter-state-engineer`, `flutter-repo-engineer` or `flutter-test-engineer`. Its brief
@@ -81,7 +81,7 @@ the baseline was never zero is the failure this step exists to prevent.
 
 ## 4. Review
 
-Call the Skill tool with `flutter-code-review`. It reviews on two axes, and both matter here:
+Call the Skill tool with `code-review`. It reviews on two axes, and both matter here:
 whether the code follows the project's conventions, and whether it does what was asked. Code can
 pass every convention and implement the wrong requirement.
 
@@ -90,7 +90,7 @@ that cost time and bought nothing.
 
 ## 5. Prove
 
-Call the Skill tool with `flutter-verify`. Name the rung reached for each acceptance criterion, and
+Call the Skill tool with `verify`. Name the rung reached for each acceptance criterion, and
 name what is not proven and what rung it would need.
 
 Where the work touched security-sensitive surfaces, meaning secrets, storage, network or a webview,

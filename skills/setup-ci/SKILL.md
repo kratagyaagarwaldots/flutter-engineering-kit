@@ -5,7 +5,7 @@ description: Generate a CI pipeline that runs the verification ladder on every p
 
 # Setup CI
 
-CI is **the automation of `flutter-verify` rungs 1 to 4**. That framing is the whole scope: the
+CI is **the automation of `verify` rungs 1 to 4**. That framing is the whole scope: the
 pipeline runs what a person would run to prove a change works, on every push, so nobody has to
 remember to.
 
@@ -94,5 +94,5 @@ The pipeline has run green at least once on a real push, with the run shown. Eve
 named rung or is explicitly out of the ladder, and the golden strategy is written down next to the
 stage.
 
-Say which rungs CI now covers and which still need a human, so `flutter-verify` claims can be made
+Say which rungs CI now covers and which still need a human, so `verify` claims can be made
 against what the pipeline actually proves.

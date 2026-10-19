@@ -10,7 +10,7 @@ and what the view reads back.
 
 ## Resolve the shape first
 
-Call the Skill tool with `project-conventions` for the Logic seam and Dependency injection rows,
+Call the Skill tool with `flutter-supabase-conventions` for the Logic seam and Dependency injection rows,
 then read the matching template. The procedure and the rules below are the same for every stack;
 only the shape differs.
 

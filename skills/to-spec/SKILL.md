@@ -44,8 +44,8 @@ What they will be able to do, from the same side.
 ## Acceptance criteria
 
 A numbered list. Every criterion is observable by a person using the app, and every one names its
-states, including loading, empty and failure. This list is what `flutter-verify` maps proof onto and
-what `flutter-code-review`'s spec axis reviews against, so an unobservable criterion is unverifiable.
+states, including loading, empty and failure. This list is what `verify` maps proof onto and
+what `code-review`'s spec axis reviews against, so an unobservable criterion is unverifiable.
 
 ## Implementation decisions
 

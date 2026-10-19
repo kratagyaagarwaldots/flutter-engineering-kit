@@ -31,7 +31,7 @@ messages). Name the safe flavor above and use it.
 ## Architecture
 
 `flutter-core-architecture` documents the kit's defaults. This table records what **this** project
-actually uses, and it wins wherever the two differ. `project-conventions` resolves these rows for
+actually uses, and it wins wherever the two differ. `flutter-supabase-conventions` resolves these rows for
 every skill that generates code, so a wrong row here produces code in the wrong style.
 
 The Value column below is filled with the kit's default. Replace each with what the repo does.
@@ -100,7 +100,7 @@ Only what is wired. An empty row means the app does not do this.
 | Startup gates in `main()` | `<Firebase, Remote Config, force-update, connectivity, push, Sentry>` |
 | Known failing tests | `<none>` |
 
-`flutter-verify` reads the last two rows. Startup gates decide whether a driver can boot the app;
+`verify` reads the last two rows. Startup gates decide whether a driver can boot the app;
 known failing tests stop an agent reporting a pre-existing failure as its own breakage.
 
 ## Commands

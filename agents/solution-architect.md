@@ -1,5 +1,5 @@
 ---
-name: flutter-architect
+name: solution-architect
 description: Heavy design and diagnosis. Use proactively for architecture decisions, decomposing acceptance criteria into stable planning tables, hard root-cause debugging, cross-cutting refactors, and security judgment. Prefer this over the layer engineers when the work needs reasoning before codegen.
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: opus
@@ -20,10 +20,10 @@ that fits, rather than working from your own recollection of the steps:
 
 | The work | Skill |
 |---|---|
-| Design a change: types, signatures, boundaries, sequence | `flutter-plan-change` |
-| Root-cause a failure that resists a first look | `flutter-diagnose-bug` |
+| Design a change: types, signatures, boundaries, sequence | `plan-change` |
+| Root-cause a failure that resists a first look | `diagnose-bug` |
 | Choosing between shapes rather than behaviours | `engineering-principles` |
-| What this project's stack actually is | `project-conventions` |
+| What this project's stack actually is | `flutter-supabase-conventions` |
 | The shared conventions and what `lib/core` holds | `flutter-core-architecture` |
 
 Where the parent asked for a feature's planning tables, follow the shapes in

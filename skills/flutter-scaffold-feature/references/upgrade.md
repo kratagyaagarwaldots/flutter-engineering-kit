@@ -58,7 +58,7 @@ error codes. Call the Skill tool with `flutter-write-tests` for the shapes.
 
 ## U.7 – Prove it
 
-Call the Skill tool with `flutter-verify`. The real network path now exists, so the rungs above the
+Call the Skill tool with `verify`. The real network path now exists, so the rungs above the
 widget level that fixture mode could not reach are available; name the one reached.
 
 Then confirm no marker survived:

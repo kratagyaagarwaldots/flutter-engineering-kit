@@ -1,5 +1,5 @@
 ---
-name: flutter-merge-conflicts
+name: merge-conflicts
 description: Resolve conflicts in a Flutter repo by intent, including the generated files and lockfiles that must be regenerated rather than merged. Use when a merge or rebase conflicts, or when resolving conflicts in .g.dart, pubspec.lock, Podfile.lock, a barrel file or a golden image.
 ---
 
@@ -100,7 +100,7 @@ flutter test
 
 Then, specifically: run the tests **from both sides** of the merge. A conflict resolved by dropping
 one side's logic leaves that side's tests failing, and that is the fastest signal that intent was
-lost. Where either side changed a screen, call the Skill tool with `flutter-verify` and reach a
+lost. Where either side changed a screen, call the Skill tool with `verify` and reach a
 widget or golden rung rather than trusting the analyzer.
 
 ## Completion criteria

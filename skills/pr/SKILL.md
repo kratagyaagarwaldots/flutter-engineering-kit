@@ -84,7 +84,7 @@ Show it working, as a before and an after. Ranked by how much they prove:
    the counts. For a bug fix, the same command twice: red, then green.
 3. **Static**: the analyzer clean. True of every PR, so it is never the evidence on its own.
 
-Then the rung. Call the Skill tool with `flutter-verify` if no rung was reported yet, and copy its
+Then the rung. Call the Skill tool with `verify` if no rung was reported yet, and copy its
 two lines: the rung reached for each acceptance criterion, and what is **not** proven. A PR that
 hides a gap gets merged with it.
 

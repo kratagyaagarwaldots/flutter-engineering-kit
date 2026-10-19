@@ -29,7 +29,7 @@ output_dir:             # DEFAULT: docs/store/
 
 ## Phase 0. Intake
 
-Dispatch `flutter-explore` to read the business context: `README*`, `docs/**`, `CHANGELOG`, brand
+Dispatch `codebase-explorer` to read the business context: `README*`, `docs/**`, `CHANGELOG`, brand
 files, and any existing store configuration or release checklist.
 
 Then ask the user one grouped batch of questions, skipping anything the inputs or the repo already
@@ -47,7 +47,7 @@ A declined answer becomes `TODO (client input needed)`. Never invent a business 
 
 ## Phase 1. Signal Inventory
 
-Dispatch `flutter-explore` again for the technical signals: manifests, plists, `*.xcprivacy`,
+Dispatch `codebase-explorer` again for the technical signals: manifests, plists, `*.xcprivacy`,
 entitlements, dependencies, and permission declarations.
 
 Write the result to `{output_dir}/_signals.md` as a table mapping **source file → signal →

@@ -21,8 +21,8 @@ The model tier tracks how much judgement the layer needs, not how much code it w
 
 | Agent | Owns | Model |
 |-------|------|-------|
-| `flutter-explore` | Read-only search: where things are, what already exists | `haiku` |
-| `flutter-architect` | Design decisions, planning tables, hard root-cause work | `opus` |
+| `codebase-explorer` | Read-only search: where things are, what already exists | `haiku` |
+| `solution-architect` | Design decisions, planning tables, hard root-cause work | `opus` |
 | `flutter-ui-engineer` | `view/` and `widget/`, translating a design into a tree | `opus` |
 | `flutter-state-engineer` | The state layer: actions, state shape, handlers, repository calls | `sonnet` |
 | `flutter-repo-engineer` | `model/` and `repo/`: DTOs and data access | `sonnet` |
@@ -31,8 +31,8 @@ The model tier tracks how much judgement the layer needs, not how much code it w
 UI sits on `opus` because a design leaves more unstated than a schema does. Tests sit on `haiku`
 because by the time they are written the assertions are already decided.
 
-`flutter-architect` holds no procedure of its own: it calls `flutter-plan-change`,
-`flutter-diagnose-bug` or `engineering-principles`, so the method has one home and the agent is the
+`solution-architect` holds no procedure of its own: it calls `plan-change`,
+`diagnose-bug` or `engineering-principles`, so the method has one home and the agent is the
 context it runs in.
 
 ## Store pack
@@ -59,7 +59,7 @@ each other. It runs the build and files bugs, and never edits source.
 
 ## When to delegate
 
-Reach for `flutter-explore` for discovery, and `flutter-architect` for judgement before any code
+Reach for `codebase-explorer` for discovery, and `solution-architect` for judgement before any code
 generation. Both pay for themselves by keeping the parent's context clear.
 
 Split by layer only once the planning tables are stable. A layer engineer handed a table that is

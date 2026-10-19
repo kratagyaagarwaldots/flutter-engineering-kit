@@ -1,5 +1,5 @@
 ---
-name: flutter-plan-change
+name: plan-change
 description: Design a change before writing it: the types, signatures and module boundaries it needs, and the order the work lands in. Use before implementing anything touching more than one file, when a change needs a technical design, or when deciding between implementation approaches.
 ---
 
@@ -16,14 +16,14 @@ problem.
 
 ## 1. Ground
 
-Read before proposing. Dispatch the `flutter-explore` agent for the reading, so the sketch is
+Read before proposing. Dispatch the `codebase-explorer` agent for the reading, so the sketch is
 written in a clean window, and answer:
 
 - Which features and which files does this touch?
 - What already exists that this should use instead of duplicating? Call the Skill tool with
   `flutter-core-architecture` for the shared conventions, then read `lib/core/` for what is actually
   there.
-- What does the project's stack decide for me? Call the Skill tool with `project-conventions`.
+- What does the project's stack decide for me? Call the Skill tool with `flutter-supabase-conventions`.
 - What did previous decisions already fix? Read `docs/adr/`.
 
 Ground first because a design proposed without it re-invents something the repo has, and that is the
@@ -52,7 +52,7 @@ than between behaviours.
 ## 3. Sequence
 
 Order the work so each step lands at a state that can be proven, not merely compiled. Call the Skill
-tool with `flutter-verify` for the rungs, and say which rung each step reaches.
+tool with `verify` for the rungs, and say which rung each step reaches.
 
 A step that can only be verified once three later steps land is too big, and should be split until
 each one can be demonstrated on its own.

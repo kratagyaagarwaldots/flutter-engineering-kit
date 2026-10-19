@@ -1,5 +1,5 @@
 ---
-name: flutter-verify
+name: verify
 description: Prove a Flutter change actually works before calling it done. Use after implementing a feature or fixing a bug, when asked to verify or confirm something works, or when a scaffolding skill reaches its verification phase.
 ---
 

@@ -79,7 +79,7 @@ the command, which runs them in this order.
 | 4 | `project-proposal` | `proposal.md` (why, for whom, modules, scope) and `features.md` (every feature, prioritised and phased) | `/fk-plan`, `/fk-feedback` |
 | 5 | `project-backlog` | Tickets for the current phase's features, with criteria and points, and a note per module | `/fk-plan`, `/fk-feedback`, `/fk-sprint plan` |
 | 6 | `to-spec` | A spec for one feature, in `docs/specs/`, whose criteria its tickets point to | `/fk-plan`, feature path |
-| 7 | `flutter-plan-change` | A technical sketch: types, signatures, order of work | `/fk-plan`, feature path |
+| 7 | `plan-change` | A technical sketch: types, signatures, order of work | `/fk-plan`, feature path |
 
 A project run for delivery takes rows 1 to 5, then `/fk-sprint plan`. One feature takes rows 2, 6
 and 7, then `/fk-build`.
@@ -93,9 +93,9 @@ The rest run inside their command too:
 | What the project remembers, and where a fact goes | `project-memory` | every command |
 | Which model each kind of agent work runs on, what it costs, or putting builds on a cheaper model | `configure-models` | installing, `/fk-sprint close` |
 | New feature folder, with or before its API | `flutter-scaffold-feature` | `/fk-build` |
-| One slice, test-first | `flutter-tdd` | `/fk-build` |
-| Prove it works, and name the rung | `flutter-verify` | `/fk-build` |
-| Review against conventions and spec | `flutter-code-review` | `/fk-build` |
+| One slice, test-first | `tdd` | `/fk-build` |
+| Prove it works, and name the rung | `verify` | `/fk-build` |
+| Review against conventions and spec | `code-review` | `/fk-build` |
 | Opening a pull request | `pr` | `/fk-build` |
 | What a release could break | `release-readiness` | `/fk-release` |
 | CI pipeline | `setup-ci` | `/fk-setup`, `/fk-release` |
@@ -121,12 +121,12 @@ when the caller wants exactly one layer touched.
 
 | Situation | Skill |
 |---|---|
-| Broken, and reading the code has not helped | `flutter-diagnose-bug` |
+| Broken, and reading the code has not helped | `diagnose-bug` |
 | Slow, janky, or too large, and you need numbers | `flutter-performance` |
 | Fails before Dart compiles: Gradle, pods, signing | `flutter-build-failure` |
-| A merge or rebase is conflicting | `flutter-merge-conflicts` |
+| A merge or rebase is conflicting | `merge-conflicts` |
 | Which core widget, util or constant to reuse | `flutter-core-architecture` |
-| Which stack this project actually uses | `project-conventions` |
+| Which stack this project actually uses | `flutter-supabase-conventions` |
 | Choosing between two shapes rather than behaviours | `engineering-principles` |
 
 ## Keep it working

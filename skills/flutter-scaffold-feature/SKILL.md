@@ -41,7 +41,7 @@ Phase 9 and then needs rebuilding.
 
 ## Phase 0.5 – Reuse before you add
 
-Call the Skill tool with `flutter-core-architecture`, then the Skill tool with `project-conventions`
+Call the Skill tool with `flutter-core-architecture`, then the Skill tool with `flutter-supabase-conventions`
 for the stack every later phase generates in. Report which existing components, utils and tokens
 this feature uses, and every new `App*` constant it needs because no existing one fits.
 
@@ -115,7 +115,7 @@ An empty cell is unfinished work. Finish it before Phase 10.
 
 ## Phase 10 – Prove it
 
-Call the Skill tool with `flutter-verify` and report the rung reached for each criterion. A
+Call the Skill tool with `verify` and report the rung reached for each criterion. A
 fixture-mode feature is provable to the widget rung and no further, since there is no real network
 path yet: say so, and name every criterion whose proof waits for the API.
 

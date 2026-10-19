@@ -187,7 +187,7 @@ def main() -> int:
 
     # 10. Stack purity. A skill that names a state-management library generates code in that
     #     library's shape, which is wrong on a project using another one. The kit resolves the
-    #     stack through `project-conventions` instead, and per-stack code lives in a skill's
+    #     stack through `flutter-supabase-conventions` instead, and per-stack code lives in a skill's
     #     templates/ directory where naming a library is the whole point.
     #
     #     STACK_OPINIONATED is the set that predates that rule. It is a ratchet: remove a name
@@ -200,7 +200,7 @@ def main() -> int:
         "fk-setup",
     }
     # A detector has to name what it detects, which is the opposite of generating in its shape.
-    STACK_DETECTORS = {"project-conventions"}
+    STACK_DETECTORS = {"flutter-supabase-conventions"}
     exempt = STACK_OPINIONATED | STACK_DETECTORS
     for stale in sorted(exempt - set(skills)):
         FAIL.append(f"stack exemption names missing skill '{stale}' — drop it from the list")
@@ -218,7 +218,7 @@ def main() -> int:
             if STACK_TOKENS.search(line):
                 FAIL.append(
                     f"{p.relative_to(ROOT)}:{lineno} names a state library — resolve it "
-                    f"through `project-conventions`, or move the code into {owner}/templates/"
+                    f"through `flutter-supabase-conventions`, or move the code into {owner}/templates/"
                 )
     check("10.", f"stack-neutral skills name no state library "
                  f"({len(STACK_OPINIONATED)} legacy skills exempt)")
@@ -455,7 +455,7 @@ def main() -> int:
     # 18. Agents follow the rules skills do. An agent reaches a skill by calling the Skill
     #     tool, never by a harness path (`.claude/skills/...` resolves in one install shape
     #     and silently in no other), and names no state library: the layer engineers serve
-    #     every stack, so the stack arrives through `project-conventions`.
+    #     every stack, so the stack arrives through `flutter-supabase-conventions`.
     HARNESS_PATH = re.compile(r"\.(?:claude|cursor|opencode)/(?:skills|rules)/")
     agent_calls = 0
     for p in sorted((ROOT / "agents").glob("*.md")):
@@ -474,7 +474,7 @@ def main() -> int:
                             f"— call the Skill tool with its name instead")
             if STACK_TOKENS.search(line):
                 FAIL.append(f"agents/{p.name}:{lineno} names a state library — resolve it "
-                            f"through `project-conventions`")
+                            f"through `flutter-supabase-conventions`")
     check("18.", f"agents: {agent_calls} Skill-tool calls resolve, no harness paths, "
                  f"no state library")
 
@@ -555,6 +555,92 @@ def main() -> int:
         if not any(ln.startswith("FAIL") for ln in r.stdout.splitlines()):
             FAIL.append(f"tests/loop_test.py crashed: {(r.stderr or r.stdout).strip()[-400:]}")
     check("22.", "kit loop drives a ticket to merged; kit models pins every harness")
+
+    # 23. Two kits, independent. This repo splits into product-engineer (stack-free) and
+    #     flutter-supabase (one stack) along kits.json. Neither calls the other's skills, and
+    #     nothing in product-engineer names a stack: it reaches one only through
+    #     project-stack, which calls a stack kit's slot skills by pattern when they are installed.
+    #     The two ratchets list what is not yet independent. Remove an entry when its skill is
+    #     restructured; never add one.
+    EDGE_RATCHET: set[tuple[str, str]] = {
+        ("fk-build", "flutter-scaffold-feature"),
+        ("fk-build", "flutter-security-review"),
+        ("fk-build", "flutter-supabase-conventions"),
+        ("fk-change", "flutter-design"),
+        ("fk-release", "store-compliance"),
+        ("fk-setup", "flutter-design"),
+        ("flutter-build-failure", "setup-wizard"),
+        ("flutter-create-state-layer", "grill"),
+        ("flutter-design", "engineering-principles"),
+        ("flutter-design", "grill"),
+        ("flutter-scaffold-feature", "verify"),
+        ("flutter-upgrade-deps", "verify"),
+        ("flutter-write-tests", "tdd"),
+        ("grill", "flutter-design"),
+        ("plan-change", "flutter-supabase-conventions"),
+        ("setup-ci", "flutter-build-failure"),
+        ("spec-for-cheap-executor", "flutter-core-architecture"),
+        ("spec-for-cheap-executor", "flutter-create-model"),
+        ("spec-for-cheap-executor", "flutter-create-repository"),
+        ("spec-for-cheap-executor", "flutter-create-screen"),
+        ("spec-for-cheap-executor", "flutter-create-state-layer"),
+        ("spec-for-cheap-executor", "flutter-modernize-screen"),
+        ("spec-for-cheap-executor", "flutter-security-review"),
+        ("spec-for-cheap-executor", "flutter-write-tests"),
+        ("takeover-audit", "flutter-build-failure"),
+        ("takeover-audit", "flutter-security-review"),
+        ("tdd", "flutter-supabase-conventions"),
+        ("tdd", "flutter-write-tests"),
+        ("triage-executor-bugs", "flutter-security-review"),
+        ("writing-for-agents", "flutter-core-architecture"),
+    }
+    STACK_RATCHET: set[str] = {
+        "ask-kit", "code-review", "codebase-explorer", "diagnose-bug", "domain-glossary",
+        "engineering-principles", "explain", "fk-build", "fk-change", "fk-plan", "fk-release",
+        "fk-setup", "grill", "merge-conflicts", "plan-change", "pr", "retro", "setup-ci",
+        "setup-wizard", "solution-architect", "spec-for-cheap-executor", "takeover-audit", "tdd",
+        "to-spec", "triage-executor-bugs", "verify", "writing-for-agents",
+    }
+    kits = json.loads((ROOT / "kits.json").read_text())["kits"]
+    owner: dict[str, str] = {}
+    for kit, parts in kits.items():
+        for kind in ("skills", "agents"):
+            for n in parts[kind]:
+                if n in owner:
+                    FAIL.append(f"kits.json assigns '{n}' to both {owner[n]} and {kit}")
+                owner[n] = kit
+    agent_files = {p.stem: p for p in (ROOT / "agents").glob("*.md") if p.stem != "README"}
+    for n in sorted(set(skills) | set(agent_files)):
+        if n not in owner:
+            FAIL.append(f"'{n}' belongs to no kit in kits.json")
+    hook_src = (ROOT / "hooks/kit-hook.py").read_text()
+    hook_checks = set(re.findall(r'"(\w+)": check_\w+', hook_src))
+    assigned_hooks = {h for parts in kits.values() for h in parts["hooks"]}
+    if hook_checks != assigned_hooks:
+        FAIL.append(f"kits.json hooks {sorted(assigned_hooks)} differ from kit-hook.py's {sorted(hook_checks)}")
+    STACK = re.compile(r"(?<![a-z])(?:flutter|dart|pubspec|supabase|widget|gradle|xcode|cocoapod|"
+                       r"riverpod|bloc|testflight)s?(?![a-z])", re.I)
+    edges, stacky = set(), set()
+    for n, kit in owner.items():
+        files = (sorted((ROOT / "skills" / n).rglob("*.md")) if n in skills
+                 else [agent_files[n]] if n in agent_files else [])
+        for f in files:
+            text = f.read_text()
+            for target in re.findall(r"Skill tool with `([a-z0-9-]+)`", text):
+                if target != n and owner.get(target, kit) != kit:
+                    edges.add((n, target))
+            if kit == "product-engineer" and STACK.search(text):
+                stacky.add(n)
+    for caller, target in sorted(edges - EDGE_RATCHET):
+        FAIL.append(f"{caller} ({owner[caller]}) calls {target} ({owner[target]}) across kits")
+    for n in sorted(stacky - STACK_RATCHET):
+        FAIL.append(f"{n} is in product-engineer but names a stack; reach it through project-stack")
+    for caller, target in sorted(EDGE_RATCHET - edges):
+        FAIL.append(f"ratchet: {caller} → {target} no longer crosses kits; remove it from EDGE_RATCHET")
+    for n in sorted(STACK_RATCHET - stacky):
+        FAIL.append(f"ratchet: {n} is stack-free now; remove it from STACK_RATCHET")
+    check("23.", f"{len(kits)} kits own every skill, agent and hook; "
+                 f"{len(EDGE_RATCHET)} cross-kit calls and {len(STACK_RATCHET)} stack-naming skills left")
 
     print()
     if FAIL:

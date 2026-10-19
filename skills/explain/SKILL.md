@@ -1,12 +1,12 @@
 ---
-name: flutter-explain
+name: explain
 description: Explain how a Flutter feature, subsystem or codebase actually works, and why it was built that way. Use when asked how something works, where something lives, why a decision was made, or when onboarding onto unfamiliar code.
 ---
 
 # Flutter explain
 
 Answer "how does this work" from the code, at whichever zoom level the question is asked. Most of
-the reading should happen in a subagent: dispatch `flutter-explore` for the sweeps and keep the
+the reading should happen in a subagent: dispatch `codebase-explorer` for the sweeps and keep the
 synthesis here, so the answer is written in a clean window rather than one full of file dumps.
 
 Explain what the code **does**, not what it should do. Where you find a bug while reading, say so
@@ -55,7 +55,7 @@ hit next:
 - `build` methods long enough that nobody reads to the bottom
 
 Report these as observations with locations, not as a plan. Where the user wants one addressed, call
-the Skill tool with `flutter-plan-change`, which owns designing the fix. A survey that turns itself
+the Skill tool with `plan-change`, which owns designing the fix. A survey that turns itself
 into a refactor is how a question becomes an unreviewed rewrite.
 
 ## Archaeology, for "why"

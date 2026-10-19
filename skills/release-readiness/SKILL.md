@@ -65,7 +65,7 @@ round up.
 
 6. **Check the upgrade path, not just the install path.** Install the previous release, use it enough
    to write state, then install this build over it. A fresh install proves nothing about the users
-   who already have the app. Where `flutter-verify`'s device rung is unavailable, say that this is
+   who already have the app. Where `verify`'s device rung is unavailable, say that this is
    unproven.
 
 ## What to hand back

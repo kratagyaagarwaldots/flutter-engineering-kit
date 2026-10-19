@@ -22,14 +22,14 @@ flutter build ios --debug --no-codesign
 ```
 
 Where a build fails before Dart compiles, call the Skill tool with `flutter-build-failure` to find
-the cause, and record the cause without fixing it. Then call the Skill tool with `flutter-verify`
+the cause, and record the cause without fixing it. Then call the Skill tool with `verify`
 for the highest rung this project can reach today, and whether the app launches there.
 
 The step is done when every platform has a recorded result: builds, or fails with a named cause.
 
 ## 2. What is there
 
-Call the Skill tool with `flutter-explain` for a map of the app: its features, how state and data
+Call the Skill tool with `explain` for a map of the app: its features, how state and data
 flow, how navigation works, what the startup sequence does. Write it as the list of modules the app
 actually has, each with what works and what is stubbed, half-built or dead. This becomes the
 proposal's **Existing** column.

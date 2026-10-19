@@ -44,7 +44,7 @@ For each row, decide whether the change alters it, and quote the line or file it
 
 | What | Where it lives | Owner |
 |---|---|---|
-| Architecture: a data store, a stack choice, a boundary between layers | `docs/adr/`, the Architecture table in `docs/agents/project.md` | `flutter-plan-change` |
+| Architecture: a data store, a stack choice, a boundary between layers | `docs/adr/`, the Architecture table in `docs/agents/project.md` | `plan-change` |
 | Design language | `docs/agents/design.md` | `flutter-design` |
 | Words | `GLOSSARY.md` | `domain-glossary` |
 | Scope: modules, features, out of scope, technical approach, timeline | `docs/vault/proposal.md`, `docs/vault/features.md` | `project-proposal` |
@@ -89,7 +89,7 @@ Decide, then record, then re-cut. Each document is written from the ones before 
 never cut against a decision not yet made. Take only the rows the map marked yes, and tick each step
 in the note as it finishes.
 
-1. **Architecture.** Call the Skill tool with `flutter-plan-change` for the sketch and the ADR. Where
+1. **Architecture.** Call the Skill tool with `plan-change` for the sketch and the ADR. Where
    the decision changes a row of the Architecture table, edit that row and name the ADR beside it.
    Where it changes a row `/fk-setup` chooses rules from, such as the logic seam or serialization,
    add a step to the note telling the user to re-run `/fk-setup` once this command ends.

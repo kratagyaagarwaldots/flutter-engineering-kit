@@ -1,5 +1,5 @@
 ---
-name: flutter-explore
+name: codebase-explorer
 description: Fast read-only codebase exploration. Use proactively when finding files by pattern, searching for keywords, answering “where is X?”, or gathering context before implementation. Never edits files.
 tools: Read, Grep, Glob, Bash
 model: haiku
@@ -27,7 +27,7 @@ Forbidden:
 1. Prefer targeted grep / glob over dumping large files.
 2. Cite `file:line` (or path + short snippet) for every claim.
 3. If the answer is ambiguous, list the top candidates with why each matches.
-4. Do not propose large refactors — report facts; leave design to `flutter-architect` or the parent.
+4. Do not propose large refactors — report facts; leave design to `solution-architect` or the parent.
 
 ## Output
 
