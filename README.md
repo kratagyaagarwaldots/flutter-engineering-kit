@@ -102,7 +102,7 @@ Every other skill reads `docs/agents/project.md`, which is what makes one kit se
 
 ### 3. That's it
 
-Type `/ask-kit` whenever you are unsure which skill fits.
+Type `/ask-kit` whenever you are unsure what comes next: it reads where the project stands and names the step.
 
 ---
 
@@ -210,22 +210,35 @@ design and an endpoint, or a screen before its API exists) and drives `flutter-t
 
 ### Project delivery
 
-The engineering loop, run as a project: a proposal everything is measured against, a pointed
-backlog in GitHub Issues, short sprints, a QA gate before anyone outside the team sees a build, and
+The engineering loop, run as a project: a proposal everything is measured against, a feature list
+the client prioritises, a pointed backlog in GitHub Issues, short sprints, a QA gate before anyone outside the team sees a build, and
 feedback sorted into bugs and change requests against what was agreed. It suits client work and
 your own product alike; a one-off change needs only the loop above.
 
 | # | Step | Command |
 |---|---|---|
 | 1 | Configure the repo, its memory and its tracker, and audit it if inherited | `/fk-setup` |
-| 2 | Write the proposal, the design language and the pointed backlog | `/fk-plan` |
-| 3 | Plan the sprint from the ready tickets | `/fk-sprint plan` |
+| 2 | Write the proposal and the feature list, the design language, and the current phase's backlog | `/fk-plan` |
+| 3 | Plan the sprint: whole features, Must first, up to capacity | `/fk-sprint plan` |
 | 4 | Build each ticket to a reviewed, proven pull request | `/fk-build #N` |
 | 5 | Test the merged build before it leaves the team | `/fk-sprint qa` |
 | 6 | Send the build to the client or testers | `/fk-release` |
 | 7 | Sort what comes back into bugs, change requests and questions | `/fk-feedback` |
 | 8 | Close the sprint, record its velocity, improve the kit | `/fk-sprint close`, `/retro` |
 | 9 | Acceptance testing, then the store | `/fk-sprint uat`, `/fk-release` |
+
+**Each planning document has one job,** which is what tells the planning skills apart:
+
+| Document | Holds | Written by |
+|---|---|---|
+| `docs/vault/proposal.md` | Why, for whom, the modules, out of scope, the timeline. What the client signs | `project-proposal` |
+| `docs/vault/features.md` | Every agreed feature (`M2.3`), its priority (Must, Should, Could) and its phase. What sprints are picked from | `project-proposal` |
+| `docs/specs/NN-*.md` | One feature's acceptance criteria and decisions, where it needs more than a ticket | `to-spec` |
+| A ticket | One buildable slice: its criteria, or the spec criteria it delivers, its points and its feature | `project-backlog` |
+| `docs/vault/sprints/sprint-NN.md` | The features a sprint promised, and what happened | `/fk-sprint` |
+
+`grill` writes nothing of its own: it settles the answers the others write down. Not sure which
+step you are on? `/ask-kit` reads these files and names it.
 
 **Where you start changes the first steps, not the rest.** A new app runs every step. Your own
 existing app skips the scaffold: `/fk-plan` writes a proposal for the next phase, or `/fk-build`
@@ -294,8 +307,8 @@ The work starts here. Every other skill is reached through one of these.
 - **[fk-setup](./skills/fk-setup/SKILL.md)**: Configure a Flutter repo for the engineering kit. Run
   once per project before using the other skills.
 - **[fk-plan](./skills/fk-plan/SKILL.md)**: Turn an idea, a brief or a client's request into an
-  agreed proposal and a pointed backlog, or a single requirement into a spec and a sketch, settling
-  it before any code exists.
+  agreed proposal, a prioritised feature list and a pointed backlog, or a single requirement into a
+  spec and a sketch, settling it before any code exists.
 - **[fk-sprint](./skills/fk-sprint/SKILL.md)**: Run the sprint, from planning it out of the ready
   tickets and reporting where it stands, through gating its build with QA before anyone outside sees
   it, to closing it with velocity and a review, or running the final acceptance window.
@@ -310,8 +323,8 @@ The work starts here. Every other skill is reached through one of these.
   store submission pack.
 - **[retro](./skills/retro/SKILL.md)**: After a round of work, propose improvements to the kit and
   the project's agent environment so the next round is shorter.
-- **[ask-kit](./skills/ask-kit/SKILL.md)**: Ask which kit skill fits what you are about to do. A
-  router over every skill in the engineering kit.
+- **[ask-kit](./skills/ask-kit/SKILL.md)**: Ask where the project stands and which kit command or
+  skill comes next. A router over every skill in the engineering kit.
 
 ### Tools
 
@@ -331,10 +344,11 @@ connect it to the engineering skills below.
 
 - **[project-proposal](./skills/project-proposal/SKILL.md)**: Write or revise the project's proposal
   in docs/vault/proposal.md, covering objective, users, deliverables, modules, technical approach,
-  assumptions, what the client provides, out of scope and timeline, under a revision history.
-- **[project-backlog](./skills/project-backlog/SKILL.md)**: Break the proposal's modules into tickets
-  with acceptance criteria, story points and blocking edges, write a note per module, and file the
-  tickets in the tracker.
+  assumptions, what the client provides, out of scope and timeline, under a revision history, and
+  its feature list in docs/vault/features.md, each feature prioritised and phased.
+- **[project-backlog](./skills/project-backlog/SKILL.md)**: Break the current phase's features into
+  tickets with acceptance criteria, story points and blocking edges, write a note per module, and
+  file the tickets in the tracker.
 - **[project-tracker](./skills/project-tracker/SKILL.md)**: File, move and report on the project's
   tickets, modules and sprints in its issue tracker, following docs/agents/issue-tracker.md.
 - **[project-memory](./skills/project-memory/SKILL.md)**: Read and keep the project's memory vault in

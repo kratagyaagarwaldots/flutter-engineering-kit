@@ -1,22 +1,45 @@
 ---
 name: ask-kit
-description: Ask which kit skill fits what you are about to do. A router over every skill in the engineering kit.
+description: Ask where the project stands and which kit command or skill comes next. A router over every skill in the engineering kit.
 disable-model-invocation: true
 ---
 
 # Ask kit
 
-Name **one** skill, say why in a sentence, and state what it needs before it can start. When two
-fit, name the narrower one first and the broader as a fallback. If the request is too vague to
-route, ask the one question that separates the candidates.
+Answer two things, in this order: where the project stands, and what the person wants next. Then
+name **one** command or skill, say why in a sentence, and state what it needs before it can start.
+If the request is too vague to route, ask the one question that separates the candidates.
 
 Do not do the work, and do not run the routed skill. Where the answer is a command, tell them to
 type it; only a human can start one.
 
-## The commands
+## 1. Where the project stands
 
-Most work starts with one of these. Each calls the right skills in the right order, so the person
-only has to know where they are.
+Check these before matching the request to anything, in order, stopping at the first that is not
+done: that is where the project stands, and its command is the default answer. Stages 1, 2 and 4
+are files to read; for stage 3, call the Skill tool with `project-tracker` for the current phase's
+Must features.
+
+| # | Stage | Done when | Next |
+|---|---|---|---|
+| 1 | Set up | `docs/agents/project.md` exists | `/fk-setup` |
+| 2 | Scoped | `docs/vault/proposal.md` says agreed, and `docs/vault/features.md` gives every feature a priority and a phase | `/fk-plan` |
+| 3 | Backlogged | every Must feature of the current phase has a ticket naming it | `/fk-plan` |
+| 4 | Sprint planned | the vault index's **Now** line names a sprint note | `/fk-sprint plan` |
+| 5 | In a sprint | (the stage the project stays in) | `/fk-build #N` for its tickets, or `kit loop run`; `/fk-sprint` for status, QA and close, picking its mode from the dates |
+
+Say the stage in one line, with the file that decided it. Then:
+
+- **The request fits the stage:** name its command.
+- **The request is a later stage:** name the current stage's command first, and say what it leaves
+  for the later one. A sprint cannot be planned from features that have no tickets.
+- **The request jumps the order on purpose:** route it directly. Feedback from a client or tester
+  is `/fk-feedback` at any stage, shipping is `/fk-release`, and a project not run as a delivery
+  project (no `proposal.md`) skips stages 2 to 4: one change goes to `/fk-plan` or `/fk-build`.
+
+## 2. The commands
+
+Each calls the right skills in the right order, so the person only has to know where they are.
 
 | Where you are | Command |
 |---|---|
@@ -36,24 +59,34 @@ only has to know where they are.
 | Handing a task to another team, or a tool someone else runs, with no review before it lands | `/spec-for-cheap-executor` |
 | Prose a client will read | `/unslop` |
 
-## Reached through the commands
+## 3. Inside the commands
 
-These run inside the commands above, and also fire on their own when a request clearly needs one.
-Route to one directly when the person wants that single step and nothing around it.
+The planning skills look alike because they all deal in requirements, but each writes a different
+thing. Tell them apart by what they leave behind, and route to one directly only when the person
+names that thing ("revise the proposal", "add a feature", "re-point these tickets"). Otherwise name
+the command, which runs them in this order.
+
+| Order | Skill | Leaves behind | Reached through |
+|---|---|---|---|
+| 1 | `client-questionnaire` | Questions only the client can answer, to send | `/fk-plan` |
+| 2 | `grill` | Settled answers and numbered criteria, in the conversation; no file of its own | `/fk-plan`, and any skill that finds a gap |
+| 3 | `domain-glossary` | `GLOSSARY.md` and ADRs | `/fk-plan`, whenever a term is doing two jobs |
+| 4 | `project-proposal` | `proposal.md` (why, for whom, modules, scope) and `features.md` (every feature, prioritised and phased) | `/fk-plan`, `/fk-feedback` |
+| 5 | `project-backlog` | Tickets for the current phase's features, with criteria and points, and a note per module | `/fk-plan`, `/fk-feedback`, `/fk-sprint plan` |
+| 6 | `to-spec` | A spec for one feature, in `docs/specs/`, whose criteria its tickets point to | `/fk-plan`, feature path |
+| 7 | `flutter-plan-change` | A technical sketch: types, signatures, order of work | `/fk-plan`, feature path |
+
+A project run for delivery takes rows 1 to 5, then `/fk-sprint plan`. One feature takes rows 2, 6
+and 7, then `/fk-build`.
+
+The rest run inside their command too:
 
 | Step | Skill | Reached through |
 |---|---|---|
 | Audit a codebase you inherited | `takeover-audit` | `/fk-setup` |
-| Write or revise the proposal | `project-proposal` | `/fk-plan`, `/fk-feedback` |
-| Cut modules into pointed tickets | `project-backlog` | `/fk-plan`, `/fk-feedback` |
-| File, move or report on tickets and sprints | `project-tracker` | every command |
+| File, move or report on tickets, features and sprints | `project-tracker` | every command |
 | What the project remembers, and where a fact goes | `project-memory` | every command |
 | Which model each kind of agent work runs on, what it costs, or putting builds on a cheaper model | `configure-models` | installing, `/fk-sprint close` |
-| A decision only the client can make | `client-questionnaire` | `/fk-plan` |
-| Settle requirements by interview | `grill` | `/fk-plan` |
-| Terms mean different things to you and the client | `domain-glossary` | `/fk-plan` |
-| Write the settled discussion as a spec | `to-spec` | `/fk-plan` |
-| Design the shape of a change | `flutter-plan-change` | `/fk-plan` |
 | New feature folder, with or before its API | `flutter-scaffold-feature` | `/fk-build` |
 | One slice, test-first | `flutter-tdd` | `/fk-build` |
 | Prove it works, and name the rung | `flutter-verify` | `/fk-build` |

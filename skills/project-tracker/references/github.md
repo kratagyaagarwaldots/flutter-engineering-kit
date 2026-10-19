@@ -100,6 +100,10 @@ gh issue list --milestone "Sprint 03" --state closed --limit 200 --json labels \
 
 # in review: open pull requests, matched to tickets by "Closes #N" in the body
 gh pr list --state open --json number,title,body,isDraft --limit 100
+
+# one feature's tickets, matched by the "Feature:" line in the body
+gh issue list --state all --limit 500 --json number,title,state,labels,body \
+  --jq '[.[] | select(.body | test("(?m)^Feature: M2\\.3\\s*$")) | {number,title,state}]'
 ```
 
 ## Close a sprint

@@ -14,7 +14,8 @@ reason the client can read.
 ## 1. Orient
 
 Read `docs/agents/project.md`, then call the Skill tool with `project-memory` to load the vault.
-Read the proposal's current revision, especially out of scope and how the team works. Note whether
+Read the proposal's current revision, especially out of scope and how the team works, and the
+feature list in `docs/vault/features.md`. Note whether
 a UAT window is open: during UAT every change request is deferred.
 
 ## 2. Keep their words
@@ -34,7 +35,7 @@ with `project-tracker` to read them), the proposal, the glossary.
 | Class | When |
 |---|---|
 | Bug | The app contradicts an agreed criterion or the proposal, or is plainly broken: a crash, lost data, an unusable layout |
-| Change request | It asks for behaviour no agreed criterion or proposal section promises, or that out of scope excludes |
+| Change request | It asks for behaviour no agreed criterion, feature or proposal section promises, or that out of scope excludes |
 | Question | It asks for information, and nothing needs to change |
 | Known | It is already fixed in a later build, or already a ticket |
 | Unclear | It cannot be reproduced, or nothing agreed decides it |
@@ -52,7 +53,8 @@ filing anything.
 - **Change request**: call the Skill tool with `grill` to turn it into acceptance criteria, then call
   the Skill tool with `project-backlog` to slice and point it. File it as `type:change-request` and
   `needs-info` until the client approves the estimate. On approval, call the Skill tool with
-  `project-proposal` to add the revision, and relabel it `ready-for-agent`. During UAT, file it and
+  `project-proposal` to add the revision and the feature's row, set the ticket's `Feature:` line to
+  it, and relabel it `ready-for-agent`. During UAT, file it and
   leave it for after launch.
 - **Question**: draft the answer. Where only the client can answer something this raised, call the
   Skill tool with `client-questionnaire`.

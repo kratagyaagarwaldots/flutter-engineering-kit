@@ -8,6 +8,7 @@ this folder is linked from here.
 
 - Current sprint: none yet
 - Proposal: not written yet
+- Features: not listed yet
 
 ## Project
 

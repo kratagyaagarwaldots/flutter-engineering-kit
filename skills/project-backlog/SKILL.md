@@ -1,28 +1,31 @@
 ---
 name: project-backlog
-description: Break the proposal's modules into tickets with acceptance criteria, story points and blocking edges, write a note per module, and file the tickets in the tracker. Use when /fk-plan has an agreed proposal or a new module, when an approved change request needs tickets, or when the user asks for a backlog or a ticket breakdown.
+description: Break the current phase's features into tickets with acceptance criteria, story points and blocking edges, write a note per module, and file the tickets in the tracker. Use when /fk-plan has an agreed proposal or starts a new phase, when an approved change request needs tickets, or when the user asks for a backlog or a ticket breakdown.
 ---
 
 # Project backlog
 
-Turns modules into work that can be picked up without asking a question. A ticket is finished being
-written when `/fk-build` could take it as its only input, and a backlog is finished when every
-module in the proposal is covered by tickets like that.
+Turns features into work that can be picked up without asking a question. A ticket is finished
+being written when `/fk-build` could take it as its only input, and a backlog is finished when every
+feature of the current phase is covered by tickets like that. Later phases are cut when they start,
+so their tickets are written against what the earlier phases taught.
 
 ## 1. Read
 
-The proposal's current revision, `GLOSSARY.md`, `docs/agents/design.md` where it exists, the module
-notes already in `docs/vault/modules/`, and the open tickets (call the Skill tool with
+The proposal's current revision, the feature list in `docs/vault/features.md` and its current
+phase, `GLOSSARY.md`, `docs/agents/design.md` where it exists, the module notes already in
+`docs/vault/modules/`, the specs its rows link, and the open tickets (call the Skill tool with
 `project-tracker` for them), so nothing is filed twice.
 
 ## 2. Slice each module
 
-Cut vertically: every ticket ends in something a person can see or do.
+Take the current phase's features, module by module, Must first. Cut vertically: every ticket ends in
+something a person can see or do, and names the feature it delivers in its `Feature:` line.
 
 - The module's **first ticket is its tracer**: the thinnest path through every layer, from the
   screen to the data and back, so the module's shape is proven before it is widened. Everything
   else in the module is blocked by it.
-- Then one ticket per capability or state the tracer left out.
+- Then one ticket per feature, or per state of a feature, the tracer left out.
 - Work no screen shows (pipelines, environments, push setup, store accounts) is `type:chore`. Work
   only a person can do (fetching keys, signing, a store console, a client decision) is
   `ready-for-human`.
@@ -33,9 +36,10 @@ Cut vertically: every ticket ends in something a person can see or do.
 ## 3. Write the criteria
 
 Each ticket gets numbered acceptance criteria a person can observe, each naming its loading, empty
-and failure behaviour where it has them, in the glossary's words. Where a module's behaviour is not
-settled enough to write them, call the Skill tool with `grill` for that module rather than inventing
-an answer.
+and failure behaviour where it has them, in the glossary's words. Where the feature's row links a
+spec, the ticket names which of the spec's criteria it delivers instead, in the shape
+`project-tracker` gives. Where a module's behaviour is not settled enough to write them, call the
+Skill tool with `grill` for that module rather than inventing an answer.
 
 ## 4. Point
 
@@ -61,9 +65,9 @@ several tickets at once.
 
 ## 6. Confirm, then file
 
-Show one table per module (title, type, points, blocked by, intake state) with its point total next
-to the size the proposal gave it. A module that comes out more than half again over its size is a
-finding: either the proposal undersized it and needs a revision, or the slicing is padded. Say which
+Show one table per module (title, feature, type, points, blocked by, intake state) with its point
+total next to the size the proposal gave it. Where the module's features span phases, compare once
+its last phase is cut. A module that comes out more than half again over its size is a finding: either the proposal undersized it and needs a revision, or the slicing is padded. Say which
 you think it is.
 
 On a yes, write `docs/vault/modules/<slug>.md` for each module and link it from the vault index,
@@ -83,6 +87,7 @@ then call the Skill tool with `project-tracker` to create the module label and f
 
 ## Completion criteria
 
-Every module in the proposal has a note and tickets. Every ticket has numbered criteria, at most 8
-points, a type and an intake state. Every dependency is recorded, and each module's total is
-reported against its proposed size.
+Every feature of the current phase has tickets, and every module they belong to has a note. Every
+ticket has numbered criteria or the spec criteria it delivers, at most 8 points, a type, an intake
+state and its feature. Every dependency is recorded, and each module's total is reported against its
+proposed size.

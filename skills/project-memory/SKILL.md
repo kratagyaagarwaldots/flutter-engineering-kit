@@ -30,6 +30,7 @@ line that bears on the task in front of you.
 | The map of the vault | `index.md` | whoever creates or deletes a note |
 | A durable fact most sessions need: a working agreement, a trap, a pointer | `memory.md` | any session, one line |
 | What the project is, its scope, and every revision to it | `proposal.md` | `project-proposal` |
+| Every agreed feature, its priority and its phase, and the current phase | `features.md` | `project-proposal`; its **Spec** cell by `to-spec` |
 | One module: purpose, design frames, decisions local to it | `modules/<slug>.md` | `project-backlog`, then any session working in it |
 | One sprint: goal, dates, committed tickets, QA, review | `sprints/sprint-NN.md` | `/fk-sprint` |
 | One round of client or tester feedback, verbatim, and its triage | `feedback/round-NN.md` | `/fk-feedback` |

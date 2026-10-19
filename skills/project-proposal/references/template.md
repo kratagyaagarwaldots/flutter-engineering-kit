@@ -32,7 +32,8 @@ job a user opens the app to do.
 
 **Existing:** what is there now.
 
-**Proposed:** what will be built, as capabilities a user sees.
+**Proposed:** what will be built, as capabilities a user sees. The features are listed, with
+priority and phase, in [features.md](features.md).
 
 **Size:** S / M / L · **Design:** frame links, once they exist
 

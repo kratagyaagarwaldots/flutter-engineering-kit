@@ -1,6 +1,6 @@
 ---
 name: fk-plan
-description: Turn an idea, a brief or a client's request into an agreed proposal and a pointed backlog, or a single requirement into a spec and a sketch, settling it before any code exists.
+description: Turn an idea, a brief or a client's request into an agreed proposal, a prioritised feature list and a pointed backlog, or a single requirement into a spec and a sketch, settling it before any code exists.
 disable-model-invocation: true
 ---
 
@@ -20,7 +20,7 @@ build on the same thinking, and a compaction between them loses the reasons behi
 
 Read `docs/agents/project.md`. Where it is missing, stop and tell the user to run `/fk-setup` first:
 every later step reads it. Call the Skill tool with `project-memory` to load the vault, and read
-`GLOSSARY.md` and the specs folder `project.md` names, so the plan uses the project's words and does
+`GLOSSARY.md`, `docs/vault/features.md` where it exists, and the specs folder `project.md` names, so the plan uses the project's words and does
 not re-decide something already settled.
 
 Then pick the path, and say which in one line:
@@ -28,8 +28,13 @@ Then pick the path, and say which in one line:
 | The work | Path |
 |---|---|
 | A new product, or a new phase of one, that no agreed proposal in `docs/vault/proposal.md` covers | **Product**: step 2, then P1 to P4 below |
-| An approved change request, or a module the proposal has and the backlog does not | Call the Skill tool with `project-backlog`, then hand off as in P4 |
+| An approved change request, or the next phase of the feature list starting with no tickets yet | Call the Skill tool with `project-backlog`, then hand off as in P4 |
 | One feature, ticket or change | **Feature**: steps 2 to 6 |
+
+On the feature path, where `docs/vault/features.md` exists, find the feature's row first. No row
+means new scope. On client work that is a change request: stop, and tell the user to run
+`/fk-feedback` with it so it is estimated and agreed. On the user's own product, call the Skill tool
+with `project-proposal` to add the row.
 
 The step is done when you can say, in a sentence, what is being planned, what already exists around
 it, and which path it takes.
@@ -70,11 +75,12 @@ Tell the user to run `/fk-build` with the spec path (and the sketch path, if ste
 
 ## Product path
 
-**P1. Proposal.** Call the Skill tool with `project-proposal`. On an inherited codebase it builds
+**P1. Proposal and features.** Call the Skill tool with `project-proposal`. It writes the proposal
+and the feature list, every feature with a priority and a phase. On an inherited codebase it builds
 on `docs/vault/audit.md`; where that is missing, tell the user to run `/fk-setup`, which runs the
 audit.
 
-**P2. Agreement.** The proposal is agreed before anything is cut from it. On client work that means
+**P2. Agreement.** The proposal and the feature list are agreed before anything is cut from them. On client work that means
 the client: stop here, and tell the user to run `/fk-plan` again once it is agreed.
 
 **P3. Design.** Where the app has no `docs/agents/design.md`, call the Skill tool with
@@ -82,14 +88,16 @@ the client: stop here, and tell the user to run `/fk-plan` again once it is agre
 exist, record their frame links on the proposal's modules; where they do not yet, the tickets say
 so, and `/fk-build` designs from the language instead.
 
-**P4. Backlog.** Call the Skill tool with `project-backlog`. Then tell the user to run
-`/fk-sprint plan`.
+**P4. Backlog.** Call the Skill tool with `project-backlog`. It cuts tickets for the current phase's
+features only. Then tell the user to run `/fk-sprint plan`.
 
 ## Completion criteria
 
-**Product path:** the proposal is agreed and its revision recorded, the design language exists, and
-every module has tickets with criteria and points in the tracker.
+**Product path:** the proposal and the feature list are agreed and the revision recorded, the design
+language exists, and every feature of the current phase has tickets with criteria and points in the
+tracker.
 
 **Feature path:** a spec file exists with numbered acceptance criteria, each naming its loading, empty and failure
-behaviour where it has one, and an out-of-scope section. Either a sketch exists or you have said why
+behaviour where it has one, and an out-of-scope section. Where a feature list exists, the spec names
+its feature and the feature's row links the spec. Either a sketch exists or you have said why
 the change needs none. Every question that could not be settled is listed, with who owns it.

@@ -11,9 +11,10 @@ does not contain enough to write a spec, say which sections you cannot fill, the
 with `grill` to settle them rather than inventing the gaps.
 
 Write to the directory `docs/agents/project.md` names for specs (`docs/specs/` by default), as
-`docs/specs/<NN>-<slug>.md`. Where the project tracks work in GitHub, also call the Skill tool with
-`project-tracker` to file the spec as a ticket linking the file, so it can be planned into a
-sprint.
+`docs/specs/<NN>-<slug>.md`. Where `docs/vault/features.md` exists, put the feature's ID in the
+spec's header and the spec's path in that row's **Spec** cell. Where the project tracks work in
+GitHub, also call the Skill tool with `project-tracker` to file the spec as a ticket linking the
+file, its criteria named by number rather than copied, so it can be planned into a sprint.
 
 ## Before writing
 
@@ -30,7 +31,7 @@ repository. Prefer seams that already exist. The fewer, the better.
 ```markdown
 # <NN>: <Feature name>
 
-**Status:** ready to build · **Source:** <the round, questionnaire, or conversation this came from>
+**Status:** ready to build · **Feature:** <ID from docs/vault/features.md, or none> · **Source:** <the round, questionnaire, or conversation this came from>
 
 ## Problem
 

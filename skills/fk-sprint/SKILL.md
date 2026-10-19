@@ -32,12 +32,16 @@ tracker, tell the user to run `/fk-setup` first. Where there is no backlog yet, 
 
 1. **Capacity.** From `issue-tracker.md`: the average velocity of the last three closed sprints.
    Before any sprint has closed, propose a number and call it a guess.
-2. **Candidates.** Call the Skill tool with `project-tracker` to find the frontier, and add the
-   tickets the last sprint carried over. Order them: carried-over work first, then tickets that
-   unblock the most others, then module order from the proposal, tracers before the tickets they
-   unblock.
-3. **Goal.** One sentence a client would understand, such as "a new user can sign up and reach their
-   dashboard". Pick tickets that serve it, up to capacity and no further.
+2. **Candidates.** Read `docs/vault/features.md` for the current phase. Call the Skill tool with
+   `project-tracker` to find the frontier, and add the tickets the last sprint carried over. Order
+   them: carried-over work first, then by their feature's priority (Must, Should, Could), and within
+   a priority, tickets that unblock the most others, tracers before the tickets they unblock.
+   A Must feature of the current phase with no tickets yet is a gap: call the Skill tool with
+   `project-backlog` for it before going on.
+3. **Goal.** The features this sprint finishes, by ID, and one sentence a client would understand,
+   such as "M1.1 to M1.3: a new user can sign up and reach their dashboard". Take whole features,
+   every open ticket of each, up to capacity and no further. Where a feature will not fit, it waits
+   for the next sprint rather than shipping half done.
 4. **Ready check.** Every chosen ticket has numbered criteria and points. One that does not goes back
    for criteria: call the Skill tool with `grill` for it, or leave it out. List `ready-for-human`
    tickets separately: they are the user's own work this sprint.
@@ -50,6 +54,7 @@ tracker, tell the user to run `/fk-setup` first. Where there is no backlog yet, 
 # Sprint NN: <goal>
 
 **Dates:** YYYY-MM-DD to YYYY-MM-DD · **Milestone:** <link> · **Capacity:** <N points, measured | guess>
+**Features:** M1.1, M1.2, M1.3
 
 ## Committed
 
@@ -101,8 +106,9 @@ the user to run `/fk-release` with a tester group as the target. A fail goes bac
    points.
 2. For each unfinished ticket, ask whether it carries into the next sprint or goes back to the
    backlog. Recommend carrying it when it serves the next goal.
-3. Write the Review section of the sprint note: what shipped, as outcomes a user would notice; what
-   did not, and why; the feedback rounds that came in, linked; the velocity.
+3. Write the Review section of the sprint note: the features finished, by ID, as outcomes a user
+   would notice; what did not finish, and why; the feedback rounds that came in, linked;
+   the velocity.
 4. Call the Skill tool with `project-tracker` to move the unfinished tickets, close the milestone and
    record the velocity.
 5. Call the Skill tool with `project-memory` to consolidate the vault.
@@ -112,7 +118,9 @@ the user to run `/fk-release` with a tester group as the target. A fail goes bac
    the cost report against the review rounds, and propose a model change only where the numbers
    support one.
 
-Then tell the user to run `/retro` while the round is fresh.
+Then tell the user to run `/retro` while the round is fresh. Where every Must feature of the current
+phase is now done, say so too: the phase is ready for `/fk-sprint uat` and `/fk-release`, and
+`/fk-plan` cuts the next phase's tickets after it.
 
 ## uat
 

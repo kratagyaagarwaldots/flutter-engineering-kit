@@ -3,6 +3,32 @@
 What changed in each kit version, and what a project or an install has to do about it. A
 **Migration** line means something you already have stops working until you act on it.
 
+## 0.10.0
+
+Planning now has an order you can see, and a feature list to plan sprints from.
+
+- **Feature list.** `project-proposal` writes `docs/vault/features.md` beside the proposal: every
+  agreed feature, numbered under its module (`M2.3`), with a priority (Must, Should, Could) and a
+  phase. Adding or removing a feature is a proposal revision; moving its priority or phase is an
+  edit the client agrees to.
+- `project-backlog` cuts tickets for the **current phase's** features only, Must first, and every
+  ticket names its feature in a `Feature:` line. Later phases are cut when they start.
+- `fk-sprint plan` picks whole features by priority up to capacity, and the sprint note lists them.
+  `close` reports features finished and says when a phase is done.
+- **Criteria have one home per ticket.** Where a feature has a spec, its tickets name the spec's
+  criterion numbers instead of copying them. `to-spec` records the feature ID and links the spec
+  from the feature's row.
+- **`ask-kit` reads where the project stands** (set up, scoped, backlogged, sprint planned, in a
+  sprint) from the files each stage leaves, and names that stage's command first. The planning
+  skills are listed in run order with what each leaves behind, so they no longer look
+  interchangeable.
+- `project-tracker` reports per feature; `fk-feedback` treats behaviour no feature promises as a
+  change request, and adds the feature's row on approval.
+
+**Migration:** a project planned before 0.10.0 has no `features.md`. Run `/fk-plan`; it routes to
+`project-proposal`, which lists the features from the agreed proposal's modules as a new revision.
+Existing tickets keep working, and gain a `Feature:` line when they are next edited.
+
 ## 0.9.2
 
 `spec-for-cheap-executor` is now only for work that leaves the session with nobody reviewing it

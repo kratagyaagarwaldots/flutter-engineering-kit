@@ -29,6 +29,7 @@ The exact commands for every operation are in [github.md](references/github.md).
 |---|---|
 | Ticket | an issue, its body in the shape below |
 | Module | a `module:<slug>` label, plus a vault note at `docs/vault/modules/<slug>.md` |
+| Feature | a `Feature: M2.3` line in the body, naming a row of `docs/vault/features.md` |
 | Story points | a `points:N` label, N in 1, 2, 3, 5, 8 |
 | Type | `type:feature`, `type:bug`, `type:change-request` or `type:chore` |
 | Intake state | `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix` |
@@ -58,6 +59,8 @@ What a user can do when this is done, from their side of the screen.
 
 1. <observable behaviour, naming its loading, empty and failure states where it has them>
 
+<or, where a spec already holds them: "Criteria 1 to 4 of [the spec](docs/specs/07-reset-password.md)">
+
 ## Design
 
 <frame links, or "none">
@@ -66,10 +69,15 @@ What a user can do when this is done, from their side of the screen.
 
 Blocked by #N.
 Out of scope: <what this ticket deliberately leaves out>.
+Feature: <the ID from docs/vault/features.md, or none for a chore or a bug>
 Source: <proposal module, feedback round, audit finding, or the spec it came from>.
 ```
 
-A ticket is ready when `/fk-build` could take it as its only input. A bug's body replaces Outcome
+Criteria have one home. Where a spec exists for the work, the ticket names the spec's criterion
+numbers and links it; otherwise the ticket states them. A ticket that copies a spec's criteria
+leaves two lists to drift apart.
+
+A ticket is ready when `/fk-build` could take it, and the spec it links, as its only input. A bug's body replaces Outcome
 with **Expected** (quoting the criterion or proposal line it contradicts), **Actual**, **Steps** and
 **Build**.
 
@@ -94,9 +102,10 @@ with every `Blocked by` closed. This is what a sprint is planned from, and what 
 **Plan a sprint.** Create the `Sprint NN` milestone with its due date and the goal as its
 description, then set it on each chosen ticket.
 
-**Report.** For a sprint or a module: closed, in review, in progress, not started and blocked, each
+**Report.** For a sprint, a module or a feature: closed, in review, in progress, not started and blocked, each
 with points, and the sum of closed points against committed. Write it for someone who has not seen
-the code: ticket titles and outcomes, not branch names.
+the code: ticket titles and outcomes, not branch names. A feature is done when every ticket naming it
+is closed.
 
 **Close a sprint.** Sum the closed points; that is the sprint's velocity. Move each open ticket to the
 next milestone or clear its milestone, as the user chose. Close the milestone. Append the sprint and
@@ -109,8 +118,8 @@ closes through its pull request, so the record links the code.
 
 Where the tracker is `none`, `docs/vault/backlog.md` is the tracker: one table, one row per ticket.
 
-| # | Title | Type | Module | Points | State | Sprint | Blocked by |
-|---|---|---|---|---|---|---|---|
+| # | Title | Type | Module | Feature | Points | State | Sprint | Blocked by |
+|---|---|---|---|---|---|---|---|---|
 
 Ticket bodies go in `docs/specs/`, one file per ticket, linked from the row. Each operation above
 becomes an edit to this table, and State takes `todo`, `in-progress`, `in-review`, `done` or one of
