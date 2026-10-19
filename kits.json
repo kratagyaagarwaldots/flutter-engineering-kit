@@ -7,7 +7,7 @@
         "domain-glossary", "engineering-principles", "explain", "fk-build", "fk-change",
         "fk-feedback", "fk-plan", "fk-release", "fk-setup", "fk-sprint", "grill", "handoff",
         "merge-conflicts", "plan-change", "pr", "project-backlog", "project-memory",
-        "project-proposal", "project-tracker", "release-readiness", "retro", "setup-ci",
+        "project-proposal", "project-stack", "project-tracker", "release-readiness", "retro", "setup-ci",
         "setup-wizard", "spec-for-cheap-executor", "takeover-audit", "tdd", "to-spec",
         "triage-executor-bugs", "unslop", "verify", "writing-for-agents"
       ],

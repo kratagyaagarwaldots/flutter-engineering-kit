@@ -366,6 +366,9 @@ connect it to the engineering skills below.
 - **[project-memory](./skills/project-memory/SKILL.md)**: Read and keep the project's memory vault in
   docs/vault/, deciding what to read at the start of a session, which file each kind of fact belongs
   in, and how to write without overwriting another agent.
+- **[project-stack](./skills/project-stack/SKILL.md)**: Resolve the project's components (an app, a
+  backend, a database) and, for one of them, its stack, its commands and the stack kit that serves
+  it, then hand the request to that kit's skill when it is installed.
 
 ### Understand
 
