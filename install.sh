@@ -21,7 +21,7 @@ set -euo pipefail
 # tests), FLUTTER_KIT_HOME (default ~/.flutter-kit).
 
 REPO="kratagyaagarwaldots/flutter-engineering-kit"
-DEFAULT_VERSION="v0.9.0"
+DEFAULT_VERSION="v0.9.1"
 
 VERSION="${KIT_VERSION:-$DEFAULT_VERSION}"
 STATE="${FLUTTER_KIT_HOME:-$HOME/.flutter-kit}"
